@@ -5,5 +5,5 @@ use App\Http\Controllers\RtoIntelligenceController;
 
 Route::middleware('auth')->prefix('rtointelligence')->group(function(): void{
     Route::get('/rtofaqs',[RtoIntelligenceController::class, "rtofaqs"])->name('rtointelligence.rtofaqs');
-    //Route::post('/type/{type}',[RtoIntelligenceController::class, "orderType"])->name('rtointelligence.type');
+    Route::get('/highrtopincodelist',[RtoIntelligenceController::class, "highrtopincodelist"])->name('rtointelligence.highrtopincodelist');
 });

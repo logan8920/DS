@@ -625,7 +625,7 @@
                             <li>
                                 <a href="javascript:;">RTO Intelligence</a>
                                 <ul>
-                                    <li><a href="about-us.html">RTO FAQs</a></li>
+                                    <li><a href="{{ route('rtointelligence.rtofaqs') }}">RTO FAQs</a></li>
                                     <li><a href="become-a-vendor.html">High RTO Pincode List</a></li>
                                     {{-- <li><a href="contact-us.html">Contact Us</a></li>
                                     <li><a href="faq.html">FAQs</a></li>

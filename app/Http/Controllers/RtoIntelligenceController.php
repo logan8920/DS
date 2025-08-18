@@ -14,6 +14,14 @@ class RtoIntelligenceController extends Controller
         //
     }
 
+    public function rtofaqs(){
+        return view('pages.rtointelligence.rtofaqs');
+    }
+
+    public function highrtopincodelist() {
+        return view('pages.rtointelligence.highrtopincodelist');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
