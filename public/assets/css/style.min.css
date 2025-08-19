@@ -7052,14 +7052,14 @@ blockquote {
 /*----------------------------------------
     Wolmart Font icon
 -----------------------------------------*/
-@font-face {
+/* @font-face {
   font-family: "wolmart";
   src: url("https://portotheme.com/html/wolmart/assets/fonts/wolmart.eot?png09e");
   src: url("https://portotheme.com/html/wolmart/assets/fonts/wolmart.woff?png09e") format("woff"), url("https://portotheme.com/html/wolmart/assets/fonts/wolmart.eot?png09e#iefix") format("embedded-opentype"), url("https://portotheme.com/html/wolmart/assets/fonts/wolmart.ttf?png09e") format("truetype"), url("https://portotheme.com/html/wolmart/assets/fonts/wolmart.svg?png09e#wolmart") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 [class^=w-icon-], [class*=" w-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "wolmart" !important;

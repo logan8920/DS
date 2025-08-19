@@ -1,10 +1,14 @@
 @extends('layouts.main');
 
 @section('title')
-    - Source a Product
+    - RTO Faqs
+@endsection
+
+@section('css')
+<link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
 @endsection
 @section('content')
-    <main class="main bg-grey pt-10">
+    <main class="main pt-10 mt-2">
 
         <!-- Start of PageContent -->
         <div class="page-content contact-us">
@@ -12,7 +16,7 @@
                 <section class="contact-section">
                     <div class="row gutter-lg pb-3">
                         <div class="col-lg-12 mb-8">
-                            <h4 class="title mb-3">People usually ask these</h4>
+                            <h4 class="title mb-3">RTO Faqs</h4>
                             <div class="accordion accordion-bg accordion-gutter-md accordion-border">
                                 <div class="card">
                                     <div class="card-header">

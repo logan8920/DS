@@ -14,90 +14,49 @@
         input {
             background: #fff !important;
         }
+
+        .card ul li {
+            list-style: auto;
+        }
     </style>
 @endsection
 @section('content')
     <main class="main bg-grey pt-10">
 
         <!-- Start of PageContent -->
-        <div class="page-content contact-us">
+        <div class="page-content contact-us mt-5">
             <div class="container">
                 <section class="contact-section">
                     <div class="row gutter-lg pb-3">
                         <div class="col-lg-12 mb-8">
-                            <h4 class="title mb-3">People usually ask these</h4>
+                            {{-- <h4 class="title mb-3">People usually ask these</h4> --}}
                             <div class="accordion accordion-bg accordion-gutter-md accordion-border">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a href="#collapse1" class="collapse">How can I cancel my order?</a>
-                                    </div>
-                                    <div id="collapse1" class="card-body expanded" style="display: block;">
-                                        <p class="mb-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp
-                                            orincid
-                                            idunt ut labore et dolore magna aliqua. Venenatis tellus in metus vulp utate eu
-                                            sceler
-                                            isque felis. Vel pretium.
-                                        </p>
-                                    </div>
-                                </div>
+                                <div class="card">                                    
+                                    <h2>High RTO Pincode List</h2>
+                                    <p class="mb-0">
+                                        Based on lakhs of historical orders, our algorithm has identified that certain pincodes are prone to very high RTO %. It is best to avoid targeting customers from these areas as it might lead to waste of customer acquisition costs.
+                                    </p>
+                                    <a download class="btn btn-danger" href="/assets/high-rto-pincode-list.xlsx">Download High RTO Pincode List</a>
+                                    <p>(Last updated on 09 Nov 2024)</p>
+                                    <br>
+                                    <h4>This Pincode can be used as negative locations in Facebook's Ad Manager</h4>
+                                    <ul>
+                                        <li>
+                                            <h5>Download the list of pincodes from the above link.</h5>
+                                            <p>You can do this in Excel itself Using "textjoin" function. or you can use free sites such as delim.co and paste the pincodes from the downloaded file. Your output should look like this - 784514,784148,784529,784145.</p>
+                                        </li>
+                                        <li>
+                                            <h5>Collate the pincodes in comma-separated form</h5>
+                                        </li>
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a href="#collapse2" class="expand">Why is my registration delayed?</a>
-                                    </div>
-                                    <div id="collapse2" class="card-body collapsed">
-                                        <p class="mb-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp
-                                            orincid
-                                            idunt ut labore et dolore magna aliqua. Venenatis tellus in metus vulp utate eu
-                                            sceler
-                                            isque felis. Vel pretium.
-                                        </p>
-                                    </div>
-                                </div>
+                                        <li>
+                                            <h5>Open your Facebook Ad Manager and create your ads as you normally would</h5>
+                                        </li>
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a href="#collapse3" class="expand">What do I need to buy products?</a>
-                                    </div>
-                                    <div id="collapse3" class="card-body collapsed">
-                                        <p class="mb-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp
-                                            orincid
-                                            idunt ut labore et dolore magna aliqua. Venenatis tellus in metus vulp utate eu
-                                            sceler
-                                            isque felis. Vel pretium.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a href="#collapse4" class="expand">How can I track an order?</a>
-                                    </div>
-                                    <div id="collapse4" class="card-body collapsed">
-                                        <p class="mb-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temp
-                                            orincid
-                                            idunt ut labore et dolore magna aliqua. Venenatis tellus in metus vulp utate eu
-                                            sceler
-                                            isque felis. Vel pretium.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a href="#collapse5" class="expand">How can I get money back?</a>
-                                    </div>
-                                    <div id="collapse5" class="card-body collapsed">
-                                        <p class="mb-0">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            temp orincid idunt ut labore et dolore magna aliqua. Venenatis tellus in
-                                            metus vulp utate eu sceler isque felis. Vel pretium.
-                                        </p>
-                                    </div>
+                                        <li>
+                                            <h5>That's it. Facebook will now avoid showing ads to users in these pincodes.</h5>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -108,32 +67,4 @@
         </div>
         <!-- End of PageContent -->
     </main>
-@endsection
-@section('js')
-    <script src="{{ asset('assets/js/virtual-select.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/js/additional-methods.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            VirtualSelect.init({
-                ele: "#category_id",
-            });
-
-            $('#regForm').validate();
-
-            $("input[type=radio][name=product_info_type]").click(function() {
-                const id = this.value;
-                $('.product-info-type').hide(); // hide all
-                $('.product-info-type').prop('required', false)
-                $('#div-' + id).show(); // show selected
-                $('#div-' + id).find('input').attr("required", true);
-                $('#regForm').validate();
-            });
-
-            // Trigger once at load to set the correct visible field
-            $("input[type=radio][name=product_info_type]:checked").trigger("click");
-
-        });
-    </script>
 @endsection
