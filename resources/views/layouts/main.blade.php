@@ -121,7 +121,7 @@
 
         div.vscomp-toggle-button {
             width: 100%;
-            height: calc(1.5em + .75rem + 16px);
+            height: calc(1.5em + .75rem + 3.5px);
             padding: 8px .375rem .75rem 16px;
             font-size: 14px;
             font-weight: 400;
@@ -129,8 +129,8 @@
             color: #000000;
             background-color: #fff;
             background-clip: padding-box;
-            border: 1px solid #eeeeee;
-            border-radius: 0.35rem;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
             transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
 

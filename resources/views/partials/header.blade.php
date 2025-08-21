@@ -57,7 +57,7 @@
             <div class="header-left mr-md-4">
                 <a href="#" class="mobile-menu-toggle  w-icon-hamburger">
                 </a>
-                <a href="{{route('dashboard')}}" class="logo ml-lg-0">
+                <a href="{{ route('dashboard') }}" class="logo ml-lg-0">
                     <img src="assets/images/demos/demo15/logo.png" alt="logo" width="144" height="45" />
                 </a>
                 <form method="get" action="#"
@@ -93,6 +93,33 @@
                         </h4>
                         <a href="tel:#" class="phone-number font-weight-bolder ls-50">0(800)123-456</a>
                     </div>
+
+                </div>
+                <div class="pr-0">
+
+                    <div class="dropdown">
+                        <a href="#language">
+                            <i class="fa-2x mr-1 w-icon-account"></i>
+                        </a>
+                        <div class="dropdown-box">
+                            <a href="javascript:;">
+                                Hi! {{ auth()->user()->name }}
+                            </a>
+                            <a href="javascript:;">
+                                Settings
+                            </a>
+                        </div>
+                    </div>
+                    <!-- End of Dropdown Menu -->
+                    <span class="divider d-lg-show"></span>
+                    {{-- <a href="blog.html" class="d-lg-show">Blog</a>
+                        <a href="become-a-vendor.html" class="d-lg-show">Become a Vendor</a>
+                        <a href="contact-us.html" class="d-lg-show">Contact Us</a> --}}
+                    {{-- <a href="assets/ajax/login.html" class="d-lg-show login sign-in"><i
+                                class="w-icon-account mr-1"></i>Sign
+                            In</a>
+                        <span class="delimiter d-lg-show bg-">/</span>
+                        <a href="assets/ajax/login.html" class="ml-0 d-lg-show login register">Register</a> --}}
                 </div>
             </div>
         </div>
@@ -105,10 +132,10 @@
                     <nav class="main-nav ml-0">
                         <ul class="menu">
                             <li class="active">
-                                <a href="{{route('dashboard')}}">Home</a>
+                                <a href="{{ route('dashboard') }}">Home</a>
                             </li>
                             <li>
-                                <a href="{{route('analytics')}}">Analytics</a>
+                                <a href="{{ route('analytics') }}">Analytics</a>
                                 {{-- <ul>
                                     <li>
                                         <a href="vendor-dokan-store-list.html">Store Listing</a>
@@ -134,34 +161,45 @@
                                 </ul> --}}
                             </li>
                             <li>
-                                <a href="{{route('orders')}}">Orders</a>
+                                <a href="{{ route('orders') }}">Orders</a>
                             </li>
                             <li>
-                                <a href="{{route('shipment.index')}}">Shipment</a>
+                                <a href="{{ route('shipment.index') }}">Shipment</a>
                             </li>
-                             <li>
-                                <a href="{{route('externalorders.index')}}">External Orders</a>
+                            <li>
+                                <a href="{{ route('externalorders.index') }}">External Orders</a>
                             </li>
-                             <li>
-                                <a href="{{route('externalshipment.index')}}">External Shipment</a>
+                            <li>
+                                <a href="{{ route('externalshipment.index') }}">External Shipment</a>
                             </li>
-                             <li>
-                                <a href="{{route('manageproduct.index')}}">Manage Product</a>
+                            <li>
+                                <a href="{{ route('manageproduct.index') }}">Manage Product</a>
                             </li>
-                             <li>
-                                <a href="{{route('sourceaproduct.index')}}">Source A Product</a>
+                            <li>
+                                <a href="{{ route('sourceaproduct.index') }}">Source A Product</a>
                             </li>
                             <li>
                                 <a href="javascript:;">RTO Intelligence</a>
                                 <ul>
                                     <li><a href="{{ route('rtointelligence.rtofaqs') }}">RTO FAQs</a></li>
-                                    <li><a href="{{ route('rtointelligence.highrtopincodelist') }}">High RTO Pincode List</a></li>
+                                    <li><a href="{{ route('rtointelligence.highrtopincodelist') }}">High RTO Pincode
+                                            List</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="{{route('ndr.index')}}">NDR</a>
+                                <a href="{{ route('ndr.index') }}">NDR</a>
                             </li>
-                           
+                            <li>
+                                <a href="javascript:;">Billing</a>
+                                <ul>
+                                    <li><a href="{{ route('billing.marginremittance') }}">Marginremittance</a></li>
+                                    <li><a href="{{ route('billing.prepaidpayment') }}">Prepaid Payment</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{{ route('channels.allChannels') }}">Channels</a>
+                            </li>
+
                         </ul>
                     </nav>
                 </div>
