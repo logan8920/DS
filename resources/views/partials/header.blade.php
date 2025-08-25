@@ -58,7 +58,7 @@
                 <a href="#" class="mobile-menu-toggle  w-icon-hamburger">
                 </a>
                 <a href="{{ route('dashboard') }}" class="logo ml-lg-0">
-                    <img src="assets/images/demos/demo15/logo.png" alt="logo" width="144" height="45" />
+                    <img src="assets/brand_logo_hor.png" alt="logo" width="144" height="45" />
                 </a>
                 <form method="get" action="#"
                     class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">

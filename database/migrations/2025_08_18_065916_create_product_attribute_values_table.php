@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_attribute_values', function (Blueprint $table) {
             $table->id('product_attribute_id');
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('attribute_id');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('attribute_id')->nullable();
             $table->string('value');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrentOnUpdate();

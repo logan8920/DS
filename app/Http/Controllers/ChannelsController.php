@@ -46,7 +46,7 @@ class ChannelsController extends Controller
         $defaultTabs = "All Channels";
 
         $firstRoute = route('channels.allChannels.get');
-        return view('pages.channels.allChannels', compact('tabs', 'firstRoute', 'defaultTabs', 'pageHeading'));
+        return view('pages.channels.allchannels', compact('tabs', 'firstRoute', 'defaultTabs', 'pageHeading'));
     }
 
     /**

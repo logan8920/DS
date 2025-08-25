@@ -15891,7 +15891,7 @@ body .product-popup {
 
 /*Intro section*/
 .intro-section .banner-media img {
-  min-height: 60rem;
+  min-height: 10rem;
 }
 
 .intro-slide1 .banner-content {

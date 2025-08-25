@@ -8,7 +8,7 @@
                 <div class="col-md-3">
                     <div class="widget widget-about mt-0 mb-4">
                         <a href="demo15.html" class="logo-footer">
-                            <img src="assets/images/demos/demo15/logo.png" alt="logo-footer" width="145"
+                            <img src="assets/brand_logo_hor.png" alt="logo-footer" width="145"
                                 height="45" />
                         </a>
                         <div class="widget-body">

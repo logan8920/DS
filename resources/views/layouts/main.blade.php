@@ -12,7 +12,7 @@
     <meta name="author" content="D-THEMES">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/icons/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/favicon-32x32.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <!-- WebFont.js -->
     <script>
