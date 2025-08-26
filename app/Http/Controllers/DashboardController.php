@@ -15,8 +15,9 @@ class DashboardController extends Controller
     public function index()
     {
         $banner = Banner::whereStatus(1)->first();
-        $categories = Category::where("is_active",1)->get();
-        return view('pages.dashboard',compact('banner','categories'));
+        $categories = Category::where("is_active",1)->limit(8)->get();
+        $categories5 = Category::where("is_active",1)->limit(5)->get();
+        return view('pages.dashboard',compact('banner','categories','categories5'));
     }
 
     /**

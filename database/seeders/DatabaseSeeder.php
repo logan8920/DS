@@ -32,65 +32,65 @@ class DatabaseSeeder extends Seeder
             'updated_at' => '2025-08-24 18:30:00',
         ]);
 
-        DB::table('categories')->insert([
-            [
-                'name' => 'Electronics',
-                'icon' => 'category-1.jpg',
-                'is_active' => 1,
-                'parent_id' => null,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:46:38'),
-            ],
-            [
-                'name' => 'Mobiles',
-                'icon' => 'category-2.jpg',
-                'is_active' => 1,
-                'parent_id' => 1,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:50:11'),
-            ],
-            [
-                'name' => 'Laptops',
-                'icon' => 'category-3.jpg',
-                'is_active' => 1,
-                'parent_id' => 1,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:50:23'),
-            ],
-            [
-                'name' => 'Fashion',
-                'icon' => 'category-4.jpg',
-                'is_active' => 1,
-                'parent_id' => null,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:50:29'),
-            ],
-            [
-                'name' => 'Men Clothing',
-                'icon' => 'category-5.jpg',
-                'is_active' => 1,
-                'parent_id' => 4,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:50:43'),
-            ],
-            [
-                'name' => 'Women Clothing',
-                'icon' => 'category-6.jpg',
-                'is_active' => 1,
-                'parent_id' => 4,
-                'created_at' => Carbon::parse('2025-08-24 18:30:00'),
-                'updated_at' => Carbon::parse('2025-08-25 08:50:50'),
-            ],
-        ]);
+        // DB::table('categories')->insert([
+        //     [
+        //         'name' => 'Electronic',
+        //         'icon' => 'category-1.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => null,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:46:38'),
+        //     ],
+        //     [
+        //         'name' => 'Mobile',
+        //         'icon' => 'category-2.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => 1,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:50:11'),
+        //     ],
+        //     [
+        //         'name' => 'Laptop',
+        //         'icon' => 'category-3.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => 1,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:50:23'),
+        //     ],
+        //     [
+        //         'name' => 'Fashion',
+        //         'icon' => 'category-4.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => null,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:50:29'),
+        //     ],
+        //     [
+        //         'name' => 'Men Clothing',
+        //         'icon' => 'category-5.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => 4,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:50:43'),
+        //     ],
+        //     [
+        //         'name' => 'Women Clothing',
+        //         'icon' => 'category-6.jpg',
+        //         'is_active' => 1,
+        //         'parent_id' => 4,
+        //         'created_at' => Carbon::parse('2025-08-24 18:30:00'),
+        //         'updated_at' => Carbon::parse('2025-08-25 08:50:50'),
+        //     ],
+        // ]);
 
-        $cat = DB::table("categories")->orderBy('category_id',"DESC")->limit(6)->pluck("category_id");
+        $cat = DB::table("categories")->limit(6)->pluck("category_id");
 
         $products = [];
 
         for ($i = 1; $i <= 6; $i++) { // 6 categories
             for ($j = 1; $j <= 10; $j++) {
                 $products[] = [
-                    'product_id' => (($i - 1) * 10) + $j,
+                    // 'product_id' => (($i - 1) * 10) + $j,
                     'category_id' => $cat[$i-1],
                     'seller_id' => 1,
                     'name' => "Product {$j} of Category {$i}",

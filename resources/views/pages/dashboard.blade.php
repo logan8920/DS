@@ -82,8 +82,8 @@
                 </div>
             </div>
         @endif
-        @if($categories)
-            @foreach ($categories as $cateogry)
+        @if($categories5)
+            @foreach ($categories5 as $cateogry)
                 <div class="container-fluid">
                     <div class="row banner-product-wrapper appear-animate pb-1 mb-10">
                         <div class="banner-product col-xl-3 col-md-4 mb-4 mb-md-0">
@@ -131,7 +131,7 @@
                                                             <a href="{{ route('product.details', 1) }}">
                                                                 @if($product?->images)
                                                                     @foreach ($product->images as $image)
-                                                                        <img src="{{ Storage::url($image['image_path']) }}" alt="Product"
+                                                                        <img src="{{ asset(Storage::url($image['image_path'])) }}" alt="Product"
                                                                             width="300" height="337">
                                                                     @endforeach
                                                                 @else
@@ -140,8 +140,8 @@
                                                                 @endif
                                                             </a>
                                                             <div class="product-action-horizontal">
-                                                                <a href="#" class="btn-product-icon btn-cart w-icon-visit"
-                                                                    title="Send To Shopify"> Send To Shopify</a>
+                                                                <a href="#" class="btn-product-icon btn-cart w-icon-visit w-100"
+                                                                    title="Send To Shopify">&nbsp; Send To Shopify</a>
                                                             </div>
                                                         </figure>
                                                         <div class="product-details">
@@ -149,7 +149,7 @@
                                                                     href="{{ route('product.details', 1) }}">{{ $product->name }}</a>
                                                             </h4>
                                                             <div class="product-price">
-                                                                <ins class="new-price">₹ {{ $product->price . " " . $counter }}</ins>
+                                                                <ins class="new-price">₹ {{ $product->price }}</ins>
                                                             </div>
                                                         </div>
                                                     </div>
