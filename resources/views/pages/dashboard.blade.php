@@ -119,11 +119,11 @@
                                                                 }">
                                 @if($cateogry->product)
                                     @php $counter = 0; @endphp
-                                    @foreach ($cateogry->product as $product)
-                                        <div class="swiper-wrapper row cols-xl-4 cols-lg-3 cols-2">
+                                    <div class="swiper-wrapper row cols-xl-4 cols-lg-3 cols-2">
+                                            @foreach ($cateogry->product as $product)
                                             @php $counter++; @endphp
                                             @if($counter === 1)
-                                                <div class="swiper-slide product-col">
+                                            <div class="swiper-slide product-col">
                                             @endif
                                                 <div class="product-wrap">
                                                     <div class="product text-center">
@@ -156,16 +156,13 @@
                                                 </div>
 
                                                 <!-- End of Product Wrap -->
-                                                @if($counter % 2 === 0)
-                                                    </div>
-                                                    <!-- End of Product Col -->
-                                                    @php $counter = 0; @endphp
-                                                @endif
-
-
-
+                                            @if($counter % 2 === 0)
+                                            </div>
+                                            <!-- End of Product Col -->
+                                            @php $counter = 0; @endphp
+                                            @endif
+                                            @endforeach
                                         </div>
-                                    @endforeach
                                 @endif
                             </div>
                         </div>
