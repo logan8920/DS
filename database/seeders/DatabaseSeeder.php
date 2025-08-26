@@ -34,7 +34,6 @@ class DatabaseSeeder extends Seeder
 
         DB::table('categories')->insert([
             [
-                'category_id' => 1,
                 'name' => 'Electronics',
                 'icon' => 'category-1.jpg',
                 'is_active' => 1,
@@ -43,7 +42,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::parse('2025-08-25 08:46:38'),
             ],
             [
-                'category_id' => 2,
                 'name' => 'Mobiles',
                 'icon' => 'category-2.jpg',
                 'is_active' => 1,
@@ -52,7 +50,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::parse('2025-08-25 08:50:11'),
             ],
             [
-                'category_id' => 3,
                 'name' => 'Laptops',
                 'icon' => 'category-3.jpg',
                 'is_active' => 1,
@@ -61,7 +58,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::parse('2025-08-25 08:50:23'),
             ],
             [
-                'category_id' => 4,
                 'name' => 'Fashion',
                 'icon' => 'category-4.jpg',
                 'is_active' => 1,
@@ -70,7 +66,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::parse('2025-08-25 08:50:29'),
             ],
             [
-                'category_id' => 5,
                 'name' => 'Men Clothing',
                 'icon' => 'category-5.jpg',
                 'is_active' => 1,
@@ -79,7 +74,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::parse('2025-08-25 08:50:43'),
             ],
             [
-                'category_id' => 6,
                 'name' => 'Women Clothing',
                 'icon' => 'category-6.jpg',
                 'is_active' => 1,
@@ -89,6 +83,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        $cat = DB::table("categories")->orderBy('category_id',"DESC")->limit(6)->pluck("category_id");
 
         $products = [];
 
@@ -96,7 +91,7 @@ class DatabaseSeeder extends Seeder
             for ($j = 1; $j <= 10; $j++) {
                 $products[] = [
                     'product_id' => (($i - 1) * 10) + $j,
-                    'category_id' => $i,
+                    'category_id' => $cat[$i-1],
                     'seller_id' => 1,
                     'name' => "Product {$j} of Category {$i}",
                     'slug' => "Product {$j} of Category {$i}",
@@ -119,8 +114,6 @@ class DatabaseSeeder extends Seeder
         $products = DB::table('products')->pluck('product_id');
         $counter = 1;
         foreach ($products as $productId) {
-            $imageCount = rand(2, 3);
-
             for ($i = 1; $i <= 2; $i++) {
                 DB::table('product_images')->insert([
                     'product_id' => $productId,
