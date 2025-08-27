@@ -91,7 +91,7 @@
                             <div class="banner banner-fixed overlay-zoom br-xs">
                                 <figure class="banner-media h-100">
                                     <img src="assets/images/categories/{{ $cateogry->icon }}" alt="{{ $cateogry->name }}"
-                                        width="431" height="610" style="background-color: #E2E2E2;" />
+                                        width="431" height="610" style="background-color: #E2E2E2;object-fit: contain;" />
                                 </figure>
                                 <div class="banner-content">
                                     <h5 class="banner-subtitle text-uppercase font-weight-bold">Accessories</h5>
