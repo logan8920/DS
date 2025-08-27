@@ -113,7 +113,7 @@
                                                                         'slidesPerView': 4
                                                                     },
                                                                     '1520': {
-                                                                        'slidesPerView': 6
+                                                                        'slidesPerView': 4
                                                                     }
                                                                 }
                                                                 }">

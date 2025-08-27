@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div class="footer-middle">
+        {{-- <div class="footer-middle">
             <div class="widget widget-category">
                 <div class="category-box">
                     <h6 class="category-name">Consumer Electric:</h6>
@@ -185,7 +185,7 @@
                     <a href="demo15-shop.html">View all</a>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="footer-bottom">
             <div class="footer-left">
                 <p class="copyright">Copyright © 2021 Wolmart Store. All Rights Reserved.</p>
