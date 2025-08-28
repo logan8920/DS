@@ -4,7 +4,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard.index');
+Route::get('/', function () {
+    return redirect('/dashboard');
+});
+
 
 Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 

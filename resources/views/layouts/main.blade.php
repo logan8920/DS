@@ -15,6 +15,9 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/favicon-32x32.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <!-- WebFont.js -->
+    <script type="text/javascript">
+        const baseSRC = '{{ url('/') }}';
+    </script>
     <script>
         WebFontConfig = {
             google: {
@@ -24,7 +27,7 @@
         (function(d) {
             var wf = d.createElement('script'),
                 s = d.scripts[0];
-            wf.src = 'assets/js/webfont.js';
+            wf.src = baseSRC+'/assets/js/webfont.js';
             wf.async = true;
             s.parentNode.insertBefore(wf, s);
         })(document);

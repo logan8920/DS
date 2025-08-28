@@ -1,13 +1,11 @@
-# Enable URL rewriting
 RewriteEngine On
 
-# Redirect all requests to the public folder
-RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ public/$1 [L]
+# If request is a directory (like just /website/), send to server.php
+RewriteRule ^$ server.php [L]
 
-# php -- BEGIN cPanel-generated handler, do not edit
-# Set the “ea-php82” package as the default “PHP” programming language.
-<IfModule mime_module>
-  AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
-</IfModule>
-# php -- END cPanel-generated handler, do not edit
+# If request is not an existing file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route everything else to server.php
+RewriteRule ^ server.php [L]

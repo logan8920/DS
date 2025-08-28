@@ -23,17 +23,17 @@
                 <!-- End of DropDown Menu -->
 
                 <div class="dropdown">
-                    <a href="#language"><img src="assets/images/flags/eng.png" alt="ENG Flag" width="14"
+                    <a href="#language"><img src="{{asset('assets/images/flags/eng.png') }}" alt="ENG Flag" width="14"
                             height="8" class="dropdown-image" /> ENG
                     </a>
                     <div class="dropdown-box">
                         <a href="#ENG">
-                            <img src="assets/images/flags/eng.png" alt="ENG Flag" width="14" height="8"
+                            <img src="{{asset('assets/images/flags/eng.png') }}" alt="ENG Flag" width="14" height="8"
                                 class="dropdown-image" />
                             ENG
                         </a>
                         <a href="#FRA">
-                            <img src="assets/images/flags/fra.png" alt="FRA Flag" width="14" height="8"
+                            <img src="{{asset('assets/images/flags/fra.png') }}" alt="FRA Flag" width="14" height="8"
                                 class="dropdown-image" />
                             FRA
                         </a>
@@ -58,7 +58,7 @@
                 <a href="#" class="mobile-menu-toggle  w-icon-hamburger">
                 </a>
                 <a href="{{ route('dashboard') }}" class="logo ml-lg-0">
-                    <img src="assets/brand_logo_hor.png" alt="logo" width="144" height="45" />
+                    <img src="{{asset('assets/brand_logo_hor.png')}}" alt="logo" width="144" height="45" />
                 </a>
                 <form method="get" action="#"
                     class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">

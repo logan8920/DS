@@ -20,7 +20,7 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide banner banner-fixed intro-slide1">
                             <figure class="banner-media">
-                                <img src="assets/images/banner/{{ $banner['image'] }}" alt="Slide" width="1903" height="100"
+                                <img src="{{ asset('assets/images/banner/')}}/{{ $banner['image'] }}" alt="Slide" width="1903" height="100"
                                     alt="{{ $banner['name'] }}" style="background-color: #DBDBDD;">
                             </figure>
                         </div>
@@ -63,7 +63,7 @@
                                     <div class="swiper-slide category category-ellipse">
                                         <figure class="category-media">
                                             <a href="{{ route('product.categories') }}">
-                                                <img src="assets/images/categories/{{ $cateogry['icon'] }}"
+                                                <img src="{{ asset('assets/images/categories/')}}/{{ $cateogry['icon'] }}"
                                                     alt="{{ $cateogry['name'] }}" width="190" height="190"
                                                     style="background-color: #C1C6CC;" />
                                             </a>
@@ -90,7 +90,7 @@
                             <h2 class="title pt-3 mb-5 appear-animate">{{ $cateogry->name }}</h2>
                             <div class="banner banner-fixed overlay-zoom br-xs">
                                 <figure class="banner-media h-100">
-                                    <img src="assets/images/categories/{{ $cateogry->icon }}" alt="{{ $cateogry->name }}"
+                                    <img src="{{ asset('assets/images/categories/')}}/{{ $cateogry->icon }}" alt="{{ $cateogry->name }}"
                                         width="431" height="610" style="background-color: #E2E2E2;object-fit: contain;" />
                                 </figure>
                                 <div class="banner-content">
@@ -135,7 +135,7 @@
                                                                             width="300" height="337">
                                                                     @endforeach
                                                                 @else
-                                                                    <img src="assets/images/demos/demo15/products/2-1-2.jpg" alt="Product"
+                                                                    <img src="{{ asset('assets/images/demos/demo15/products/2-1-2.jpg') }}" alt="Product"
                                                                         width="300" height="337">
                                                                 @endif
                                                             </a>

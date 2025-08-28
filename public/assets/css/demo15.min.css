@@ -911,6 +911,10 @@ table {
   .d-md-show {
     display: none !important;
   }
+
+  figure.banner-media {
+    float: inline-end;
+  }
 }
 @media (max-width: 575px) {
   .d-sm-show {
