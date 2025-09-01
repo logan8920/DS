@@ -6,4 +6,6 @@ use App\Http\Controllers\ProductController;
 Route::middleware('auth')->prefix("product")->group(function () {
     Route::get("{product}/details",[ProductController::class, "details"])->name("product.details");
     Route::get("/categories",[ProductController::class, "categories"])->name("product.categories");
+
+    Route::post("push-to-shopify",[ProductController::class, "pushToShopify"])->name("product.push");
 });

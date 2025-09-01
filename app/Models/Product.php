@@ -9,4 +9,10 @@ class Product extends Model
     public function images() {
         return $this->hasMany(ProductImage::class, "product_id", "product_id");
     }
+
+    public function variants()  {
+        return $this->hasMany(Product::class, "product_id", "product_id");
+    }
+
+    protected $hidden = ['product_id'];
 }

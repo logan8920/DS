@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function channelConfigs() {
+        return $this->hasMany(ChannelConfig::class,"seller_id","id");
+    }
 }

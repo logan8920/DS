@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
+use App\Models\ChannelConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Product;
+use Exception;
 
 class ChannelsController extends Controller
 {
@@ -54,7 +59,9 @@ class ChannelsController extends Controller
      */
     public function create()
     {
-        //
+        $channels = Channel::all();
+        $pageHeading = "Add Channel";
+        return view('pages.channels.createchannel', compact('channels', 'pageHeading'));
     }
 
     /**
@@ -62,7 +69,43 @@ class ChannelsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $validator = Validator::make($request->all(), [
+                "channel_id" => "required|numeric|exists:channels,id",
+                "domain" => "required|unique:channel_configs,domain",
+                "api_key" => "required",
+                "api_key_secret" => "required",
+                "access_token" => "required"
+            ]);
+
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first(), 422);
+            }
+
+            $data = $validator->validated();
+
+            $data['created_at'] = now();
+            $data['seller_id'] = auth()->id();
+
+            $result = ChannelConfig::create($data);
+
+            if(!$result) {
+                throw new Exception("Unable to create channel!", 422);
+            } 
+
+            return response()->json([
+                "success" => "Channel Created Successfully!",
+                "sweetAlert" => true,
+                "redirect" => route('channels.allChannels') 
+            ],200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                "error" => $e->getMessage(),
+                //"redirect" => route('channels.allChannels') 
+            ],200);
+        }
     }
 
     /**

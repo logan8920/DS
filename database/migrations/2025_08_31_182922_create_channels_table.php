@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("seller_id")->nullable();
-            $table->string('domain')->nullable();
-            $table->string('api_key')->nullable();
-            $table->string('api_key_secret')->nullable();
-            $table->foreign('seller_id')->references('id')->on('users')->onDelete('set null');
+            $table->string('name')->nullable();
+            $table->string('image')->nullable();
+            $table->string('description')->nullable();
+            $table->string('callback_url')->nullable();
             $table->timestamps();
         });
     }

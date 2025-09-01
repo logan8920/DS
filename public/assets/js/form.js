@@ -3,8 +3,11 @@ let form = document.getElementById('regForm'),
   pwdd;
 (form && (form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  if (!$('#regForm').valid()) return false;
-
+  if ($('#regForm[validate]').length && !$('#regForm').valid()) {
+    return false;
+  }else if(!$('#regForm')[0].checkValidity()) {
+    return false;
+  }
   const $callback = $('#regForm[callbackFn]');
   if($callback && $callback.attr('callbackFn')) {
     const Fn = $callback.attr('callbackFn');
