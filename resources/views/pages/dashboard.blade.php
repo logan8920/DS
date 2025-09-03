@@ -140,7 +140,7 @@
                                                                 @endif
                                                             </a>
                                                             <div class="product-action-horizontal">
-                                                                <a href="#" class="btn-product-icon btn-cart w-icon-visit w-100"
+                                                                <a href="#" data-product-id="{{ $product?->product_id }}" class="btn-product-icon btn-cart w-icon-visit w-100"
                                                                     title="Send To Shopify">&nbsp; Send To Shopify</a>
                                                             </div>
                                                         </figure>

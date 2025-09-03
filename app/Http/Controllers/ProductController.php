@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\{Product,User};
 use Illuminate\Http\Request;
-use App\Libraries\ShopifyTraits;
+use App\Libraries\Shopify;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use DB;
@@ -91,58 +91,52 @@ class ProductController extends Controller
 
             $productId = $request->product_id;
 
-
-            $productData = Product::select(["product_id", "name as title"])
+            $product = Product::select(["product_id", "name as title"])
                 ->with([
-                    "variants" => function ($q) {
-                        $q->select(["product_id", "name as title", "price", "sku"]); // include FK + fields you need
+                    "productOptions" => function ($q) {
+                        $q->select([
+                            'product_attribute_values.product_id',
+                            'product_attribute_values.value',
+                            'attributes.name as attribute'
+                        ])
+                        ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id');
                     },
-                    "images" => function ($q) {
-                        $q->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")]); // include FK
-                    }
+                    
                 ])
                 ->where("product_id", $productId)
-                ->first()->toArray();
+                ->first();
 
-            /*$productData = [
-                "title" => "Helmet Nova Dummy",
-                "variants" => [
-                    [
-                        "price" => "49.99",   // Price lives here
-                        "sku" => "HELMET001"
-                    ]
-                ],
-                "images" => [
-                    [
-                        "src" => "https://dummyimage.com/600x400/000/fff.png&text=Helmet+Image",
-                        "altText" => "Gray helmet dummy"
-                    ]
-                ],
-                "metafields" => [
-                    [
-                        "key" => "material",
-                        "namespace" => "specs",
-                        "type" => "single_line_text_field",
-                        "value" => "Polycarbonate"
-                    ]
-                ]
-            ];*/
+            // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
+            $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text as alt",DB::raw("'IMAGE' as mediaContentType")])->get();
+            
+            $media = count($media->toArray()) ? $media->toArray() : NULL;
 
-            // $config = auth()->user()->channelConfigs()->whereDomain($request->domain)->first();
+            $product = $product->toArray();
 
-            $config = User::where("id",1)->first()->channelConfigs()->whereDomain($request->domain)->first();
+            $productData = compact("product","media");
+
+            $productData['product'] = array_filter($productData['product'], function($data) {
+                return $data !== null && !empty($data);
+            });
+
+            $productData = array_filter($productData, function($data) {
+                return $data !== null && !empty($data);
+            });
+
+            $config = auth()->user()->channelConfigs()->whereDomain("rmspn9-sg.myshopify.com")->first();
+            // $config = User::where("id",1)->first()->channelConfigs()->whereDomain($request->domain)->first();
 
             if(!$config) {
                 throw new Exception("Seller for {$request->domain} Channel Not Found!", 422);
             }
             
             //dd(json_encode($productData));
-            $shopify = new ShopifyTraits($config);
+            $shopify = new Shopify($config);
 
             $response = $shopify->createProduct($productData);
 
-            if(!$response['response'] ?? false) {
-                throw new Exception($response['message'] ?? "Unable to get Response!", 422);
+            if(isset($response['response']['errors']) ||  !$response['response']) {
+                throw new Exception($response['response']['errors'][0]['message'] ?? $response['response']['errors']['message'] ?? "Unable to get Response!", 422);
             }
 
             return response()->json([

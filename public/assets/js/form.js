@@ -1,6 +1,5 @@
-let form = document.getElementById('regForm'),
-  csrfToken = (document.querySelector('[name="csrf-token"]') && document.querySelector('[name="csrf-token"]').content || ''),
-  pwdd;
+let form = document.getElementById('regForm'),pwdd;
+  window.csrfToken = (document.querySelector('[name="csrf-token"]') && document.querySelector('[name="csrf-token"]').content || '');
 (form && (form.addEventListener("submit", async function (e) {
   e.preventDefault();
   if ($('#regForm[validate]').length && !$('#regForm').valid()) {

@@ -4,7 +4,7 @@ namespace App\Libraries;
 use Illuminate\Support\Facades\Http;
 use Log;
 
-class ShopifyTraits
+class Shopify
 {
     private $key;
 
@@ -16,20 +16,35 @@ class ShopifyTraits
 
     private $reqID;
 
-    private $query = <<<GQL
-mutation CreateProductWithAllDetails(\$product: ProductCreateInput!) { 
-  productCreate(product: \$product) { 
-    product { 
-      id 
-      title 
-      variants(first: 10) { nodes { id title price sku } } 
-      media(first: 10) { nodes { alt mediaContentType preview { status } } } 
-      metafields(first: 10) { nodes { namespace key value } } 
-    } 
-    userErrors { field message } 
-  } 
+    private $mutationWithMedia = <<<GQL
+mutation CreateProductWithNewMedia(\$product: ProductCreateInput!, \$media: [CreateMediaInput!]) {
+  productCreate(product: \$product, media: \$media) {
+    product {
+      id
+      title
+      variants(first: 10) { nodes { id title price sku } }
+      media(first: 10) { nodes { alt mediaContentType preview { status } } }
+      metafields(first: 10) { nodes { namespace key value } }
+    }
+    userErrors { field message }
+  }
 }
 GQL;
+
+    private $mutationWithoutMedia = <<<GQL
+mutation CreateProduct(\$product: ProductCreateInput!) {
+  productCreate(product: \$product) {
+    product {
+      id
+      title
+      variants(first: 10) { nodes { id title price sku } }
+      metafields(first: 10) { nodes { namespace key value } }
+    }
+    userErrors { field message }
+  }
+}
+GQL;
+
 
     public function __construct($config)
     {
@@ -43,10 +58,8 @@ GQL;
     public function createProduct($productData)
     {
         $body = [
-            "query" => $this->query,
-            "variables" => [
-                "product" => $productData
-            ]
+            "query" => isset($productData['media']) ? $this->mutationWithMedia : $this->mutationWithoutMedia,
+            "variables" => $productData
         ];
 
         $request = [
