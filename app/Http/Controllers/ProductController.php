@@ -107,10 +107,15 @@ class ProductController extends Controller
                 ->first();
 
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
-            $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text as alt",DB::raw("'IMAGE' as mediaContentType")])->get();
-            
+            $media = $product->images()
+                ->select([
+                    "product_id",
+                    DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                    "alt_text as alt",
+                    DB::raw("'IMAGE' as \"mediaContentType\"")
+                ])
+                ->get();
             $media = count($media->toArray()) ? $media->toArray() : NULL;
-
             $product = $product->toArray();
 
             $productData = compact("product","media");
