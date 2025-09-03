@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Product;
 use Exception;
+use DB;
 
 class ChannelsController extends Controller
 {
@@ -34,15 +35,13 @@ class ChannelsController extends Controller
                     ]
                 ],
                 "columns" => [
-                    ['data' => 'order_date', 'title' => 'Order Date'],
-                    ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
-                    ['data' => 'price', 'title' => 'Price'],
-                    ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'name', 'title' => 'Store Name'],
+                    ['data' => 'callback_url', 'title' => 'Store Url'],
+                    ['data' => 'domain', 'title' => 'Channel Name'],
+                    ['data' => 'is_active', 'title' => 'IS Active'],
+                    ['data' => 'created_at', 'title' => 'Pull Date'],
+                    ['data' => 'created_at', 'title' => 'Created on'],
+                    ['data' => 'name', 'title' => 'Action'],
                 ],
                 "url" => route('channels.allChannels.get')
             ]
@@ -113,76 +112,56 @@ class ChannelsController extends Controller
      */
     public function show(Request $request)
     {
-        $data = [
-            [
-                'order_date' => '2025-08-16',
-                'shopify_order_id' => '#SH12345',
-                'order_id' => 'ORD001',
-                'price' => '₹2500',
-                'payment' => 'COD',
-                'customer' => 'John Doe',
-                'mobile' => '9876543210',
-                'store' => 'Amazon',
-            ],
-            [
-                'order_date' => '2025-08-15',
-                'shopify_order_id' => '#SH12346',
-                'order_id' => 'ORD002',
-                'price' => '₹1800',
-                'payment' => 'Prepaid',
-                'customer' => 'Vishal Kumar',
-                'mobile' => '9998887776',
-                'store' => 'Flipkart',
-            ]
-        ];
-
-
-
+        
         $order = $request->post('order');
         $start = $request->post('start') ?? 0;
         $length = $request->post('length') ?? 10;
         $search = $request->post('search')['value'] ?? null;
 
-        // $query = User::selectRaw('(@rownum := @rownum + 1) AS s_no, users.id, users.name, users.firmname, business_name, users.username, users.status, users.datetime, users.created_by, users.email, users.created_at, users.phone')
-        //     ->crossJoin(DB::raw('(SELECT @rownum := 0) r'))
-        //     ->where('api_partner', 1)->with(['createdBy:id,name', 'apiCredentials:user_id,ipaddress','apiConfig:user_id,pg_company_id']);
+        $dbColumns = [
+            'channel_configs.domain', 
+            'callback_url', 
+            'channels.name', 
+            'channel_configs.created_at'
+        ];
 
-        // if (auth()->user()->api_partner) {
-        //     $query->where('id', auth()->user()->id);
-        // }
-        // // Search filter
-        // if ($search) {
-        //     $query->where(function ($q) use ($dbColumns, $search) {
-        //         foreach ($dbColumns as $key => $column) {
-        //             if ($key === 0) {
-        //                 $q->where($column, 'like', "%$search%");
-        //             } else {
-        //                 $q->orWhere($column, 'like', "%$search%");
-        //             }
-        //         }
-        //     });
-        // }
+        $query = ChannelConfig::selectRaw("domain, callback_url, channels.name, channel_configs.created_at, 'Active' as is_active")
+        ->join('channels', 'channels.id', '=', 'channel_configs.channel_id');
 
-        // // Order
-        // if (isset($order[0]['dir'])) {
-        //     $dir = $order[0]['dir'];
-        //     $colIndex = $order[0]['column'] ?? false;
-        //     $col = $dbColumns[$colIndex] ?? false;
-        //     if ($col) {
-        //         $query->orderBy($col, $dir);
-        //     }
-        // } else {
-        //     $query->orderBy('users.id', 'desc');
-        // }
+        $query->where('seller_id', auth()->user()->id);
+        // Search filter
+        if ($search) {
+            $query->where(function ($q) use ($dbColumns, $search) {
+                foreach ($dbColumns as $key => $column) {
+                    if ($key === 0) {
+                        $q->where($column, 'like', "%$search%");
+                    } else {
+                        $q->orWhere($column, 'like', "%$search%");
+                    }
+                }
+            });
+        }
 
-        // // Count recordsFiltered before applying limit & offset
-        // $recordsFiltered = $query->count(DB::raw('1'));
+        // Order
+        if (isset($order[0]['dir'])) {
+            $dir = $order[0]['dir'];
+            $colIndex = $order[0]['column'] ?? false;
+            $col = $dbColumns[$colIndex] ?? false;
+            if ($col) {
+                $query->orderBy($col, $dir);
+            }
+        } else {
+            $query->orderBy('channel_configs.id', 'desc');
+        }
 
-        // // Pagination
-        // $data = $query->offset($start)->limit($length)->get()->toArray();
+        // Count recordsFiltered before applying limit & offset
+        $recordsFiltered = $query->count(DB::raw('1'));
 
-        // // Total records
-        // $recordsTotal = User::count();
+        // Pagination
+        $data = $query->offset($start)->limit($length)->get()->toArray();
+
+        // Total records
+        $recordsTotal = ChannelConfig::count();
 
         // Prepare response
         $draw = $request->post('draw');
