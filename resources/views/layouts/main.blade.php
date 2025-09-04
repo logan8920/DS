@@ -208,6 +208,35 @@
                 btn.textContent = "▼";
             }
         }
+
+        window.ListOnShopifyResponse = function (req) {
+            return new Promise((resolve) => {
+                const $modal = $(".cart-dropdown");
+                const $closeBtn = $modal.find(".btn-close");
+                const $pushBtn = $modal.find(".btn-push");
+                $modal.find(".cart-header span").text(req.headerText);
+                $modal.find(".product-name").text(req.productName);
+                $modal.find("figure.product-media a img").attr("src",req.productMedia);
+                $modal.find(".product-price").text(req.productPrice);
+                $modal.addClass("opened");
+
+                function closeModal(response) {
+                    $modal.removeClass("opened");
+                    $pushBtn.off("click", yesHandler);
+                    $closeBtn.off("click", noHandler);
+                    resolve(response);
+                }
+
+                function yesHandler() {
+                    let selectDomain = $modal.find("select#channelDomain").val();
+                    closeModal(selectDomain);
+                }
+                function noHandler() { closeModal(0); }
+
+                $pushBtn.on("click", yesHandler);
+                $closeBtn.on("click", noHandler);
+            });
+        }
     </script>
     <!-- Plugin JS File -->
     <script data-cfasync="false" src="{{ asset('assets/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}">

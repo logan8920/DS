@@ -92,6 +92,7 @@
                             </a>
                         </h4>
                         <a href="tel:#" class="phone-number font-weight-bolder ls-50">0(800)123-456</a>
+                        @include('partials.cart')
                     </div>
 
                 </div>
