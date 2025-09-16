@@ -12,7 +12,7 @@
     <div class="dropdown-box">
         <div class="cart-header">
             <span>Shopping Cart</span>
-            <a href="#" class="btn-close">Close<i class="w-icon-long-arrow-right"></i></a>
+            <a href="javascript:;" class="btn-close">Close<i class="w-icon-long-arrow-right"></i></a>
         </div>
 
         <div class="products">
@@ -38,10 +38,34 @@
         </div>
 
         <div class="cart-total">
-            <label for="domain">Select Channel</label>
-            <select name="domain" class="form-control" id="channelDomain" required>
-                <option value="test">test</option>
-            </select>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="platform_price">Platform Price</label>
+                        <input type="number" id="platform_price" value="" class="form-control" placeholder="Plateform Price" disabled="true"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="selling_price">Selling Price</label>
+                        <input type="number" name="selling_price" id="selling_price" value="" class="form-control" placeholder="Selling Price"/>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="domain">Select Channel</label>
+                        @php $channels = \App\Models\ChannelConfig::whereSellerId(auth()->id())->get(); @endphp
+                        <select name="domain" class="form-control" id="channelDomain" required>
+                            <option value="">Select Channel</option>    
+                            @foreach ($channels as $channel)
+                            <option value="{{$channel->domain}}">{{$channel->domain}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="cart-action">

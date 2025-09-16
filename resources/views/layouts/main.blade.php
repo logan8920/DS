@@ -211,6 +211,7 @@
 
         window.ListOnShopifyResponse = function (req) {
             return new Promise((resolve) => {
+                console.log(req);
                 const $modal = $(".cart-dropdown");
                 const $closeBtn = $modal.find(".btn-close");
                 const $pushBtn = $modal.find(".btn-push");
@@ -218,6 +219,8 @@
                 $modal.find(".product-name").text(req.productName);
                 $modal.find("figure.product-media a img").attr("src",req.productMedia);
                 $modal.find(".product-price").text(req.productPrice);
+                console.log($modal.find("input#platform_price"));
+                $modal.find("input#platform_price").val(parseInt(req.productPrice.trim().replace('₹ ','')));
                 $modal.addClass("opened");
 
                 function closeModal(response) {
