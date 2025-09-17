@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title')
-    - Product Details
+    - {{ strtoupper($product->name) }}
 @endsection
 
 @section('content')
@@ -14,24 +14,28 @@
             </ul>
             <ul class="product-nav list-style-none">
                 <li class="product-nav-prev">
-                    <a href="#">
+                    <a href="{{ $product?->previous() ? route('product.details',$product?->previous()?->product_id ?? 1) : "#" }}" {{ !$product?->previous() ? "disabled" : ""  }}>
                         <i class="w-icon-angle-left"></i>
                     </a>
+                    @if($product?->previous())
                     <span class="product-nav-popup">
-                        <img src="assets/images/products/product-nav-prev.jpg" alt="Product" width="110"
-                            height="110" />
-                        <span class="product-name">Soft Sound Maker</span>
+                        <img src="{{ storage_path($product?->previous()?->image?->image_path) }}" alt="{{$product?->previous()?->image?->alt_text}}" width="110"
+                            height="110" onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
+                        <span class="product-name">{{ ucwords($product?->previous()?->name) }}</span>
                     </span>
+                    @endif
                 </li>
                 <li class="product-nav-next">
-                    <a href="#">
+                    <a href="{{ $product?->next() ? route('product.details',$product?->next()?->product_id ?? 1) : "#" }}">
                         <i class="w-icon-angle-right"></i>
                     </a>
+                    @if($product?->next())
                     <span class="product-nav-popup">
-                        <img src="assets/images/products/product-nav-next.jpg" alt="Product" width="110"
-                            height="110" />
-                        <span class="product-name">Fabulous Sound Speaker</span>
+                        <img src="{{ storage_path($product?->next()?->image?->image_path) }}" alt="{{$product?->next()?->image?->alt_text}}" width="110"
+                            height="110" onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
+                        <span class="product-name">{{ ucwords($product?->next()?->name) }}</span>
                     </span>
+                    @endif
                 </li>
             </ul>
         </nav>
@@ -52,48 +56,24 @@
                                             }
                                         }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
+                                            @forelse($product->images as $image)
                                             <div class="swiper-slide">
                                                 <figure class="product-image">
-                                                    <img src="assets/images/products/default/1-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/1-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
+                                                    <img src="{{ storage_path($image->image_path) }}"
+                                                        data-zoom-image="{{ storage_path($image->image_path) }}"
+                                                        alt="{{ $image->alt_text }}" width="800" height="900"
+                                                        onerror="(this.src = `{{ asset('assets/brand_logo_500x500.png') }}`),(this.dataset.zoomImage = `{{ asset('assets/brand_logo_500x500.png') }}`)">
                                                 </figure>
                                             </div>
+                                            @empty
                                             <div class="swiper-slide">
                                                 <figure class="product-image">
-                                                    <img src="assets/images/products/default/2-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/2-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="488" height="549">
+                                                    <img src="{{ asset('assets/brand_logo_500x500.png') }}"
+                                                        data-zoom-image="{{ asset('assets/brand_logo_500x500.png') }}"
+                                                        alt="Dropshipx" width="488" height="549">
                                                 </figure>
                                             </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/3-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/3-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/4-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/4-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/5-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/5-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/6-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/6-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
+                                            @endforelse
                                         </div>
                                         <button class="swiper-button-next"></button>
                                         <button class="swiper-button-prev"></button>
@@ -108,30 +88,17 @@
                                             }
                                         }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
+                                            @forelse($product->images as $image)
                                             <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/1-800x900.jpg" alt="Product Thumb"
+                                                <img src="{{ storage_path($image->image_path) }}" alt="{{ $image->alt_text }}"
                                                     width="800" height="900">
                                             </div>
+                                            @empty
                                             <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/2-800x900.jpg" alt="Product Thumb"
+                                                <img src="{{ asset('assets/brand_logo_500x500.png') }}" alt="Dropshipx"
                                                     width="800" height="900">
                                             </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/3-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/4-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/5-800x900.jpg"
-                                                    alt="Product Thumb" width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/6-800x900.jpg"
-                                                    alt="Product Thumb" width="800" height="900">
-                                            </div>
+                                            @endforelse
                                         </div>
                                         <button class="swiper-button-next"></button>
                                         <button class="swiper-button-prev"></button>
@@ -140,56 +107,57 @@
                             </div>
                             <div class="col-md-6 mb-4 mb-md-6">
                                 <div class="product-details" data-sticky-options="{'minWidth': 767}">
-                                    <h1 class="product-title">Electronics Black Wrist Watch</h1>
+                                    <h1 class="product-title">{{ $product->name }}</h1>
+                                    @if($product->category)
                                     <div class="product-bm-wrapper">
                                         <figure class="brand">
-                                            <img src="assets/images/products/brand/brand-1.jpg" alt="Brand"
+                                            <img src="{{ storage_path($product?->category?->icon) }}" 
+                                                alt="{{ $product?->category?->name }}"
+                                                onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`"
                                                 width="102" height="48" />
                                         </figure>
                                         <div class="product-meta">
                                             <div class="product-categories">
                                                 Category:
-                                                <span class="product-category"><a href="#">Electronics</a></span>
+                                                <span class="product-category"><a href="{{ route('product.category.show', ["parent"=> $product?->category?->parent ? $product?->category?->parent : 0, "id" => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
                                             </div>
                                             <div class="product-sku">
-                                                SKU: <span>MS46891340</span>
+                                                SKU: <span>{{ $product?->sku }}</span>
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     <hr class="product-divider">
 
-                                    <div class="product-price"><ins class="new-price">$40.00</ins></div>
+                                    <div class="product-price"><ins class="new-price">₹ {{ $product?->price }}</ins></div>
 
-                                    <div class="ratings-container">
+                                    {{-- <div class="ratings-container">
                                         <div class="ratings-full">
                                             <span class="ratings" style="width: 80%;"></span>
                                             <span class="tooltiptext tooltip-top"></span>
                                         </div>
                                         <a href="#product-tab-reviews" class="rating-reviews scroll-to">(3
                                             Reviews)</a>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="product-short-desc">
-                                        <ul class="list-type-check list-style-none">
-                                            <li>Ultrices eros in cursus turpis massa cursus mattis.</li>
-                                            <li>Volutpat ac tincidunt vitae semper quis lectus.</li>
-                                            <li>Aliquam id diam maecenas ultricies mi eget mauris.</li>
-                                        </ul>
+                                        {!! $product?->description !!}
                                     </div>
 
                                     <hr class="product-divider">
-
+                                    @forelse($product?->attributes as $attribute)
                                     <div class="product-form product-variation-form product-color-swatch">
-                                        <label>Color:</label>
+                                        <label>{{ ucfirst($attribute?->label?->name) }}:</label>
                                         <div class="d-flex align-items-center product-variations">
-                                            <a href="#" class="color" style="background-color: #ffcc01"></a>
-                                            <a href="#" class="color" style="background-color: #ca6d00;"></a>
-                                            <a href="#" class="color" style="background-color: #1c93cb;"></a>
-                                            <a href="#" class="color" style="background-color: #ccc;"></a>
-                                            <a href="#" class="color" style="background-color: #333;"></a>
+                                            @forelse ($attribute->values as $value)
+                                            <a href="#">{{ $value->value }}</a>
+                                            @empty
+                                            <a href="#">No Specified Value</a>
+                                            @endforelse
                                         </div>
                                     </div>
+                                    @empty
                                     <div class="product-form product-variation-form product-size-swatch">
                                         <label class="mb-1">Size:</label>
                                         <div class="flex-wrap d-flex align-items-center product-variations">
@@ -200,7 +168,7 @@
                                         </div>
                                         <a href="#" class="product-variation-clean">Clean All</a>
                                     </div>
-
+                                    @endforelse
                                     <div class="product-variation-price">
                                         <span></span>
                                     </div>
