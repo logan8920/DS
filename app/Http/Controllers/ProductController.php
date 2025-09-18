@@ -84,7 +84,7 @@ class ProductController extends Controller
 
             $validator = Validator::make($request->all(), [
                 "product_id" => "required|numeric|exists:products,product_id",
-                "domain" => "required|exists:channel_config,domain"
+                "domain" => "required|exists:channel_configs,domain"
             ]);
 
             if ($validator->fails()) {
