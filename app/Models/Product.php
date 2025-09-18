@@ -11,23 +11,24 @@ class Product extends Model
     public function image()
     {
         return $this->hasOne(ProductImage::class, "product_id", "product_id")
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->where('is_primary', 1);
                 $q->orWhere("is_primary", 0);
             })
-            ->where("is_active",1);
+            ->where("is_active", 1);
     }
 
     public function images()
     {
         return $this->hasMany(ProductImage::class, "product_id", "product_id")
-            ->where("is_active",1)
-            ->orderBy("is_active","desc");
+            ->where("is_active", 1)
+            ->orderBy("is_active", "desc");
     }
 
-    public function category()  {
-        return $this->hasOne(Category::class, "category_id","category_id")
-        ->whereIsActive(1);
+    public function category()
+    {
+        return $this->hasOne(Category::class, "category_id", "category_id")
+            ->whereIsActive(1);
     }
 
     public function previous()
@@ -44,7 +45,10 @@ class Product extends Model
             ->first();
     }
 
-    public function attributes() {
-        return $this->hasMany(ProductAttributeValue::class, "product_id","product_id")->groupBy("attribute_id");
+    public function attributes()
+    {
+        return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id")
+            ->selectRaw('DISTINCT(attribute_id), product_attribute_id, value, product_id');
     }
+
 }

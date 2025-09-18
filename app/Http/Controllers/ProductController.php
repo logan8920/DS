@@ -68,7 +68,8 @@ class ProductController extends Controller
 
     public function details(Product $product)
     {
-        return view('pages.product-details',compact('product'));
+        $moreProducts = Product::where("product_id","!=",$product->product_id)->get();
+        return view('pages.product-details',compact('product','moreProducts'));
     }
 
     public function categories()
