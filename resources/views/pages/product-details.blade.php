@@ -173,7 +173,7 @@
                                                     <span>Calculator</span>
                                                 </button>
                                                 &nbsp;&nbsp;
-                                                <button class="btn btn-primary">
+                                                <button class="btn btn-primary btn-push-to-shopify">
                                                     <i class="w-icon-visit"></i>
                                                     <span>Push to Shopify</span>
                                                 </button>
