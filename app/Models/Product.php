@@ -51,4 +51,8 @@ class Product extends Model
             ->selectRaw('DISTINCT(attribute_id), product_attribute_id, value, product_id');
     }
 
+    protected $hidden = [
+        'product_id',
+    ];
+
 }
