@@ -9,7 +9,7 @@
             <span class="cart-count">2</span>
         </i>
     </a> --}}
-    <div class="dropdown-box">
+    <div class="dropdown-box" style="overflow: scroll;width: 461px;max-width: 500px;">
         <div class="cart-header">
             <span>Shopping Cart</span>
             <a href="javascript:;" class="btn-close">Close<i class="w-icon-long-arrow-right"></i></a>
@@ -40,29 +40,102 @@
         <div class="cart-total">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="platform_price">Platform Price</label>
-                        <input type="number" id="platform_price" value="" class="form-control" placeholder="Plateform Price" disabled="true"/>
+                        <input type="number" id="platform_price" value="" class="form-control mt-1"
+                            placeholder="Plateform Price" disabled="true" />
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="selling_price">Selling Price</label>
-                        <input type="number" name="selling_price" id="selling_price" value="" class="form-control" placeholder="Selling Price"/>
+                        <input type="number" name="selling_price" id="selling_price" value="" class="form-control mt-1"
+                            placeholder="Selling Price" />
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="domain">Select Channel</label>
                         @php $channels = \App\Models\ChannelConfig::whereSellerId(auth()->id())->get(); @endphp
-                        <select name="domain" class="form-control" id="channelDomain" required>
-                            <option value="">Select Channel</option>    
+                        <select name="domain" class="form-control mt-1" id="channelDomain" required>
+                            <option value="">Select Channel</option>
                             @foreach ($channels as $channel)
-                            <option value="{{$channel->domain}}">{{$channel->domain}}</option>
+                                <option value="{{$channel->domain}}">{{$channel->domain}}</option>
                             @endforeach
                         </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="float">
+                            Your margin
+                        </div>
+                        <div class="float-right margin-amt">
+                            0.00
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button"
+                                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                                        aria-controls="collapseOne">
+                                        Collapsible Group Item #1
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Some placeholder content for the first accordion panel. This panel is shown by
+                                    default, thanks to the <code>.show</code> class.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                        aria-controls="collapseTwo">
+                                        Collapsible Group Item #2
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Some placeholder content for the second accordion panel. This panel is hidden by
+                                    default.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingThree">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                        aria-controls="collapseThree">
+                                        Collapsible Group Item #3
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    And lastly, the placeholder content for the third and final accordion panel. This
+                                    panel is hidden by default.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
