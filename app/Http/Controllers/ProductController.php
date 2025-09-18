@@ -66,9 +66,10 @@ class ProductController extends Controller
         //
     }
 
-    public function details($product)
+    public function details(Product $product)
     {
-        return view('pages.product-details');
+        $moreProducts = Product::where("product_id","!=",$product->product_id)->limit(30)->get();
+        return view('pages.product-details',compact('product','moreProducts'));
     }
 
     public function categories()
@@ -82,7 +83,8 @@ class ProductController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
-                "product_id" => "required|numeric|exists:products,product_id"
+                "product_id" => "required|numeric|exists:products,product_id",
+                "domain" => "required|exists:channel_config,domain"
             ]);
 
             if ($validator->fails()) {
@@ -90,7 +92,7 @@ class ProductController extends Controller
             }
 
             $productId = $request->product_id;
-
+            $domain = $request->domain;
             $product = Product::select(["product_id", "name as title"])
                 ->with([
                     "productOptions" => function ($q) {
@@ -128,7 +130,7 @@ class ProductController extends Controller
                 return $data !== null && !empty($data);
             });
 
-            $config = auth()->user()->channelConfigs()->whereDomain("rmspn9-sg.myshopify.com")->first();
+            $config = auth()->user()->channelConfigs()->whereDomain($domain)->first();
             // $config = User::where("id",1)->first()->channelConfigs()->whereDomain($request->domain)->first();
 
             if(!$config) {
@@ -159,5 +161,9 @@ class ProductController extends Controller
             ]);
         }
 
+    }
+
+    public function categoryProductShow($parentId, $categoryId){
+        dd($parentId,$categoryId);
     }
 }

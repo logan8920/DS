@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title')
-    - Product Details
+    - {{ strtoupper($product->name) }}
 @endsection
 
 @section('content')
@@ -14,24 +14,31 @@
             </ul>
             <ul class="product-nav list-style-none">
                 <li class="product-nav-prev">
-                    <a href="#">
+                    <a href="{{ $product?->previous() ? route('product.details', $product?->previous()?->product_id ?? 1) : '#' }}"
+                        {{ !$product?->previous() ? 'disabled' : '' }}>
                         <i class="w-icon-angle-left"></i>
                     </a>
-                    <span class="product-nav-popup">
-                        <img src="assets/images/products/product-nav-prev.jpg" alt="Product" width="110"
-                            height="110" />
-                        <span class="product-name">Soft Sound Maker</span>
-                    </span>
+                    @if ($product?->previous())
+                        <span class="product-nav-popup">
+                            <img src="{{ storage_path($product?->previous()?->image?->image_path) }}"
+                                alt="{{ $product?->previous()?->image?->alt_text }}" width="110" height="110"
+                                onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
+                            <span class="product-name">{{ ucwords($product?->previous()?->name) }}</span>
+                        </span>
+                    @endif
                 </li>
                 <li class="product-nav-next">
-                    <a href="#">
+                    <a href="{{ $product?->next() ? route('product.details', $product?->next()?->product_id ?? 1) : '#' }}">
                         <i class="w-icon-angle-right"></i>
                     </a>
-                    <span class="product-nav-popup">
-                        <img src="assets/images/products/product-nav-next.jpg" alt="Product" width="110"
-                            height="110" />
-                        <span class="product-name">Fabulous Sound Speaker</span>
-                    </span>
+                    @if ($product?->next())
+                        <span class="product-nav-popup">
+                            <img src="{{ storage_path($product?->next()?->image?->image_path) }}"
+                                alt="{{ $product?->next()?->image?->alt_text }}" width="110" height="110"
+                                onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
+                            <span class="product-name">{{ ucwords($product?->next()?->name) }}</span>
+                        </span>
+                    @endif
                 </li>
             </ul>
         </nav>
@@ -46,54 +53,30 @@
                                 <div class="product-gallery product-gallery-sticky">
                                     <div class="swiper-container product-single-swiper swiper-theme nav-inner"
                                         data-swiper-options="{
-                                            'navigation': {
-                                                'nextEl': '.swiper-button-next',
-                                                'prevEl': '.swiper-button-prev'
-                                            }
-                                        }">
+                                                'navigation': {
+                                                    'nextEl': '.swiper-button-next',
+                                                    'prevEl': '.swiper-button-prev'
+                                                }
+                                            }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/1-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/1-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/2-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/2-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="488" height="549">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/3-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/3-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/4-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/4-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/5-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/5-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <figure class="product-image">
-                                                    <img src="assets/images/products/default/6-800x900.jpg"
-                                                        data-zoom-image="assets/images/products/default/6-800x900.jpg"
-                                                        alt="Electronics Black Wrist Watch" width="800" height="900">
-                                                </figure>
-                                            </div>
+                                            @forelse($product->images as $image)
+                                                <div class="swiper-slide">
+                                                    <figure class="product-image">
+                                                        <img src="{{ asset(Storage::url($image->image_path)) }}"
+                                                            data-zoom-image="{{ "storage/".$image->image_path }}"
+                                                            alt="{{ $image->alt_text }}" width="800" height="900"
+                                                            onerror="(this.src = `{{ asset('assets/brand_logo_500x500.png') }}`),(this.dataset.zoomImage = `{{ asset('assets/brand_logo_500x500.png') }}`)">
+                                                    </figure>
+                                                </div>
+                                            @empty
+                                                <div class="swiper-slide">
+                                                    <figure class="product-image">
+                                                        <img src="{{ asset('assets/brand_logo_500x500.png') }}"
+                                                            data-zoom-image="{{ asset('assets/brand_logo_500x500.png') }}"
+                                                            alt="Dropshipx" width="488" height="549">
+                                                    </figure>
+                                                </div>
+                                            @endforelse
                                         </div>
                                         <button class="swiper-button-next"></button>
                                         <button class="swiper-button-prev"></button>
@@ -102,36 +85,23 @@
                                     </div>
                                     <div class="product-thumbs-wrap swiper-container"
                                         data-swiper-options="{
-                                            'navigation': {
-                                                'nextEl': '.swiper-button-next',
-                                                'prevEl': '.swiper-button-prev'
-                                            }
-                                        }">
+                                                'navigation': {
+                                                    'nextEl': '.swiper-button-next',
+                                                    'prevEl': '.swiper-button-prev'
+                                                }
+                                            }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/1-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/2-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/3-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/4-800x900.jpg" alt="Product Thumb"
-                                                    width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/5-800x900.jpg"
-                                                    alt="Product Thumb" width="800" height="900">
-                                            </div>
-                                            <div class="product-thumb swiper-slide">
-                                                <img src="assets/images/products/default/6-800x900.jpg"
-                                                    alt="Product Thumb" width="800" height="900">
-                                            </div>
+                                            @forelse($product->images as $image)
+                                                <div class="product-thumb swiper-slide">
+                                                    <img src="{{ asset(Storage::url($image->image_path)) }}"
+                                                        alt="{{ $image->alt_text }}" width="800" height="900">
+                                                </div>
+                                            @empty
+                                                <div class="product-thumb swiper-slide">
+                                                    <img src="{{ asset('assets/brand_logo_500x500.png') }}" alt="Dropshipx"
+                                                        width="800" height="900">
+                                                </div>
+                                            @endforelse
                                         </div>
                                         <button class="swiper-button-next"></button>
                                         <button class="swiper-button-prev"></button>
@@ -140,112 +110,80 @@
                             </div>
                             <div class="col-md-6 mb-4 mb-md-6">
                                 <div class="product-details" data-sticky-options="{'minWidth': 767}">
-                                    <h1 class="product-title">Electronics Black Wrist Watch</h1>
-                                    <div class="product-bm-wrapper">
-                                        <figure class="brand">
-                                            <img src="assets/images/products/brand/brand-1.jpg" alt="Brand"
-                                                width="102" height="48" />
-                                        </figure>
-                                        <div class="product-meta">
-                                            <div class="product-categories">
-                                                Category:
-                                                <span class="product-category"><a href="#">Electronics</a></span>
-                                            </div>
-                                            <div class="product-sku">
-                                                SKU: <span>MS46891340</span>
+                                    <h1 class="product-title">{{ $product->name }}</h1>
+                                    @if ($product->category)
+                                        <div class="product-bm-wrapper">
+                                            <figure class="brand">
+                                                <img src="{{ storage_path($product?->category?->icon) }}"
+                                                    alt="{{ $product?->category?->name }}"
+                                                    onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`"
+                                                    width="102" height="48" />
+                                            </figure>
+                                            <div class="product-meta">
+                                                <div class="product-categories">
+                                                    Category:
+                                                    <span class="product-category"><a
+                                                            href="{{ route('product.category.show', ['parent' => $product?->category?->parent ? $product?->category?->parent : 0, 'id' => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
+                                                </div>
+                                                <div class="product-sku">
+                                                    SKU: <span>{{ $product?->sku }}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                     <hr class="product-divider">
 
-                                    <div class="product-price"><ins class="new-price">$40.00</ins></div>
+                                    <div class="product-price"><ins class="new-price">₹ {{ $product?->price }}</ins></div>
 
-                                    <div class="ratings-container">
+                                    {{-- <div class="ratings-container">
                                         <div class="ratings-full">
                                             <span class="ratings" style="width: 80%;"></span>
                                             <span class="tooltiptext tooltip-top"></span>
                                         </div>
                                         <a href="#product-tab-reviews" class="rating-reviews scroll-to">(3
                                             Reviews)</a>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="product-short-desc">
-                                        <ul class="list-type-check list-style-none">
-                                            <li>Ultrices eros in cursus turpis massa cursus mattis.</li>
-                                            <li>Volutpat ac tincidunt vitae semper quis lectus.</li>
-                                            <li>Aliquam id diam maecenas ultricies mi eget mauris.</li>
-                                        </ul>
+                                        {!! $product?->description !!}
                                     </div>
 
                                     <hr class="product-divider">
-
-                                    <div class="product-form product-variation-form product-color-swatch">
-                                        <label>Color:</label>
-                                        <div class="d-flex align-items-center product-variations">
-                                            <a href="#" class="color" style="background-color: #ffcc01"></a>
-                                            <a href="#" class="color" style="background-color: #ca6d00;"></a>
-                                            <a href="#" class="color" style="background-color: #1c93cb;"></a>
-                                            <a href="#" class="color" style="background-color: #ccc;"></a>
-                                            <a href="#" class="color" style="background-color: #333;"></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-form product-variation-form product-size-swatch">
-                                        <label class="mb-1">Size:</label>
-                                        <div class="flex-wrap d-flex align-items-center product-variations">
-                                            <a href="#" class="size">Small</a>
-                                            <a href="#" class="size">Medium</a>
-                                            <a href="#" class="size">Large</a>
-                                            <a href="#" class="size">Extra Large</a>
-                                        </div>
-                                        <a href="#" class="product-variation-clean">Clean All</a>
-                                    </div>
-
-                                    <div class="product-variation-price">
-                                        <span></span>
-                                    </div>
-
-                                    <div class="fix-bottom product-sticky-content sticky-content">
-                                        <div class="product-form container">
-                                            <div class="product-qty-form">
-                                                <div class="input-group">
-                                                    <input class="quantity form-control" type="number" min="1"
-                                                        max="10000000">
-                                                    <button class="quantity-plus w-icon-plus"></button>
-                                                    <button class="quantity-minus w-icon-minus"></button>
-                                                </div>
-                                            </div>
-                                            <button class="btn btn-primary btn-cart">
-                                                <i class="w-icon-cart"></i>
-                                                <span>Add to Cart</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="social-links-wrapper">
-                                        <div class="social-links">
-                                            <div class="social-icons social-no-color border-thin">
-                                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
-                                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
-                                                <a href="#"
-                                                    class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                                <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                                <a href="#"
-                                                    class="social-icon social-youtube fab fa-linkedin-in"></a>
+                                    @forelse($product?->attributes as $attribute)
+                                        <div class="product-form product-variation-form product-color-swatch">
+                                            <label>{{ ucfirst($attribute?->label?->name) }}:</label>
+                                            <div class="d-flex align-items-center product-variations">
+                                                @forelse ($attribute->values as $value)
+                                                    <a href="#">{{ $value->value }}</a>
+                                                @empty
+                                                    <a href="#">No Specified Value</a>
+                                                @endforelse
                                             </div>
                                         </div>
-                                        <span class="divider d-xs-show"></span>
-                                        <div class="product-link-wrapper d-flex">
-                                            <a href="#"
-                                                class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
-                                            <a href="#"
-                                                class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
+                                    @empty
+                                        <p>No Attribute Present</p>
+                                    @endforelse
+                                    <hr class="product-divider">
+                                    <div class="sticky-content-wrapper">
+                                        <div class="fix-bottom product-sticky-content sticky-content">
+                                            <div class="product-form container">
+                                                <button class="btn btn-secondary btn-calculator" type="button">
+                                                    <i class="w-icon-calculator"></i>
+                                                    <span>Calculator</span>
+                                                </button>
+                                                &nbsp;&nbsp;
+                                                <button class="btn btn-primary">
+                                                    <i class="w-icon-visit"></i>
+                                                    <span>Push to Shopify</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
@@ -969,7 +907,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <section class="related-product-section">
                             <div class="title-link-wrapper mb-4">
                                 <h4 class="title">Related Products</h4>
@@ -978,20 +916,20 @@
                             </div>
                             <div class="swiper-container swiper-theme"
                                 data-swiper-options="{
-                                    'spaceBetween': 20,
-                                    'slidesPerView': 2,
-                                    'breakpoints': {
-                                        '576': {
-                                            'slidesPerView': 3
-                                        },
-                                        '768': {
-                                            'slidesPerView': 4
-                                        },
-                                        '992': {
-                                            'slidesPerView': 3
+                                        'spaceBetween': 20,
+                                        'slidesPerView': 2,
+                                        'breakpoints': {
+                                            '576': {
+                                                'slidesPerView': 3
+                                            },
+                                            '768': {
+                                                'slidesPerView': 4
+                                            },
+                                            '992': {
+                                                'slidesPerView': 3
+                                            }
                                         }
-                                    }
-                                }">
+                                    }">
                                 <div class="swiper-wrapper row cols-lg-3 cols-md-4 cols-sm-3 cols-2">
                                     <div class="swiper-slide product">
                                         <figure class="product-media">
@@ -1145,8 +1083,7 @@
                     <aside class="sidebar product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
                         <div class="sidebar-overlay"></div>
                         <a class="sidebar-close" href="#"><i class="close-icon"></i></a>
-                        <a href="#" class="sidebar-toggle d-flex d-lg-none"><i
-                                class="fas fa-chevron-left"></i></a>
+                        <a href="#" class="sidebar-toggle d-flex d-lg-none"><i class="fas fa-chevron-left"></i></a>
                         <div class="sidebar-content scrollable">
                             <div class="sticky-sidebar">
                                 <div class="widget widget-icon-box mb-6">
@@ -1180,23 +1117,6 @@
                                 </div>
                                 <!-- End of Widget Icon Box -->
 
-                                <div class="widget widget-banner mb-9">
-                                    <div class="banner banner-fixed br-sm">
-                                        <figure>
-                                            <img src="assets/images/shop/banner3.jpg" alt="Banner" width="266"
-                                                height="220" style="background-color: #1D2D44;" />
-                                        </figure>
-                                        <div class="banner-content">
-                                            <div class="banner-price-info font-weight-bolder text-white lh-1 ls-25">
-                                                40<sup class="font-weight-bold">%</sup><sub
-                                                    class="font-weight-bold text-uppercase ls-25">Off</sub>
-                                            </div>
-                                            <h4 class="banner-subtitle text-white font-weight-bolder text-uppercase mb-0">
-                                                Ultimate Sale</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End of Widget Banner -->
 
                                 <div class="widget widget-products">
                                     <div class="title-link-wrapper mb-2">
@@ -1205,26 +1125,31 @@
 
                                     <div class="swiper nav-top">
                                         <div class="swiper-container swiper-theme nav-top"
-                                            data-swiper-options = "{
-                                                'slidesPerView': 1,
-                                                'spaceBetween': 20,
-                                                'navigation': {
-                                                    'prevEl': '.swiper-button-prev',
-                                                    'nextEl': '.swiper-button-next'
-                                                }
-                                            }">
+                                            data-swiper-options="{
+                                                    'slidesPerView': 1,
+                                                    'spaceBetween': 20,
+                                                    'navigation': {
+                                                        'prevEl': '.swiper-button-prev',
+                                                        'nextEl': '.swiper-button-next'
+                                                    }
+                                                }">
                                             <div class="swiper-wrapper">
-                                                <div class="widget-col swiper-slide">
+                                                @php $counter = 0; @endphp
+                                                @foreach ($moreProducts as $mProduct)
+                                                    @if ($counter === 0)
+                                                        <div class="widget-col swiper-slide">
+                                                    @endif
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/13.jpg" alt="Product"
-                                                                    width="100" height="113" />
+                                                            <a href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}">
+                                                                <img src="{{ asset(Storage::url($mProduct->image->image_path)) }}"
+                                                                    alt="Product" width="100" height="113" />
                                                             </a>
                                                         </figure>
                                                         <div class="product-details">
                                                             <h4 class="product-name">
-                                                                <a href="#">Smart Watch</a>
+                                                                <a
+                                                                    href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}</a>
                                                             </h4>
                                                             <div class="ratings-container">
                                                                 <div class="ratings-full">
@@ -1232,126 +1157,37 @@
                                                                     <span class="tooltiptext tooltip-top"></span>
                                                                 </div>
                                                             </div>
-                                                            <div class="product-price">$80.00 - $90.00</div>
+                                                            <div class="product-price">₹ {{ $mProduct->price }}</div>
                                                         </div>
                                                     </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/14.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Sky Medical Facility</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 80%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$58.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/15.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Black Stunt Motor</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 60%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$374.00</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="widget-col swiper-slide">
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/16.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Skate Pan</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 100%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$278.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/17.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Modern Cooker</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 80%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$324.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/18.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">CT Machine</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 100%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$236.00</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    @php $counter++; @endphp
+                                                    @if ($counter % 3 === 0)
+                                                        @php $counter = 0; @endphp
                                             </div>
-                                            <button class="swiper-button-next"></button>
-                                            <button class="swiper-button-prev"></button>
+                                            @endif
+                                            @endforeach
+
                                         </div>
+                                        <button class="swiper-button-next"></button>
+                                        <button class="swiper-button-prev"></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </aside>
-                    <!-- End of Sidebar -->
                 </div>
+                </aside>
+                <!-- End of Sidebar -->
             </div>
+        </div>
         </div>
         <!-- End of Page Content -->
     </main>
     <!-- End of Main -->
+@endsection
+
+@section("js")
+<script>
+    @php $product->image; @endphp
+    window.product = {!! json_encode($product->toArray()) !!};
+</script>
 @endsection

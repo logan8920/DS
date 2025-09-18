@@ -128,7 +128,7 @@
                                                 <div class="product-wrap">
                                                     <div class="product text-center">
                                                         <figure class="product-media">
-                                                            <a href="{{ route('product.details', 1) }}">
+                                                            <a href="{{ route('product.details', $product->product_id) }}">
                                                                 @if($product?->images)
                                                                     @foreach ($product->images as $image)
                                                                         <img src="{{ asset(Storage::url($image['image_path'])) }}" alt="Product"
@@ -146,7 +146,7 @@
                                                         </figure>
                                                         <div class="product-details">
                                                             <h4 class="product-name"><a
-                                                                    href="{{ route('product.details', 1) }}">{{ $product->name }}</a>
+                                                                    href="{{ route('product.details', $product->product_id) }}">{{ $product->name }}</a>
                                                             </h4>
                                                             <div class="product-price">
                                                                 <ins class="new-price">₹ {{ $product->price }}</ins>

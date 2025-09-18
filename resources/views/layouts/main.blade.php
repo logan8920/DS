@@ -189,6 +189,7 @@
     {{-- @include('partials.newsletter') --}}
     @include('partials.quickview')
 
+    @include('partials.calculator')
     <script type="text/javascript">
         let overlay = document.querySelector('.loading-overlay');
 
@@ -211,6 +212,7 @@
 
         window.ListOnShopifyResponse = function (req) {
             return new Promise((resolve) => {
+                console.log(req);
                 const $modal = $(".cart-dropdown");
                 const $closeBtn = $modal.find(".btn-close");
                 const $pushBtn = $modal.find(".btn-push");
@@ -218,6 +220,8 @@
                 $modal.find(".product-name").text(req.productName);
                 $modal.find("figure.product-media a img").attr("src",req.productMedia);
                 $modal.find(".product-price").text(req.productPrice);
+                console.log($modal.find("input#platform_price"));
+                $modal.find("input#platform_price").val(parseInt(req.productPrice.trim().replace('₹ ','')));
                 $modal.addClass("opened");
 
                 function closeModal(response) {
@@ -248,7 +252,7 @@
     <script src="{{ asset('assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/isotope/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/skrollr/skrollr.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/zoom/jquery.zoom.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.countdown/jquery.countdown.min.js') }}"></script>
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
