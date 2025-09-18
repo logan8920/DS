@@ -66,9 +66,9 @@ class ProductController extends Controller
         //
     }
 
-    public function details($product)
+    public function details(Product $product)
     {
-        return view('pages.product-details');
+        return view('pages.product-details',compact('product'));
     }
 
     public function categories()
@@ -160,5 +160,9 @@ class ProductController extends Controller
             ]);
         }
 
+    }
+
+    public function categoryProductShow($parentId, $categoryId){
+        dd($parentId,$categoryId);
     }
 }
