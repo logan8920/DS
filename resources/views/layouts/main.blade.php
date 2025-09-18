@@ -51,7 +51,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/magnific-popup/magnific-popup.min.css') }}">
 
     <!-- Default CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/demo15.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/demo15.min.css?v=').rand(11111,999999) }}">
     <style type="text/css">
         .loading-overlay {
             display: none;
@@ -197,9 +197,10 @@
             overlay && overlay.classList.toggle('is-active');
         }
 
-        function toggleFilters() {
-            const body = document.getElementById("filterBody");
-            const btn = document.getElementById("toggleBtn");
+        function toggleFilters(ele) {
+            const filterBody = ele.nextElementSibling;
+            const body = filterBody;
+            const btn = ele.querySelector("[id=toggleBtn]");
 
             if (body.style.display === "none") {
                 body.style.display = "grid";
@@ -257,11 +258,11 @@
     <script src="{{ asset('assets/vendor/jquery.countdown/jquery.countdown.min.js') }}"></script>
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
-    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script src="{{ asset('assets/js/form.js?v=').rand(11111,999999) }}"></script>
     @yield('js')
 
     <!-- Main JS -->
-    <script src="{{ asset('assets/js/main.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.min.js?v=').rand(11111,999999) }}"></script>
 </body>
 
 </html>
