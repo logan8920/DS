@@ -14,27 +14,27 @@
             </ul>
             <ul class="product-nav list-style-none">
                 <li class="product-nav-prev">
-                    <a href="{{ $product?->previous() ? route('product.details', $product?->previous()?->product_id ?? 1) : "#" }}"
-                        {{ !$product?->previous() ? "disabled" : ""  }}>
+                    <a href="{{ $product?->previous() ? route('product.details', $product?->previous()?->product_id ?? 1) : '#' }}"
+                        {{ !$product?->previous() ? 'disabled' : '' }}>
                         <i class="w-icon-angle-left"></i>
                     </a>
-                    @if($product?->previous())
+                    @if ($product?->previous())
                         <span class="product-nav-popup">
                             <img src="{{ storage_path($product?->previous()?->image?->image_path) }}"
-                                alt="{{$product?->previous()?->image?->alt_text}}" width="110" height="110"
+                                alt="{{ $product?->previous()?->image?->alt_text }}" width="110" height="110"
                                 onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
                             <span class="product-name">{{ ucwords($product?->previous()?->name) }}</span>
                         </span>
                     @endif
                 </li>
                 <li class="product-nav-next">
-                    <a href="{{ $product?->next() ? route('product.details', $product?->next()?->product_id ?? 1) : "#" }}">
+                    <a href="{{ $product?->next() ? route('product.details', $product?->next()?->product_id ?? 1) : '#' }}">
                         <i class="w-icon-angle-right"></i>
                     </a>
-                    @if($product?->next())
+                    @if ($product?->next())
                         <span class="product-nav-popup">
                             <img src="{{ storage_path($product?->next()?->image?->image_path) }}"
-                                alt="{{$product?->next()?->image?->alt_text}}" width="110" height="110"
+                                alt="{{ $product?->next()?->image?->alt_text }}" width="110" height="110"
                                 onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
                             <span class="product-name">{{ ucwords($product?->next()?->name) }}</span>
                         </span>
@@ -63,7 +63,7 @@
                                                 <div class="swiper-slide">
                                                     <figure class="product-image">
                                                         <img src="{{ asset(Storage::url($image->image_path)) }}"
-                                                            data-zoom-image="{{ asset(Storage::url($image->image_path)) }}"
+                                                            data-zoom-image="{{ "storage/".$image->image_path }}"
                                                             alt="{{ $image->alt_text }}" width="800" height="900"
                                                             onerror="(this.src = `{{ asset('assets/brand_logo_500x500.png') }}`),(this.dataset.zoomImage = `{{ asset('assets/brand_logo_500x500.png') }}`)">
                                                     </figure>
@@ -83,7 +83,8 @@
                                         <a href="#" class="product-gallery-btn product-image-full"><i
                                                 class="w-icon-zoom"></i></a>
                                     </div>
-                                    <div class="product-thumbs-wrap swiper-container" data-swiper-options="{
+                                    <div class="product-thumbs-wrap swiper-container"
+                                        data-swiper-options="{
                                                 'navigation': {
                                                     'nextEl': '.swiper-button-next',
                                                     'prevEl': '.swiper-button-prev'
@@ -110,7 +111,7 @@
                             <div class="col-md-6 mb-4 mb-md-6">
                                 <div class="product-details" data-sticky-options="{'minWidth': 767}">
                                     <h1 class="product-title">{{ $product->name }}</h1>
-                                    @if($product->category)
+                                    @if ($product->category)
                                         <div class="product-bm-wrapper">
                                             <figure class="brand">
                                                 <img src="{{ storage_path($product?->category?->icon) }}"
@@ -122,7 +123,7 @@
                                                 <div class="product-categories">
                                                     Category:
                                                     <span class="product-category"><a
-                                                            href="{{ route('product.category.show', ["parent" => $product?->category?->parent ? $product?->category?->parent : 0, "id" => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
+                                                            href="{{ route('product.category.show', ['parent' => $product?->category?->parent ? $product?->category?->parent : 0, 'id' => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
                                                 </div>
                                                 <div class="product-sku">
                                                     SKU: <span>{{ $product?->sku }}</span>
@@ -163,44 +164,22 @@
                                     @empty
                                         <p>No Attribute Present</p>
                                     @endforelse
-                                    <!-- <div class="product-variation-price">
-                                        <span></span>
-                                    </div> -->
-
-                                    <!-- <div class="fix-bottom product-sticky-content sticky-content">
+                                    <hr class="product-divider">
+                                    <div class="sticky-content-wrapper">
+                                        <div class="fix-bottom product-sticky-content sticky-content">
                                             <div class="product-form container">
-                                                <div class="product-qty-form">
-                                                    <div class="input-group">
-                                                        <input class="quantity form-control" type="number" min="1"
-                                                            max="10000000">
-                                                        <button class="quantity-plus w-icon-plus"></button>
-                                                        <button class="quantity-minus w-icon-minus"></button>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-primary btn-cart">
-                                                    <i class="w-icon-cart"></i>
-                                                    <span>Add to Cart</span>
+                                                <button class="btn btn-secondary btn-calculator" type="button">
+                                                    <i class="w-icon-calculator"></i>
+                                                    <span>Calculator</span>
+                                                </button>
+                                                &nbsp;&nbsp;
+                                                <button class="btn btn-primary">
+                                                    <i class="w-icon-visit"></i>
+                                                    <span>Push to Shopify</span>
                                                 </button>
                                             </div>
-                                        </div> -->
-
-                                    <!-- <div class="social-links-wrapper">
-                                        <div class="social-links">
-                                            <div class="social-icons social-no-color border-thin">
-                                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
-                                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
-                                                <a href="#" class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                                <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                                <a href="#" class="social-icon social-youtube fab fa-linkedin-in"></a>
-                                            </div>
                                         </div>
-                                        <span class="divider d-xs-show"></span>
-                                        <div class="product-link-wrapper d-flex">
-                                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
-                                            <a href="#"
-                                                class="btn-product-icon btn-compare btn-icon-left w-icon-compare"><span></span></a>
-                                        </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -305,8 +284,8 @@
                                             <div class="vendor-user">
                                                 <figure class="vendor-logo mr-4">
                                                     <a href="#">
-                                                        <img src="assets/images/products/vendor-logo.jpg" alt="Vendor Logo"
-                                                            width="80" height="80" />
+                                                        <img src="assets/images/products/vendor-logo.jpg"
+                                                            alt="Vendor Logo" width="80" height="80" />
                                                     </a>
                                                 </figure>
                                                 <div>
@@ -470,20 +449,21 @@
                                                             <option value="1">Very poor</option>
                                                         </select>
                                                     </div>
-                                                    <textarea cols="30" rows="6" placeholder="Write Your Review Here..."
-                                                        class="form-control" id="review"></textarea>
+                                                    <textarea cols="30" rows="6" placeholder="Write Your Review Here..." class="form-control"
+                                                        id="review"></textarea>
                                                     <div class="row gutter-md">
                                                         <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="Your Name"
-                                                                id="author">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Your Name" id="author">
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="Your Email"
-                                                                id="email_1">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Your Email" id="email_1">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input type="checkbox" class="custom-checkbox" id="save-checkbox">
+                                                        <input type="checkbox" class="custom-checkbox"
+                                                            id="save-checkbox">
                                                         <label for="save-checkbox">Save my name, email, and website
                                                             in this browser for the next time I comment.</label>
                                                     </div>
@@ -934,7 +914,8 @@
                                 <a href="#" class="btn btn-dark btn-link btn-slide-right btn-icon-right">More
                                     Products<i class="w-icon-long-arrow-right"></i></a>
                             </div>
-                            <div class="swiper-container swiper-theme" data-swiper-options="{
+                            <div class="swiper-container swiper-theme"
+                                data-swiper-options="{
                                         'spaceBetween': 20,
                                         'slidesPerView': 2,
                                         'breakpoints': {
@@ -953,8 +934,8 @@
                                     <div class="swiper-slide product">
                                         <figure class="product-media">
                                             <a href="product-default.html">
-                                                <img src="assets/images/products/default/5.jpg" alt="Product" width="300"
-                                                    height="338" />
+                                                <img src="assets/images/products/default/5.jpg" alt="Product"
+                                                    width="300" height="338" />
                                             </a>
                                             <div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-cart w-icon-cart"
@@ -965,7 +946,8 @@
                                                     title="Add to Compare"></a>
                                             </div>
                                             <div class="product-action">
-                                                <a href="#" class="btn-product btn-quickview" title="Quick View">Quick
+                                                <a href="#" class="btn-product btn-quickview"
+                                                    title="Quick View">Quick
                                                     View</a>
                                             </div>
                                         </figure>
@@ -986,8 +968,8 @@
                                     <div class="swiper-slide product">
                                         <figure class="product-media">
                                             <a href="product-default.html">
-                                                <img src="assets/images/products/default/6.jpg" alt="Product" width="300"
-                                                    height="338" />
+                                                <img src="assets/images/products/default/6.jpg" alt="Product"
+                                                    width="300" height="338" />
                                             </a>
                                             <div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-cart w-icon-cart"
@@ -998,7 +980,8 @@
                                                     title="Add to Compare"></a>
                                             </div>
                                             <div class="product-action">
-                                                <a href="#" class="btn-product btn-quickview" title="Quick View">Quick
+                                                <a href="#" class="btn-product btn-quickview"
+                                                    title="Quick View">Quick
                                                     View</a>
                                             </div>
                                         </figure>
@@ -1014,7 +997,8 @@
                                             </div>
                                             <div class="product-pa-wrapper">
                                                 <div class="product-price">
-                                                    <ins class="new-price">$263.00</ins><del class="old-price">$300.00</del>
+                                                    <ins class="new-price">$263.00</ins><del
+                                                        class="old-price">$300.00</del>
                                                 </div>
                                             </div>
                                         </div>
@@ -1022,10 +1006,10 @@
                                     <div class="swiper-slide product">
                                         <figure class="product-media">
                                             <a href="product-default.html">
-                                                <img src="assets/images/products/default/7-1.jpg" alt="Product" width="300"
-                                                    height="338" />
-                                                <img src="assets/images/products/default/7-2.jpg" alt="Product" width="300"
-                                                    height="338" />
+                                                <img src="assets/images/products/default/7-1.jpg" alt="Product"
+                                                    width="300" height="338" />
+                                                <img src="assets/images/products/default/7-2.jpg" alt="Product"
+                                                    width="300" height="338" />
                                             </a>
                                             <div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-cart w-icon-cart"
@@ -1036,7 +1020,8 @@
                                                     title="Add to Compare"></a>
                                             </div>
                                             <div class="product-action">
-                                                <a href="#" class="btn-product btn-quickview" title="Quick View">Quick
+                                                <a href="#" class="btn-product btn-quickview"
+                                                    title="Quick View">Quick
                                                     View</a>
                                             </div>
                                         </figure>
@@ -1058,8 +1043,8 @@
                                     <div class="swiper-slide product">
                                         <figure class="product-media">
                                             <a href="product-default.html">
-                                                <img src="assets/images/products/default/8.jpg" alt="Product" width="300"
-                                                    height="338" />
+                                                <img src="assets/images/products/default/8.jpg" alt="Product"
+                                                    width="300" height="338" />
                                             </a>
                                             <div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-cart w-icon-cart"
@@ -1070,7 +1055,8 @@
                                                     title="Add to Compare"></a>
                                             </div>
                                             <div class="product-action">
-                                                <a href="#" class="btn-product btn-quickview" title="Quick View">Quick
+                                                <a href="#" class="btn-product btn-quickview"
+                                                    title="Quick View">Quick
                                                     View</a>
                                             </div>
                                         </figure>
@@ -1138,7 +1124,8 @@
                                     </div>
 
                                     <div class="swiper nav-top">
-                                        <div class="swiper-container swiper-theme nav-top" data-swiper-options="{
+                                        <div class="swiper-container swiper-theme nav-top"
+                                            data-swiper-options="{
                                                     'slidesPerView': 1,
                                                     'spaceBetween': 20,
                                                     'navigation': {
@@ -1147,21 +1134,22 @@
                                                     }
                                                 }">
                                             <div class="swiper-wrapper">
-                                                @php $counter = 1; @endphp
-                                                @foreach ($moreProducts as $product)
-                                                @if($counter == 1 )
-                                                <div class="widget-col swiper-slide">
-                                                @endif
+                                                @php $counter = 0; @endphp
+                                                @foreach ($moreProducts as $mProduct)
+                                                    @if ($counter === 0)
+                                                        <div class="widget-col swiper-slide">
+                                                    @endif
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="{{ asset(Storage::url($product->image->image_path)) }}" alt="Product"
-                                                                    width="100" height="113" />
+                                                            <a href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}">
+                                                                <img src="{{ asset(Storage::url($mProduct->image->image_path)) }}"
+                                                                    alt="Product" width="100" height="113" />
                                                             </a>
                                                         </figure>
                                                         <div class="product-details">
                                                             <h4 class="product-name">
-                                                                <a href="#">Smart Watch</a>
+                                                                <a
+                                                                    href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}</a>
                                                             </h4>
                                                             <div class="ratings-container">
                                                                 <div class="ratings-full">
@@ -1169,131 +1157,37 @@
                                                                     <span class="tooltiptext tooltip-top"></span>
                                                                 </div>
                                                             </div>
-                                                            <div class="product-price">$80.00 - $90.00</div>
+                                                            <div class="product-price">₹ {{ $mProduct->price }}</div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/14.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Sky Medical Facility</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 80%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$58.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/15.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Black Stunt Motor</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 60%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$374.00</div>
-                                                        </div>
-                                                    </div> -->
-                                                @php $counter++; @endphp
-                                                @if ($counter % 3 === 0)
-                                                    @php $counter = 1; @endphp
-                                                </div>
-                                                @endif
-                                                @endforeach
-                                                <div class="widget-col swiper-slide">
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/16.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Skate Pan</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 100%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$278.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/17.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">Modern Cooker</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 80%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$324.00</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product product-widget">
-                                                        <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="assets/images/shop/18.jpg" alt="Product"
-                                                                    width="100" height="113" />
-                                                            </a>
-                                                        </figure>
-                                                        <div class="product-details">
-                                                            <h4 class="product-name">
-                                                                <a href="#">CT Machine</a>
-                                                            </h4>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 100%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-price">$236.00</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    @php $counter++; @endphp
+                                                    @if ($counter % 3 === 0)
+                                                        @php $counter = 0; @endphp
                                             </div>
-                                            <button class="swiper-button-next"></button>
-                                            <button class="swiper-button-prev"></button>
+                                            @endif
+                                            @endforeach
+
                                         </div>
+                                        <button class="swiper-button-next"></button>
+                                        <button class="swiper-button-prev"></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </aside>
-                    <!-- End of Sidebar -->
                 </div>
+                </aside>
+                <!-- End of Sidebar -->
             </div>
+        </div>
         </div>
         <!-- End of Page Content -->
     </main>
     <!-- End of Main -->
+@endsection
+
+@section("js")
+<script>
+    @php $product->image; @endphp
+    window.product = {!! json_encode($product->toArray()) !!};
+</script>
 @endsection

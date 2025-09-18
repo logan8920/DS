@@ -189,6 +189,7 @@
     {{-- @include('partials.newsletter') --}}
     @include('partials.quickview')
 
+    @include('partials.calculator')
     <script type="text/javascript">
         let overlay = document.querySelector('.loading-overlay');
 
@@ -251,7 +252,7 @@
     <script src="{{ asset('assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/isotope/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/skrollr/skrollr.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/zoom/jquery.zoom.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.countdown/jquery.countdown.min.js') }}"></script>
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
