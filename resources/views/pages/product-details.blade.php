@@ -173,7 +173,7 @@
                                                     <span>Calculator</span>
                                                 </button>
                                                 &nbsp;&nbsp;
-                                                <button class="btn btn-primary">
+                                                <button class="btn btn-primary btn-push-to-shopify">
                                                     <i class="w-icon-visit"></i>
                                                     <span>Push to Shopify</span>
                                                 </button>
@@ -184,7 +184,7 @@
                             </div>
                         </div>
 
-                        <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
+                        <!-- <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a href="#product-tab-description" class="nav-link active">Description</a>
@@ -1077,7 +1077,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                        </section> -->
                     </div>
                     <!-- End of Main Content -->
                     <aside class="sidebar product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
@@ -1141,7 +1141,7 @@
                                                     @endif
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
-                                                            <a href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}">
+                                                            <a href="{{ route('product.details', $mProduct->product_id) }}" title="{{ $mProduct->name }}">
                                                                 <img src="{{ asset(Storage::url($mProduct->image->image_path)) }}"
                                                                     alt="Product" width="100" height="113" />
                                                             </a>
@@ -1151,12 +1151,12 @@
                                                                 <a
                                                                     href="{{ route('product.details', $mProduct->product_id) }}">{{ $mProduct->name }}</a>
                                                             </h4>
-                                                            <div class="ratings-container">
+                                                            <!-- <div class="ratings-container">
                                                                 <div class="ratings-full">
                                                                     <span class="ratings" style="width: 100%;"></span>
                                                                     <span class="tooltiptext tooltip-top"></span>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="product-price">₹ {{ $mProduct->price }}</div>
                                                         </div>
                                                     </div>

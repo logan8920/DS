@@ -148,7 +148,7 @@
         <!-- 🔹 Filters -->
         <section class="filters card">
             <div class="filter-header" onclick="toggleFilters()">
-                <h3>Filters</h3>
+                <h3>Orders</h3>
                 <button id="toggleBtn" type="button">▲</button>
             </div>
 

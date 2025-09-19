@@ -84,7 +84,7 @@ class ProductController extends Controller
 
             $validator = Validator::make($request->all(), [
                 "product_id" => "required|numeric|exists:products,product_id",
-                "domain" => "required|exists:channel_config,domain"
+                "domain" => "required|exists:channel_configs,domain"
             ]);
 
             if ($validator->fails()) {
@@ -94,17 +94,17 @@ class ProductController extends Controller
             $productId = $request->product_id;
             $domain = $request->domain;
             $product = Product::select(["product_id", "name as title"])
-                ->with([
-                    "productOptions" => function ($q) {
-                        $q->select([
-                            'product_attribute_values.product_id',
-                            'product_attribute_values.value',
-                            'attributes.name as attribute'
-                        ])
-                        ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id');
-                    },
+                // ->with([
+                //     "productOptions" => function ($q) {
+                //         $q->select([
+                //             'product_attribute_values.product_id',
+                //             'product_attribute_values.value',
+                //             'attributes.name as attribute'
+                //         ])
+                //         ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id');
+                //     },
                     
-                ])
+                // ])
                 ->where("product_id", $productId)
                 ->first();
 
