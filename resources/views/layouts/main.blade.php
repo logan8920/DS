@@ -196,10 +196,10 @@
             overlay && overlay.classList.toggle('is-active');
         }
 
-        function toggleFilters(ele) {
-            const filterBody = ele.nextElementSibling;
+        function toggleFilters(ele = undefined) {
+            const filterBody = ele?.nextElementSibling ?? document.getElementById('filterBody');
             const body = filterBody;
-            const btn = ele.querySelector("[id=toggleBtn]");
+            const btn = ele?.length ? ele.querySelector("[id=toggleBtn]") : document.getElementById('toggleBtn');
 
             if (body.style.display === "none") {
                 body.style.display = "grid";

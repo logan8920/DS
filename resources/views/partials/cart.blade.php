@@ -1,3 +1,103 @@
+<style>
+    .filters.card {
+        border-radius: 12px;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: #fff;
+    }
+
+    /* Header bar */
+    .filter-header {
+        background: #f4f4f9;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .filter-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .filter-header button {
+        background: none;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        color: #6a11cb;
+        font-weight: 600;
+    }
+
+    /* Body grid */
+    .filter-body {
+        padding: 15px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .filter-body label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .filter-body input,
+    .filter-body select {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .filter-body input:focus,
+    .filter-body select:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 4px rgba(106, 17, 203, 0.3);
+    }
+
+    /* Actions (Reset/Apply buttons) */
+    .filter-body .actions {
+        grid-column: span 2;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .filter-body .reset {
+        background: #e0e0e0;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .filter-body .apply {
+        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+        border: none;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    table.rto-table tr td,
+    table.rto-table tr th {
+        border: 1px solid #e0e0e2;
+        padding: 10px !important;
+    }
+</style>
 <div class="cart-dropdown cart-offcanvas d-flex dropdown mr-0 mr-lg-2">
     <div class="cart-overlay"></div>
     {{-- <a href="#" class="cart-toggle label-down link">
@@ -50,8 +150,11 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="selling_price">Selling Price</label>
-                        <input type="number" name="selling_price" id="selling_price" value="" class="form-control mt-1"
-                            placeholder="Selling Price" />
+                        <input type="number" 
+                            name="selling_price" 
+                            oninput="this.value ? (priceMargin.textContent = `₹ ${parseFloat(this.value - platform_price.value).toFixed(2)}`) : priceMargin.textContent = `₹ 0.00`" 
+                            id="selling_price"
+                            class="form-control mt-1" placeholder="Selling Price" />
                     </div>
                 </div>
 
@@ -62,81 +165,47 @@
                         <select name="domain" class="form-control mt-1" id="channelDomain" required>
                             <option value="">Select Channel</option>
                             @foreach ($channels as $channel)
-                                <option value="{{$channel->domain}}">{{$channel->domain}}</option>
+                                <option value="{{ $channel->domain }}">{{ $channel->domain }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="bg-primary card pb-3 pl-3 pr-3 pt-3 text-white mb-4" style="border-radius: 10px;">
                         <div class="float">
-                            Your margin
-                        </div>
-                        <div class="float-right margin-amt">
-                            0.00
+                            Your margin <span id="priceMargin" style="float: inline-end;">₹ 0.00</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button"
-                                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                                        aria-controls="collapseOne">
-                                        Collapsible Group Item #1
-                                    </button>
-                                </h2>
-                            </div>
+                    <section class="filters card">
+                        <div class="filter-header" onclick="toggleFilters(this)">
+                            <h5 class="mb-0">RTO & RVP charges are applicable and vary depending on the Product weight
+                            </h5>
+                            <button id="toggleBtn" type="button">▼</button>
+                        </div>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    Some placeholder content for the first accordion panel. This panel is shown by
-                                    default, thanks to the <code>.show</code> class.
-                                </div>
-                            </div>
+                        <div id="filterBody" style="display: none" class="filter-body">
+                            <table class="rto-table text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Charges<br><small>(For this product)</small></th>
+                                        <th>RTO Charges<br><small>(All inclusive)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>All 3PLs</td>
+                                        <td>
+                                            <a style="justify-content: center;" href="javascript:;">Please Contact Admin</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="card">
-                            <div class="card-header" id="headingTwo">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                        data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                        aria-controls="collapseTwo">
-                                        Collapsible Group Item #2
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    Some placeholder content for the second accordion panel. This panel is hidden by
-                                    default.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="headingThree">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                        data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                        aria-controls="collapseThree">
-                                        Collapsible Group Item #3
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    And lastly, the placeholder content for the third and final accordion panel. This
-                                    panel is hidden by default.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
