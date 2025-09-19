@@ -187,7 +187,7 @@
     <!-- End of Scroll Top -->
     @include('partials.mobile-menu')
     {{-- @include('partials.newsletter') --}}
-    @include('partials.quickview')
+    {{-- @include('partials.quickview') --}}
 
     <script type="text/javascript">
         let overlay = document.querySelector('.loading-overlay');

@@ -15552,7 +15552,7 @@ body .product-popup {
 .cart-dropdown.cart-offcanvas .dropdown-box {
   position: fixed;
   top: 0;
-  right: -34rem;
+  right: -100%;
   max-width: 34rem;
   margin-top: 0;
   padding: 2.4rem 2rem 2rem;
