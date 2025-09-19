@@ -189,7 +189,6 @@
     {{-- @include('partials.newsletter') --}}
     @include('partials.quickview')
 
-    @include('partials.calculator')
     <script type="text/javascript">
         let overlay = document.querySelector('.loading-overlay');
 

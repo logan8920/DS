@@ -1183,6 +1183,7 @@
         <!-- End of Page Content -->
     </main>
     <!-- End of Main -->
+    @include('partials.calculator')
 @endsection
 
 @section("js")
