@@ -11,6 +11,12 @@ class ProductAttributeValue extends Model
     }
 
     public function values()  {
-        return $this->hasMany(Self::class, "attribute_id", "attribute_id")->where("product_id",$this->product_id);
+        return $this->hasMany(Self::class, "attribute_id", "attribute_id")
+        ->selectRaw('product_attribute_id, value as name, attribute_id');
     }
+
+    protected $hidden = [
+        'product_attribute_id',
+        'product_id'
+    ];
 }

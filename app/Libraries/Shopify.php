@@ -95,7 +95,7 @@ GQL;
             "query" => $this->{$query},
             "variables" => $productData
         ];
-
+        // dd($body);
         $request = [
             "url" => "https://{$this->domain}/admin/api/2025-07/graphql.json",
             "header" => [
