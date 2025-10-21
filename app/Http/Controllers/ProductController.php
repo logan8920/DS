@@ -94,19 +94,21 @@ class ProductController extends Controller
             $productId = $request->product_id;
             $domain = $request->domain;
             $product = Product::select(["product_id", "name as title"])
-                // ->with([
-                //     "productOptions" => function ($q) {
-                //         $q->select([
-                //             'product_attribute_values.product_id',
-                //             'product_attribute_values.value',
-                //             'attributes.name as attribute'
-                //         ])
-                //         ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id');
-                //     },
+                ->with([
+                    "productOptions" => function ($q) {
+                        $q->select([
+                            'product_attribute_values.product_id',
+                            'product_attribute_values.value',
+                            'attributes.name as attribute'
+                        ])
+                        ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id');
+                    },
                     
-                // ])
+                ])
                 ->where("product_id", $productId)
                 ->first();
+
+                dd($product->toArray());
 
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
             $media = $product->images()
@@ -140,7 +142,7 @@ class ProductController extends Controller
             //dd(json_encode($productData));
             $shopify = new Shopify($config);
 
-            $response = $shopify->createProduct($productData);
+            $response = $shopify->createProduct($productData,"createProduct");
 
             if(isset($response['response']['errors']) ||  !$response['response']) {
                 throw new Exception($response['response']['errors'][0]['message'] ?? $response['response']['errors']['message'] ?? "Unable to get Response!", 422);

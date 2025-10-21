@@ -45,7 +45,7 @@ class Product extends Model
             ->first();
     }
 
-    public function attributes()
+    public function productOptions()
     {
         return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id")
             ->selectRaw('DISTINCT(attribute_id), product_attribute_id, value, product_id');
