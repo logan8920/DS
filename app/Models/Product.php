@@ -69,7 +69,7 @@ class Product extends Model
                         "product_id",
                         DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
                         "alt_text as alt",
-                        DB::raw("SUBSTRING_INDEX(image_path, '/', -1) AS \"filename\""),
+                         DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) AS \"filename\""),
                         DB::raw("'IMAGE' as \"contentType\"")
                     ])
                     ->first()->toArray(),
