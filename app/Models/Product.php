@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class Product extends Model
 {
     protected $primaryKey = 'product_id';
 
-    public function image()
+    public function file()
     {
         return $this->hasOne(ProductImage::class, "product_id", "product_id")
             ->where(function ($q) {
@@ -18,7 +18,7 @@ class Product extends Model
             ->where("is_active", 1);
     }
 
-    public function images()
+    public function files()
     {
         return $this->hasMany(ProductImage::class, "product_id", "product_id")
             ->where("is_active", 1)
@@ -45,10 +45,32 @@ class Product extends Model
             ->first();
     }
 
-    public function attributes()
+    public function productOptions()
     {
         return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id")
             ->selectRaw('DISTINCT(attribute_id), product_attribute_id, value, product_id');
+    }
+
+    public function optionValues(){
+        return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id");
+
+    }
+
+    public function variants(){
+        $this->variants = [
+            "optionValues" => $this->optionValues()->select('attributes.name as optionName', 'value as name')->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')->get()->toArray(),
+            "file" => $this->file()
+                ->select([
+                    "product_id",
+                    DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                    "alt_text as alt",
+                    DB::raw("'test.jpg' as \"filename\""),
+                    DB::raw("'IMAGE' as \"contentType\"")
+                ])
+                ->first()->toArray(),
+            "price" => $this->first()->price
+        ];
+        return $this;
     }
 
     protected $hidden = [

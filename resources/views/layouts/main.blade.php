@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <!-- WebFont.js -->
     <script type="text/javascript">
-        window.baseSRC = '{{ url('/') }}';
+        window.baseSRC = document.querySelector("base").href.slice(0, -1);
     </script>
     <script>
         WebFontConfig = {

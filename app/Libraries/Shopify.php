@@ -45,7 +45,41 @@ mutation CreateProduct(\$product: ProductCreateInput!) {
 }
 GQL;
 
-
+    private $createProduct = <<<GQL
+mutation createProduct(\$productSet: ProductSetInput!, \$synchronous: Boolean!) {
+  productSet(synchronous: \$synchronous, input: \$productSet) {
+    product {
+      id
+      media(first: 5) {
+        nodes {
+          id
+          alt
+          mediaContentType
+          status
+        }
+      }
+      variants(first: 5) {
+        nodes {
+          title
+          price
+          media(first: 5) {
+            nodes {
+              id
+              alt
+              mediaContentType
+              status
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+GQL;
     public function __construct($config)
     {
         $this->key = $config->key;
@@ -55,13 +89,13 @@ GQL;
         $this->reqID = rand(1111111111, 99999999999999);
     }
 
-    public function createProduct($productData)
+    public function createProduct($productData,$query)
     {
         $body = [
-            "query" => isset($productData['media']) ? $this->mutationWithMedia : $this->mutationWithoutMedia,
+            "query" => $this->{$query},
             "variables" => $productData
         ];
-
+        // dd($body);
         $request = [
             "url" => "https://{$this->domain}/admin/api/2025-07/graphql.json",
             "header" => [
