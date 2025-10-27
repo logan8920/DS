@@ -57,9 +57,16 @@ class Product extends Model
     }
 
     public function variants(){
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'mysql') {
+            $filename = DB::raw("SUBSTRING_INDEX(image_path, '/', -1) as filename");
+        } else { // PostgreSQL
+            $filename = DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) as filename");
+        }
         $this->variants = $this->optionValues()->select('attributes.name as optionName', 'value as name')->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')->get()->toArray();
 
-        $this->variants = array_map(function($val){
+        $this->variants = array_map(function($val) use ( $filename){
             $return = [
                 "optionValues" => [
                     $val
@@ -69,11 +76,11 @@ class Product extends Model
                         "product_id",
                         DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
                         "alt_text as alt",
-                         DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) AS \"filename\""),
+                        $filename,
                         DB::raw("'IMAGE' as \"contentType\"")
                     ])
                     ->first()->toArray(),
-                "price" => $this->first()->price
+                "price" => (float) $this->first()->price
 
             ];
 

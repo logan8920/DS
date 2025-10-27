@@ -90,17 +90,26 @@ class ProductController extends Controller
             if ($validator->fails()) {
                 throw new Exception($validator->errors()->first(), 422);
             }
+
+            $driver = DB::connection()->getDriverName();
+
+            if ($driver === 'mysql') {
+                $filename = DB::raw("SUBSTRING_INDEX(image_path, '/', -1) as filename");
+            } else { // PostgreSQL
+                $filename = DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) as filename");
+            }
+
             $data = [];
             $productId = $request->product_id;
             $domain = $request->domain;
             $product = Product::select(["product_id", "name as title"])
                 ->with([
-                    "files" => function ($q) {
+                    "files" => function ($q) use ($filename) {
                         $q->select([
                             "product_id",
                             DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
                             "alt_text as alt",
-                            DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) AS \"filename\""),
+                            $filename,
                             DB::raw("'IMAGE' as \"contentType\"")
                         ]);
                     },
