@@ -47,8 +47,8 @@ class Product extends Model
 
     public function productOptions()
     {
-        return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id")
-            ->selectRaw('DISTINCT(attribute_id), product_attribute_id, value, product_id');
+        return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id");
+           // ->selectRaw('attribute_id, product_attribute_id, value, product_id');
     }
 
     public function optionValues(){
@@ -57,19 +57,29 @@ class Product extends Model
     }
 
     public function variants(){
-        $this->variants = [
-            "optionValues" => $this->optionValues()->select('attributes.name as optionName', 'value as name')->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')->get()->toArray(),
-            "file" => $this->file()
-                ->select([
-                    "product_id",
-                    DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
-                    "alt_text as alt",
-                    DB::raw("'test.jpg' as \"filename\""),
-                    DB::raw("'IMAGE' as \"contentType\"")
-                ])
-                ->first()->toArray(),
-            "price" => $this->first()->price
-        ];
+        $this->variants = $this->optionValues()->select('attributes.name as optionName', 'value as name')->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')->get()->toArray();
+
+        $this->variants = array_map(function($val){
+            $return = [
+                "optionValues" => [
+                    $val
+                ],
+                 "file" => $this->file()
+                    ->select([
+                        "product_id",
+                        DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                        "alt_text as alt",
+                        DB::raw("SUBSTRING_INDEX(image_path, '/', -1) AS \"filename\""),
+                        DB::raw("'IMAGE' as \"contentType\"")
+                    ])
+                    ->first()->toArray(),
+                "price" => $this->first()->price
+
+            ];
+
+            return $return;
+                
+        },$this->variants);
         return $this;
     }
 

@@ -100,7 +100,7 @@ class ProductController extends Controller
                             "product_id",
                             DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
                             "alt_text as alt",
-                            DB::raw("'test.jpg' as \"filename\""),
+                            DB::raw("SUBSTRING_INDEX(image_path, '/', -1) AS \"filename\""),
                             DB::raw("'IMAGE' as \"contentType\"")
                         ]);
                     },
@@ -109,13 +109,20 @@ class ProductController extends Controller
                 ->where("product_id", $productId)
                 ->first();
 
-            $product->productOptions = $product->productOptions()->select([
-                'product_attribute_values.product_id',
-                'attributes.name as name'
+            $product->productOptions = $product->productOptions()
+            ->select([
+                DB::raw('DISTINCT product_attribute_values.product_id'),
+                'attributes.name as name',
+                'product_attribute_values.attribute_id'
             ])
             ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')
             ->with('values')
-            ->get()->toArray();
+            ->get()
+            ->toArray();
+
+            
+
+
 
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
             // $media = $product->files()
@@ -131,16 +138,16 @@ class ProductController extends Controller
             $product->variants();
             $data['synchronous'] = true;
             $data['productSet'] = $product->toArray();
-             dd( $data);
-            $productData = compact("data");
+            // response()->json($data);
+            $productData = $data;
 
             // $productData['product'] = array_filter($productData['product'], function($data) {
             //     return $data !== null && !empty($data);
             // });
 
-            $productData = array_filter($productData, function($data) {
-                return $data !== null && !empty($data);
-            });
+            // $productData = array_filter($productData, function($data) {
+            //     return $data !== null && !empty($data);
+            // });
 
             $config = auth()->user()->channelConfigs()->whereDomain($domain)->first();
             // $config = User::where("id",1)->first()->channelConfigs()->whereDomain($request->domain)->first();
