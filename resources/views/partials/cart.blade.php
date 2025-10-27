@@ -187,7 +187,7 @@
                             <button id="toggleBtn" type="button">▼</button>
                         </div>
 
-                        <div id="filterBody" style="display: none" class="filter-body">
+                        <div id="filterBodys" style="display: none" class="filter-body">
                             <table class="rto-table text-center">
                                 <thead>
                                     <tr>

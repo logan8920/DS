@@ -259,6 +259,12 @@
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
     <script src="{{ asset('assets/js/form.js?v=').rand(11111,999999) }}"></script>
     @yield('js')
+    <script>
+        // $(document).on("click","#filterBody button.apply", function(e) {
+        //     e.preventDefault();
+        //     table && table.ajax.reload();
+        // });
+    </script>
 
     <!-- Main JS -->
     <script src="{{ asset('assets/js/main.min.js?v=').rand(11111,999999) }}"></script>
