@@ -128,9 +128,20 @@ class ProductController extends Controller
             ->with('values')
             ->get()
             ->toArray();
-
+            // dd($product);
             
-
+            if(!count($product->productOptions ?? [])) {
+                $product->productOptions = [
+                    [
+                        "name" => "DefaultOption",
+                        "values" => [
+                            [
+                                "name" => "DefaultValue",
+                            ]
+                        ]
+                    ]
+                ];
+            }
 
 
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
@@ -149,7 +160,7 @@ class ProductController extends Controller
             $data['productSet'] = $product->toArray();
             // response()->json($data);
             $productData = $data;
-
+            // dd($productData);
             // $productData['product'] = array_filter($productData['product'], function($data) {
             //     return $data !== null && !empty($data);
             // });

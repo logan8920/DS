@@ -80,13 +80,36 @@ class Product extends Model
                         DB::raw("'IMAGE' as \"contentType\"")
                     ])
                     ->first()->toArray(),
-                "price" => (float) $this->first()->price
+                "price" => $this->first()->price
 
             ];
 
             return $return;
                 
         },$this->variants);
+
+        if(!count($this->variants ?? [])) {
+            $this->variants = [
+                [
+                    "optionValues" => [
+                        [
+                            "optionName" => "DefaultOption",
+                            "name" => "DefaultValue"
+                        ]
+                    ],
+                    "file" => $this->file()
+                        ->select([
+                            "product_id",
+                            DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                            "alt_text as alt",
+                            $filename,
+                            DB::raw("'IMAGE' as \"contentType\"")
+                        ])
+                        ->first()->toArray(),
+                    "price" => $this->first()->price
+                ]
+            ];
+        }
         return $this;
     }
 
