@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\{Product,User};
+use App\Models\{Product,User,MapShopifyProduct};
 use Illuminate\Http\Request;
 use App\Libraries\Shopify;
 use Illuminate\Support\Facades\Validator;
@@ -77,7 +77,7 @@ class ProductController extends Controller
         return view('pages.product-categories');
     }
 
-    public function pushToShopify(Request $request)
+    /*public function pushToShopify(Request $request)
     {
         // dd($request->all());
         try {
@@ -187,6 +187,27 @@ class ProductController extends Controller
             if(isset($response['response']['errors']) ||  !$response['response']) {
                 throw new Exception($response['response']['errors'][0]['message'] ?? $response['response']['errors']['message'] ?? "Unable to get Response!", 422);
             }
+            dd($response['response']['data']['productSet']['variants']['nodes']);
+            $variants = $response['response']['data']['productSet']['variants']['nodes'] ?? [];
+            $shopifyProductID = $response['response']['data']['productSet']['product']['id'] ?? '';
+            $create = [];
+
+            DB::beginTransaction();
+
+            foreach($variants as $variant){
+                $create[] = [
+                    "user_id" => auth()->user(),
+                    "product_id" => $productId,
+                    "shopify_variant_id" => $variant['id'],
+                    "shopify_product_id" => $shopifyProductID,
+                    "price" => $sellingPrice,
+                    "created_at" => date("Y-m-d H:i:s")
+                ];
+            }
+            
+            MapShopifyProduct::insert($create);
+
+            DB::commit();
 
             return response()->json([
                 "status" => true,
@@ -196,6 +217,7 @@ class ProductController extends Controller
             ]);
 
         } catch (Exception $e) {
+            DB::rollBack();
             return response()->json([
                 "status" => false,
                 "statuscode" => $e->getCode(),
@@ -203,7 +225,148 @@ class ProductController extends Controller
             ]);
         }
 
+    }*/
+
+    public function pushToShopify(Request $request)
+    {
+        try {
+            // ✅ Validate request
+            $validator = Validator::make($request->all(), [
+                "product_id" => "required|numeric|exists:products,product_id",
+                "domain" => "required|exists:channel_configs,domain",
+                "selling_price" => "required|numeric",
+            ]);
+
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first(), 422);
+            }
+
+            $driver = DB::connection()->getDriverName();
+
+            // ✅ Handle filename extraction for MySQL / PostgreSQL
+            $filename = $driver === 'mysql'
+                ? DB::raw("SUBSTRING_INDEX(image_path, '/', -1) as filename")
+                : DB::raw("split_part(image_path, '/', array_length(string_to_array(image_path, '/'), 1)) as filename");
+
+            $productId = $request->product_id;
+            $domain = $request->domain;
+            $sellingPrice = $request->selling_price;
+
+            // ✅ Static variable on model (if used)
+            Product::$sellingPrice = $sellingPrice;
+
+            // ✅ Load product and related images/files
+            $product = Product::select(["product_id", "name as title"])
+                ->with([
+                    "files" => function ($q) use ($filename) {
+                        $q->select([
+                            "product_id",
+                            DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"),
+                            "alt_text as alt",
+                            $filename,
+                            DB::raw("'IMAGE' as contentType"),
+                        ]);
+                    },
+                ])
+                ->where("product_id", $productId)
+                ->first();
+
+            if (!$product) {
+                throw new Exception("Product not found!", 404);
+            }
+
+            // ✅ Fetch product options
+            $product->productOptions = $product->productOptions()
+                ->select([
+                    DB::raw('DISTINCT product_attribute_values.product_id'),
+                    'attributes.name as name',
+                    'product_attribute_values.attribute_id'
+                ])
+                ->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')
+                ->with('values')
+                ->get()
+                ->toArray();
+
+            // ✅ Default option if none found
+            if (empty($product->productOptions)) {
+                $product->productOptions = [
+                    [
+                        "name" => "DefaultOption",
+                        "values" => [
+                            ["name" => "DefaultValue"]
+                        ],
+                    ],
+                ];
+            }
+
+            // ✅ Generate product data to push
+            $product->variants(); // Ensure variants relationship is loaded
+            $data = [
+                'synchronous' => true,
+                'productSet' => $product->toArray(),
+            ];
+
+            $productData = $data;
+
+            // ✅ Fetch Shopify config
+            $config = auth()->user()->channelConfigs()->where('domain', $domain)->first();
+            if (!$config) {
+                throw new Exception("Seller for {$domain} Channel Not Found!", 422);
+            }
+
+            // ✅ Push product to Shopify
+            $shopify = new Shopify($config);
+            $response = $shopify->createProduct($productData, "createProduct");
+
+            $respData = $response['response']['data']['productSet']['product'] ?? [];
+            $variants = $respData['variants']['nodes'] ?? [];
+            $idParts = explode('/', $respData['id'] ?? '1');
+            $shopifyProductID = end($idParts);
+
+            if (empty($respData)) {
+                throw new Exception($response['response']['errors'][0]['message']
+                    ?? $response['response']['errors']['message']
+                    ?? "Unable to get valid Shopify response!", 422);
+            }
+
+            // ✅ Save variants mapping
+            DB::beginTransaction();
+
+            $create = [];
+            foreach ($variants as $variant) {
+                $variantIdParts = explode('/', $variant['id'] ?? '1');
+                $create[] = [
+                    "user_id" => auth()->id(),
+                    "product_id" => $productId,
+                    "shopify_variant_id" => end($variantIdParts),
+                    "shopify_product_id" => $shopifyProductID,
+                    "price" => $sellingPrice,
+                    "created_at" => now(),
+                ];
+            }
+
+            if (!empty($create)) {
+                MapShopifyProduct::insert($create);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                "status" => true,
+                "statuscode" => 200,
+                "message" => "Product successfully pushed to Shopify!",
+                "response" => $response['response'],
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                "status" => false,
+                "statuscode" => $e->getCode() ?: 500,
+                "message" => $e->getMessage(),
+            ]);
+        }
     }
+
 
     public function categoryProductShow($parentId, $categoryId){
         dd($parentId,$categoryId);

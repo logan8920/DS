@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -49,15 +49,15 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
+            'key' => env('AWS_ACCESS_KEY_ID', "AKIAY6Q4ENPIYSGQXGU6"),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', "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"),
+            'region' => env('AWS_DEFAULT_REGION', "ap-south-1"),
+            'bucket' => env('AWS_BUCKET', "dropshipbucket"),
+            'url' => env('AWS_URL', "https://dropshipbucket.s3.ap-south-1.amazonaws.com"),
+            //    'endpoint' => env('AWS_ENDPOINT', "https://vyapti.s3.ap-south-1.amazonaws.com"),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw' => false,
-            'report' => false,
+            //    'throw' => false,
+            //    'report' => false,
         ],
 
     ],

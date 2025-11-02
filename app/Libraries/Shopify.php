@@ -60,6 +60,7 @@ mutation createProduct(\$productSet: ProductSetInput!, \$synchronous: Boolean!) 
       }
       variants(first: 5) {
         nodes {
+          id
           title
           price
           media(first: 5) {
