@@ -261,10 +261,10 @@ class ProductController extends Controller
                     "files" => function ($q) use ($filename) {
                         $q->select([
                             "product_id",
-                            DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"),
+                            DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
                             "alt_text as alt",
                             $filename,
-                            DB::raw("'IMAGE' as contentType"),
+                            DB::raw("'IMAGE' as \"contentType\""),
                         ]);
                     },
                 ])
@@ -307,7 +307,7 @@ class ProductController extends Controller
             ];
 
             $productData = $data;
-
+            dd($productData);
             // ✅ Fetch Shopify config
             $config = auth()->user()->channelConfigs()->where('domain', $domain)->first();
             if (!$config) {
