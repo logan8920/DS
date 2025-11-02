@@ -307,7 +307,7 @@ class ProductController extends Controller
             ];
 
             $productData = $data;
-            dd($productData);
+            // dd($productData);
             // ✅ Fetch Shopify config
             $config = auth()->user()->channelConfigs()->where('domain', $domain)->first();
             if (!$config) {
