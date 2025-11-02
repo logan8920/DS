@@ -7,6 +7,7 @@ use DB;
 class Product extends Model
 {
     protected $primaryKey = 'product_id';
+    public static $sellingPrice;
 
     public function file()
     {
@@ -80,7 +81,7 @@ class Product extends Model
                         DB::raw("'IMAGE' as \"contentType\"")
                     ])
                     ->first()->toArray(),
-                "price" => $this->first()->price
+                "price" => self::$sellingPrice
 
             ];
 
@@ -106,7 +107,7 @@ class Product extends Model
                             DB::raw("'IMAGE' as \"contentType\"")
                         ])
                         ->first()->toArray(),
-                    "price" => $this->first()->price
+                    "price" => self::$sellingPrice
                 ]
             ];
         }

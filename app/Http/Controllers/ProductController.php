@@ -79,12 +79,13 @@ class ProductController extends Controller
 
     public function pushToShopify(Request $request)
     {
-
+        // dd($request->all());
         try {
 
             $validator = Validator::make($request->all(), [
                 "product_id" => "required|numeric|exists:products,product_id",
-                "domain" => "required|exists:channel_configs,domain"
+                "domain" => "required|exists:channel_configs,domain",
+                "selling_price" => "required|numeric",
             ]);
 
             if ($validator->fails()) {
@@ -102,6 +103,8 @@ class ProductController extends Controller
             $data = [];
             $productId = $request->product_id;
             $domain = $request->domain;
+            $sellingPrice = $request->selling_price;
+            Product::$sellingPrice = $sellingPrice;
             $product = Product::select(["product_id", "name as title"])
                 ->with([
                     "files" => function ($q) use ($filename) {
