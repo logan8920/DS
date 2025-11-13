@@ -131,8 +131,6 @@ class ProductController extends Controller
             ->with('values')
             ->get()
             ->toArray();
-<<<<<<< HEAD
-=======
             // dd($product);
             
             if(!count($product->productOptions ?? [])) {
@@ -148,7 +146,6 @@ class ProductController extends Controller
                 ];
             }
 
->>>>>>> f197f170a33362fb9ccde03b2e3598fe572ab347
 
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
             // $media = $product->files()

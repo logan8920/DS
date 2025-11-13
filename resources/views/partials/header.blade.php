@@ -99,7 +99,7 @@
                 <div class="pr-0">
 
                     <div class="dropdown">
-                        <a href="#language">
+                        <a href="javascript:;">
                             <i class="fa-2x mr-1 w-icon-account"></i>
                         </a>
                         <div class="dropdown-box">
