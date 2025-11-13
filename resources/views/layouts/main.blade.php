@@ -232,8 +232,8 @@
                 }
 
                 function yesHandler() {
-                    let selectDomain = $modal.find("select#channelDomain").val();
-                    closeModal(selectDomain);
+                    let [selectDomain,sellingPrice] = [$modal.find("select#channelDomain").val(),$modal.find("input#selling_price").val()];
+                    closeModal({selectDomain,sellingPrice});
                 }
                 function noHandler() { closeModal(0); }
 
