@@ -129,10 +129,6 @@ class ProductController extends Controller
             ->get()
             ->toArray();
 
-            
-
-
-
             // $media = $product->images()->select(["product_id",DB::raw("CONCAT('" . asset('storage') . "/', image_path) as originalSource"), "alt_text",DB::raw("'IMAGE' as mediaContentType")])->get();
             // $media = $product->files()
             //     ->select([
