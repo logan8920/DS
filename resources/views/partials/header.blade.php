@@ -102,13 +102,28 @@
                         <a href="javascript:;">
                             <i class="fa-2x mr-1 w-icon-account"></i>
                         </a>
-                        <div class="dropdown-box">
+                        <div class="dropdown-box" style="width: 10rem;">
                             <a href="javascript:;">
                                 Hi! {{ auth()->user()->name }}
                             </a>
-                            <a href="javascript:;">
-                                Settings
+                            <a href="javascript:;" class="logout" data-id="logout-html">
+                                Logout
                             </a>
+                            <div class="d-none" id="logout-html">
+                                <form method="POST" class="d-flex justify-content-center" action="{{ route('logout') }}">
+                                    <div class="card pb-4 pl-4 pr-4 pt-4 text-center">
+                                        <div class="card-header">
+                                            <h4>Logout</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Are you sure want to logout?</p>
+                                            @csrf
+                                            <button class="btn btn-warning popupcancel" type="button">Cancel</button>
+                                            <button class="btn btn-danger" type="submit">Logout</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <!-- End of Dropdown Menu -->
