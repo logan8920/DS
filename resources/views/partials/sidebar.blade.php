@@ -82,23 +82,24 @@
 
 <div id="sidebar" class="sidebar">
 
-    <div class="logo">
+    <div class="logo" style="cursor: pointer;" onclick="window.location.href = `{{ route('dashboard') }}`">
         <img src="{{asset('assets/brand_logo_hor.png')}}" class="l-logo" height="40">
         <img src="{{asset('assets/brand_icon.png') }}" class="s-logo d-none" width="40">
     </div>
 
-    <a href="#"><i>🏠</i> <span class="menu-text">Home</span></a>
-    <a href="#"><i>📊</i> <span class="menu-text">Analytics</span></a>
-    <a href="#"><i>📦</i> <span class="menu-text">Orders</span></a>
-    <a href="#"><i>🚚</i> <span class="menu-text">Shipment</span></a>
+    <a href="{{ route('dashboard') }}"><i>🏠</i> <span class="menu-text">Home</span></a>
+    <a href="{{ route('analytics') }}"><i>📊</i> <span class="menu-text">Analytics</span></a>
+    <a href="{{ route('orders') }}"><i>📦</i> <span class="menu-text">Orders</span></a>
+    <a href="{{ route('shipment.index') }}"><i>🚚</i> <span class="menu-text">Shipment</span></a>
 
     <!-- <strong class="menu-text ml-3 mt-3">RTO</strong> -->
-    <a href="#"><i>❓</i> <span class="menu-text">RTO FAQs</span></a>
-    <a href="#"><i>📍</i> <span class="menu-text">High RTO Pincode</span></a>
-
-    <!-- <strong class="menu-text ml-3 mt-3">Billing</strong> -->
-    <a href="#"><i>💳</i> <span class="menu-text">Margin Remittance</span></a>
-    <a href="#"><i>💰</i> <span class="menu-text">Prepaid Payment</span></a>
+    <a href="{{ route('rtointelligence.rtofaqs') }}"><i>❓</i> <span class="menu-text">RTO FAQs</span></a>
+    <a href="{{ route('rtointelligence.highrtopincodelist') }}"><i>📍</i> <span class="menu-text">High RTO Pincode</span></a>
+    <a href="{{ route('ndr.index') }}"><i>📍</i> <span class="menu-text">NDR</span></a>
+    <!-- <strong class="text-black ml-3 mt-3">Billing</strong> -->
+    <a href="{{ route('billing.marginremittance') }}"><i>💳</i> <span class="menu-text">Margin Remittance</span></a>
+    <a href="{{ route('billing.prepaidpayment') }}"><i>💰</i> <span class="menu-text">Prepaid Payment</span></a>
+    <a href="{{ route('channels.allChannels') }}"><i>💳</i> <span class="menu-text">Channels</span></a>
 </div>
 
 <script async>
