@@ -1,4 +1,4 @@
-@extends('layouts.mains')
+@extends('layouts.main2')
 @section('title')
     - COD {{$pageHeading}}
 @endsection
