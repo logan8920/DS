@@ -59,7 +59,7 @@
                                                 }
                                             }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
-                                            @forelse($product->images as $image)
+                                            @forelse(($product->images ?? []) as $image)
                                                 <div class="swiper-slide">
                                                     <figure class="product-image">
                                                         <img src="{{ asset(Storage::url($image->image_path)) }}"
@@ -91,7 +91,7 @@
                                                 }
                                             }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
-                                            @forelse($product->images as $image)
+                                            @forelse(($product->images ?? []) as $image)
                                                 <div class="product-thumb swiper-slide">
                                                     <img src="{{ asset(Storage::url($image->image_path)) }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
@@ -150,7 +150,7 @@
                                     </div>
 
                                     <hr class="product-divider">
-                                    @forelse($product?->attributes as $attribute)
+                                    @forelse(($product?->attributes ?? []) as $attribute)
                                         <div class="product-form product-variation-form product-color-swatch">
                                             <label>{{ ucfirst($attribute?->label?->name) }}:</label>
                                             <div class="d-flex align-items-center product-variations">
@@ -1142,7 +1142,7 @@
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
                                                             <a href="{{ route('product.details', $mProduct->product_id) }}" title="{{ $mProduct->name }}">
-                                                                <img src="{{ asset(Storage::url($mProduct->image->image_path)) }}"
+                                                                <img src="{{ $mProduct?->image?->image_path ? asset(Storage::url($mProduct?->image?->image_path)) : asset('assets/brand_icon.png') }}"
                                                                     alt="Product" width="100" height="113" />
                                                             </a>
                                                         </figure>
