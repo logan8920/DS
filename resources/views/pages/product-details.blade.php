@@ -166,7 +166,7 @@
                                     @endforelse
                                     <hr class="product-divider">
                                     <div class="sticky-content-wrapper">
-                                        <div class="fix-bottom product-sticky-content sticky-content">
+                                        <div class="fix-bottomss product-sticky-content sticky-content">
                                             <div class="product-form container">
                                                 <button class="btn btn-secondary btn-calculator" type="button">
                                                     <i class="w-icon-calculator"></i>

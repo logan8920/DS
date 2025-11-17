@@ -43,6 +43,13 @@
         border: none;
     }
 
+    .sidebar a.active {
+        background: #ff3232;
+        color: #fff;
+        font-weight: 600;
+        border: none;
+    }
+
     .sidebar .menu-text {
         margin-left: 10px;
     }
@@ -119,4 +126,46 @@
             }
         };
     });
-</script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        let currentUrl = `${window.location.origin}${window.location.pathname}${window.location.search ?? ''}`;
+        let ele = document.querySelector(`[href="${currentUrl}"]`) ?? document.querySelector(`[href="${window.location.origin}${window.location.pathname}"]`);
+        let a;
+        // const clickEle = [];
+        if (!ele) return;
+
+        // let closestLi = ele.closest("li");
+        // console.log(ele);
+        ele.classList.add("active");
+        // if (closestLi) {
+        // }
+        // do {
+        //     if (!ele) break;
+
+        //     let closestLi = ele.closest("li");
+        //     if (closestLi) {
+        //       closestLi.classList.add("active");
+        //     }
+
+            
+        //     let submenu = ele.closest("ul.submenu");
+        //     if (submenu) {
+        //         a = submenu.previousElementSibling;
+
+        //         if (a && a.matches('a[data-toggle="collapse"]')) {
+        //             clickEle.push(a);
+        //         }
+        //     } else {
+        //         a = null;
+        //     }
+
+        //     ele = a;
+        // } while (a);
+
+        // console.log(clickEle);
+
+        
+        // clickEle.forEach(aEle => aEle.click());
+    });
+
+ </script>      
