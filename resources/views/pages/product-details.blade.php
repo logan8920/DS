@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 @section('title')
     - {{ strtoupper($product->name) }}
 @endsection
@@ -1080,7 +1080,7 @@
                         </section> -->
                     </div>
                     <!-- End of Main Content -->
-                    <aside class="sidebar product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
+                    <aside class="sidebar-details product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
                         <div class="sidebar-overlay"></div>
                         <a class="sidebar-close" href="#"><i class="close-icon"></i></a>
                         <a href="#" class="sidebar-toggle d-flex d-lg-none"><i class="fas fa-chevron-left"></i></a>
@@ -1184,6 +1184,7 @@
     </main>
     <!-- End of Main -->
     @include('partials.calculator')
+    @include('partials.cart')
 @endsection
 
 @section("js")

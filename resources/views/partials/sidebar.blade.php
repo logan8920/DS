@@ -15,7 +15,7 @@
     }
 
     .sidebar.collapsed {
-        width: 70px;
+        width: 86px;
     }
 
     .sidebar .logo {

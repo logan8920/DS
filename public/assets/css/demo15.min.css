@@ -10580,7 +10580,7 @@ body .product-popup {
 }
 
 @media (min-width: 992px) {
-  .sidebar {
+  .sidebar-details {
     -webkit-box-flex: 0;
         -ms-flex: 0 0 31rem;
             flex: 0 0 31rem;
