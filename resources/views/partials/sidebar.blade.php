@@ -120,11 +120,18 @@
             let img = sidebar.children[0].children;
             [...img].forEach(image => image.classList.add('d-none'));
             if(sidebar.classList.contains('collapsed')){
+                localStorage.setItem('sidebar','close');
                 img[1].classList.remove('d-none');
             }else{
+                localStorage.setItem('sidebar','open');
                 img[0].classList.remove('d-none');
             }
         };
+        let sidebarState = localStorage.getItem('sidebar') ?? 'close';
+
+        if(sidebarState == 'close') {
+            toggleBtn.click();
+        }
     });
 
     document.addEventListener("DOMContentLoaded", function() {

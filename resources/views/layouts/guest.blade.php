@@ -198,6 +198,17 @@
 
     {{ $slot }}
 
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('form').on('submit',function (e) {
+                const submitBtn = this.querySelector('button[type=submit]');
+                startLoadings(submitBtn);
+            })
+        });
+    </script>
+
 </body>
 
 </html>

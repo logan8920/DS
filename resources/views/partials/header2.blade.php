@@ -5,12 +5,10 @@
     </div>
     <div class="dropdown">
         <a href="javascript:;">
-            <img src="{{ asset('assets/images/icon/profile.png') }}" width="30" class="fa-2x mr-1" alt="">
+            Hi! {{ auth()->user()->name }} &nbsp;&nbsp; <span class="text-lighter">|</span>&nbsp;&nbsp;&nbsp; <img src="{{ asset('assets/images/icon/profile.png') }}" width="30" class="fa-2x mr-1" alt="">
         </a>
         <div class="dropdown-box" style="width: 10rem;">
-            <a href="javascript:;">
-                Hi! {{ auth()->user()->name }}
-            </a>
+
             <a href="javascript:;" class="logout" data-id="logout-html">
                 Logout
             </a>
@@ -24,7 +22,7 @@
                             <p>Are you sure want to logout?</p>
                             @csrf
                             <button class="btn btn-warning popupcancel" type="button">Cancel</button>
-                            <button class="btn btn-danger" type="submit">Logout</button>
+                            <button class="btn btn-danger" onclick="(startLoadings(this),this.closest('form').submit())" type="submit">Logout</button>
                         </div>
                     </div>
                 </form>
