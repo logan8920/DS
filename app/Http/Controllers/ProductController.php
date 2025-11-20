@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\{Product,User,MapShopifyProduct};
+use App\Models\{Product, User, MapShopifyProduct};
 use Illuminate\Http\Request;
 use App\Libraries\Shopify;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use DB;
+use PhpParser\Node\Expr\Cast\Double;
 
 class ProductController extends Controller
 {
@@ -68,8 +69,8 @@ class ProductController extends Controller
 
     public function details(Product $product)
     {
-        $moreProducts = Product::where("product_id","!=",$product->product_id)->limit(30)->get();
-        return view('pages.product-details',compact('product','moreProducts'));
+        $moreProducts = Product::where("product_id", "!=", $product->product_id)->limit(30)->get();
+        return view('pages.product-details', compact('product', 'moreProducts'));
     }
 
     public function categories()
@@ -116,7 +117,7 @@ class ProductController extends Controller
                             DB::raw("'IMAGE' as \"contentType\"")
                         ]);
                     },
-                    
+
                 ])
                 ->where("product_id", $productId)
                 ->first();
@@ -132,7 +133,7 @@ class ProductController extends Controller
             ->get()
             ->toArray();
             // dd($product);
-            
+
             if(!count($product->productOptions ?? [])) {
                 $product->productOptions = [
                     [
@@ -178,7 +179,7 @@ class ProductController extends Controller
             if(!$config) {
                 throw new Exception("Seller for {$request->domain} Channel Not Found!", 422);
             }
-            
+
             //dd(json_encode($productData));
             $shopify = new Shopify($config);
 
@@ -204,7 +205,7 @@ class ProductController extends Controller
                     "created_at" => date("Y-m-d H:i:s")
                 ];
             }
-            
+
             MapShopifyProduct::insert($create);
 
             DB::commit();
@@ -334,16 +335,26 @@ class ProductController extends Controller
 
             $create = [];
             foreach ($variants as $variant) {
+
+                // Extract variant ID safely
                 $variantIdParts = explode('/', $variant['id'] ?? '1');
+
+                // Convert values to float safely
+                $sellingPriceFloat = floatval($sellingPrice);
+                $costPriceFloat = floatval($product->price);
+
                 $create[] = [
                     "user_id" => auth()->id(),
                     "product_id" => $productId,
                     "shopify_variant_id" => end($variantIdParts),
                     "shopify_product_id" => $shopifyProductID,
-                    "price" => $sellingPrice,
+                    "price" => $sellingPriceFloat,
                     "created_at" => now(),
+                    "current_price" => $costPriceFloat,
+                    "profit" => $sellingPriceFloat - $costPriceFloat,
                 ];
             }
+
 
             if (!empty($create)) {
                 MapShopifyProduct::insert($create);
@@ -368,7 +379,8 @@ class ProductController extends Controller
     }
 
 
-    public function categoryProductShow($parentId, $categoryId){
-        dd($parentId,$categoryId);
+    public function categoryProductShow($parentId, $categoryId)
+    {
+        dd($parentId, $categoryId);
     }
 }

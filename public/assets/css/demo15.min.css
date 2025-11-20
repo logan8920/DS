@@ -16775,7 +16775,7 @@ body .product-popup {
     margin: -1.7rem 0 1.7rem 0;
   }
   .banner-product-wrapper .banner-media img, .title-link-wrapper .banner-media img {
-    max-height: 21rem;
+    max-height: 14rem;
   }
   .banner-product-wrapper .nav-links li, .title-link-wrapper .nav-links li {
     margin: 0 1.5rem 0 0;
@@ -16797,5 +16797,36 @@ body .product-popup {
 
   .footer .social-icons {
     margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .sidebar.collapsed {
+    position: absolute !important;
+    left: 100% !important;
+  }
+
+  .sidebar {
+    z-index: 9;
+    background: aliceblue;
+  }
+  .swiper-container-fade .swiper-slide {
+    padding: 0px 0px 0px 12px !important;
+  }
+  .page-header input {
+    width: 110px !important;
+  }
+
+  body.home:has(.sidebar:not(.collapsed)) > div#wrapper {
+    margin-left: 250px !important;
+    width: 100%;
+  }
+
+  body.home:has(.sidebar.collapsed) > div#wrapper {
+    margin-left: 0px !important;
+  }
+
+  .intro-section .banner-media img {
+    min-height: 13rem;
   }
 }
