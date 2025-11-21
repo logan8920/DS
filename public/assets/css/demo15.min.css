@@ -8991,7 +8991,7 @@ body .product-popup {
   background-color: #EC7A5C;
 }
 .btn-product-icon.btn-cart, .btn-product-icon.btn-quickview {
-  font-size: 1.6em;
+  font-size: 1.4em;
 }
 .btn-product-icon.btn-compare {
   font-size: 2em;
@@ -14553,7 +14553,8 @@ body .product-popup {
 }
 @media (max-width: 479px) {
   .cart-dropdown.cart-offcanvas .dropdown-box {
-    max-width: 28rem;
+    width: 100% !important;
+    max-width: 500px !important;
   }
 }
 /*------------------------------------------
@@ -16829,4 +16830,20 @@ body .product-popup {
   .intro-section .banner-media img {
     min-height: 13rem;
   }
+}
+
+span#netLoss.text-success-bold {
+    color: #27e027 !important;
+}
+
+span#netLoss.text-primary {
+    font-weight: 500;
+}
+
+span#netLossPerOrder.text-primary {
+    font-weight: 500;
+}
+
+span#netLossPerOrder.text-success-bold {
+    color: #27e027 !important;
 }

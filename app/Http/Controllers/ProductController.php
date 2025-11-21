@@ -69,6 +69,7 @@ class ProductController extends Controller
 
     public function details(Product $product)
     {
+        $product->image->image_path;
         $moreProducts = Product::where("product_id", "!=", $product->product_id)->limit(30)->get();
         return view('pages.product-details', compact('product', 'moreProducts'));
     }

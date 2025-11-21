@@ -2,7 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
     
-    <div class="left-panel">
+    <div class="left-panel register">
         <div class="left-panel-content">
             <img src="{{ asset('assets/images/svg/register.svg') }}" alt="">
             <h1><i class="bi bi-shop me-2"></i>Start Your E-Commerce Journey</h1>
