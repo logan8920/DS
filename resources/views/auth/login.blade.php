@@ -4,6 +4,7 @@
 
     <div class="left-panel">
         <div class="left-panel-content">
+            <img src="{{ asset('assets/images/svg/login_transparent.svg') }}" alt="">
             <h1><i class="bi bi-shop-window me-2"></i>Grow Your Dropshipping Empire</h1>
             <p>Manage products, track orders, and scale your business seamlessly.</p>
         </div>

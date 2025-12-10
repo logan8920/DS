@@ -19,6 +19,16 @@ class Product extends Model
             ->where("is_active", 1);
     }
 
+    public function image()
+    {
+        return $this->hasOne(ProductImage::class, "product_id", "product_id")
+            ->where(function ($q) {
+                $q->where('is_primary', 1);
+                $q->orWhere("is_primary", 0);
+            })
+            ->where("is_active", 1);
+    }
+
     public function files()
     {
         return $this->hasMany(ProductImage::class, "product_id", "product_id")

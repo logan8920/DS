@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 @section('title')
     - Dashboard
 @endsection
@@ -172,4 +172,5 @@
         @endif
     </main>
     <!-- End of Main -->
+    @include('partials.cart')
 @endsection

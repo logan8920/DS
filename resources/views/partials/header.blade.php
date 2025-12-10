@@ -1,56 +1,5 @@
 <!-- Start of Header -->
 <header class="header">
-    {{-- <div class="header-top">
-        <div class="container-fluid">
-            <div class="header-left mr-4">
-                <a href="#" class="d-flex mr-2 mr-lg-6">
-                    <i class="w-icon-map-marker"></i>
-                    <span class="d-md-show">Find Wolmart Store</span>
-                </a>
-                <a href="#" class="d-flex">
-                    <i class="w-icon-info"></i>
-                    <span class="d-md-show">Free Standard Shipping</span>
-                </a>
-            </div>
-            <div class="header-right pr-0">
-                <div class="dropdown">
-                    <a href="#currency">USD</a>
-                    <div class="dropdown-box">
-                        <a href="#USD">USD</a>
-                        <a href="#EUR">EUR</a>
-                    </div>
-                </div>
-                <!-- End of DropDown Menu -->
-
-                <div class="dropdown">
-                    <a href="#language"><img src="{{asset('assets/images/flags/eng.png') }}" alt="ENG Flag" width="14"
-                            height="8" class="dropdown-image" /> ENG
-                    </a>
-                    <div class="dropdown-box">
-                        <a href="#ENG">
-                            <img src="{{asset('assets/images/flags/eng.png') }}" alt="ENG Flag" width="14" height="8"
-                                class="dropdown-image" />
-                            ENG
-                        </a>
-                        <a href="#FRA">
-                            <img src="{{asset('assets/images/flags/fra.png') }}" alt="FRA Flag" width="14" height="8"
-                                class="dropdown-image" />
-                            FRA
-                        </a>
-                    </div>
-                </div>
-                <!-- End of Dropdown Menu -->
-                <span class="divider d-lg-show"></span>
-                <a href="blog.html" class="d-lg-show">Blog</a>
-                <a href="become-a-vendor.html" class="d-lg-show">Become a Vendor</a>
-                <a href="contact-us.html" class="d-lg-show">Contact Us</a>
-                <a href="assets/ajax/login.html" class="d-lg-show login sign-in"><i class="w-icon-account mr-1"></i>Sign
-                    In</a>
-                <span class="delimiter d-lg-show bg-">/</span>
-                <a href="assets/ajax/login.html" class="ml-0 d-lg-show login register">Register</a>
-            </div>
-        </div>
-    </div> --}}
     <!-- End of Header Top -->
     <div class="header-middle">
         <div class="container-fluid">

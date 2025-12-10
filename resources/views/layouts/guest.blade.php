@@ -118,22 +118,6 @@
             color: #6610f2;
         }
 
-        @media (max-width: 992px) {
-            body {
-                flex-direction: column-reverse;
-            }
-
-            .left-panel {
-                height: 40%;
-            }
-
-            .login-container {
-                width: 100%;
-                height: 60%;
-                box-shadow: none;
-            }
-        }
-
          /* RIGHT PANEL (Register Form) */
         .register-container {
             overflow: scroll;
@@ -174,6 +158,7 @@
         }
 
         @media (max-width: 992px) {
+           
             body {
                 flex-direction: column-reverse;
             }
@@ -182,11 +167,31 @@
                 height: 40%;
             }
 
+            .login-container {
+                width: 100%;
+                height: 60%;
+                overflow-y: scroll;
+                box-shadow: none;
+            }
+
+            .left-panel img {
+                width: 200px !important;
+            }
+
+            .left-panel.register img {
+                width: 125px !important;
+            }
+
             .register-container {
                 width: 100%;
                 height: 60%;
                 box-shadow: none;
             }
+
+            .login-container h2 {
+                margin-top: 2rem;
+            }
+            
         }
     </style>
 
@@ -197,6 +202,18 @@
 <body class="font-sans text-gray-900 antialiased">
 
     {{ $slot }}
+
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('form').on('submit',function (e) {
+                $(this).find('input').attr("readonly",true);
+                const submitBtn = this.querySelector('button[type=submit]');
+                startLoadings(submitBtn);
+            })
+        });
+    </script>
 
 </body>
 

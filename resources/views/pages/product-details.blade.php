@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 @section('title')
     - {{ strtoupper($product->name) }}
 @endsection
@@ -59,7 +59,7 @@
                                                 }
                                             }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
-                                            @forelse($product->images as $image)
+                                            @forelse(($product->images ?? []) as $image)
                                                 <div class="swiper-slide">
                                                     <figure class="product-image">
                                                         <img src="{{ asset(Storage::url($image->image_path)) }}"
@@ -91,7 +91,7 @@
                                                 }
                                             }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
-                                            @forelse($product->images as $image)
+                                            @forelse(($product->images ?? []) as $image)
                                                 <div class="product-thumb swiper-slide">
                                                     <img src="{{ asset(Storage::url($image->image_path)) }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
@@ -150,7 +150,7 @@
                                     </div>
 
                                     <hr class="product-divider">
-                                    @forelse($product?->attributes as $attribute)
+                                    @forelse(($product?->attributes ?? []) as $attribute)
                                         <div class="product-form product-variation-form product-color-swatch">
                                             <label>{{ ucfirst($attribute?->label?->name) }}:</label>
                                             <div class="d-flex align-items-center product-variations">
@@ -166,7 +166,7 @@
                                     @endforelse
                                     <hr class="product-divider">
                                     <div class="sticky-content-wrapper">
-                                        <div class="fix-bottom product-sticky-content sticky-content">
+                                        <div class="fix-bottomss product-sticky-content sticky-content">
                                             <div class="product-form container">
                                                 <button class="btn btn-secondary btn-calculator" type="button">
                                                     <i class="w-icon-calculator"></i>
@@ -1080,7 +1080,7 @@
                         </section> -->
                     </div>
                     <!-- End of Main Content -->
-                    <aside class="sidebar product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
+                    <aside class="sidebar-details product-sidebar sidebar-fixed right-sidebar sticky-sidebar-wrapper">
                         <div class="sidebar-overlay"></div>
                         <a class="sidebar-close" href="#"><i class="close-icon"></i></a>
                         <a href="#" class="sidebar-toggle d-flex d-lg-none"><i class="fas fa-chevron-left"></i></a>
@@ -1142,7 +1142,7 @@
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
                                                             <a href="{{ route('product.details', $mProduct->product_id) }}" title="{{ $mProduct->name }}">
-                                                                <img src="{{ asset(Storage::url($mProduct->image->image_path)) }}"
+                                                                <img src="{{ $mProduct?->image?->image_path ? asset(Storage::url($mProduct?->image?->image_path)) : asset('assets/brand_icon.png') }}"
                                                                     alt="Product" width="100" height="113" />
                                                             </a>
                                                         </figure>
@@ -1184,6 +1184,7 @@
     </main>
     <!-- End of Main -->
     @include('partials.calculator')
+    @include('partials.cart')
 @endsection
 
 @section("js")

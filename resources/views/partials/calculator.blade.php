@@ -150,11 +150,11 @@
                 <input type="number" class="form-control" id="expOrders" />
             </div>
             <div class="col-2 mb-3">
-                <label>Confirm Orders (✓)*</label>
+                <label>Confirm Orders (%)*</label>
                 <input type="number" class="form-control" id="confOrders" />
             </div>
             <div class="col-2 mb-3">
-                <label>Expected Delivery (✓)*</label>
+                <label>Expected Delivery (%)*</label>
                 <input type="number" class="form-control" id="expDelivery" />
             </div>
             <div class="col-2 mb-3">
