@@ -152,6 +152,7 @@
     <div class="page-wrapper">
         <h1 class="d-none">Wolmart - Responsive Marketplace HTML Template</h1>
         @include('partials.header')
+        @include('partials.sidebar')
         @yield('content')
         @include('partials.footer')
     </div>
