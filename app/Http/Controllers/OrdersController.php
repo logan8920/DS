@@ -14,7 +14,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $statuses = Statuses::select(['name','status_id'])->get()->pluck('name','status_id')->toArray();
+        $statuses = Statuses::select(['name', 'status_id'])->get()->pluck('name', 'status_id')->toArray();
         $pageHeading = "Orders";
         $tabs = [
             "All" => [
@@ -813,139 +813,76 @@ class OrdersController extends Controller
         return view('pages.comman-table', compact('tabs', 'firstRoute', 'defaultTabs', 'pageHeading'));
     }
 
-    public function orderType(Request $request,$type)
+    public function orderType(Request $request, $type)
     {
-        //$isAdmin = auth()->user()->roles()->first()->name === "Admin";
         $select = [
             'orders.order_id',
             'orders.order_number',
             DB::raw('orders.created_at as order_date'),
             'orders.shopify_order_id',
+
+            // PostgreSQL-safe
             DB::raw("CONCAT('₹', orders.total_price) as price"),
+
             DB::raw('orders.financial_status as payment'),
             'orders.customer',
+
+            // CASE instead of IF
             DB::raw("
-                CASE 
-                    WHEN orders.financial_status = 'PREPAID' 
-                    THEN 'yes' 
-                    ELSE 'no' 
-                END as payment_required
-            "),
+            CASE 
+                WHEN orders.financial_status = 'PREPAID' 
+                THEN 'yes' 
+                ELSE 'no' 
+            END as payment_required
+        "),
         ];
 
+        $statuses = Statuses::select(['name', 'status_id'])
+            ->get()
+            ->pluck('status_id', 'name')
+            ->toArray();
 
-        $statuses = Statuses::select(['name','status_id'])->get()->pluck('status_id','name')->toArray();
+        // fixed case
+        $financialStatus = ['COD', 'PREPAID'];
+        $filter = null;
 
-        $financialStatus = ['COD','Prepaid'];
-        $filter = false;
-        if(in_array($type,array_keys($statuses))) {
-            $filter = ['orders.status_id'=>$statuses[$type]];
-        }elseif(in_array($type,$financialStatus)) {
-            $filter = ['orders.financial_status'=>$type];
+        if (array_key_exists($type, $statuses)) {
+            $filter = ['orders.status_id' => $statuses[$type]];
+        } elseif (in_array($type, $financialStatus)) {
+            $filter = ['orders.financial_status' => $type];
         }
 
-        // dd($filter);
         $query = Order::select($select)
             ->join('order_items as oi', 'orders.order_id', '=', 'oi.order_id')
             ->where('oi.dropshipper_id', auth()->id())
             ->orderBy('orders.created_at', 'DESC')
-
             ->with([
                 'orderItem' => function ($q) {
-                    $q->select(['order_id','seller_id'])->where('dropshipper_id', auth()->id());
+                    $q->select(['order_id', 'seller_id'])
+                        ->where('dropshipper_id', auth()->id());
                 },
                 'orderItem.seller:user_id,store_name',
                 'paymentDetails:order_id'
             ]);
-        if($filter)
+
+        if ($filter) {
             $query->where($filter);
-            // ->distinct()   //Prevent duplicate orders
-        $data = $query->get()->toArray();
-        // dd($data);
-        // $data = [
-        //     [
-        //         'order_date' => '2025-08-16',
-        //         'shopify_order_id' => '#SH12345',
-        //         'order_id' => 'ORD001',
-        //         'price' => '₹2500',
-        //         'payment' => 'COD',
-        //         'customer' => 'John Doe',
-        //         'mobile' => '9876543210',
-        //         'store' => 'Amazon',
-        //     ],
-        //     [
-        //         'order_date' => '2025-08-15',
-        //         'shopify_order_id' => '#SH12346',
-        //         'order_id' => 'ORD002',
-        //         'price' => '₹1800',
-        //         'payment' => 'Prepaid',
-        //         'customer' => 'Vishal Kumar',
-        //         'mobile' => '9998887776',
-        //         'store' => 'Flipkart',
-        //     ]
-        // ];
+        }
 
+        $data = $query->get();
 
+        // DataTables params
+        $draw = intval($request->post('draw'));
+        $recordsTotal = $data->count();
 
-        $order = $request->post('order');
-        $start = $request->post('start') ?? 0;
-        $length = $request->post('length') ?? 10;
-        $search = $request->post('search')['value'] ?? null;
-
-        // $query = User::selectRaw('(@rownum := @rownum + 1) AS s_no, users.id, users.name, users.firmname, business_name, users.username, users.status, users.datetime, users.created_by, users.email, users.created_at, users.phone')
-        //     ->crossJoin(DB::raw('(SELECT @rownum := 0) r'))
-        //     ->where('api_partner', 1)->with(['createdBy:id,name', 'apiCredentials:user_id,ipaddress','apiConfig:user_id,pg_company_id']);
-
-        // if (auth()->user()->api_partner) {
-        //     $query->where('id', auth()->user()->id);
-        // }
-        // // Search filter
-        // if ($search) {
-        //     $query->where(function ($q) use ($dbColumns, $search) {
-        //         foreach ($dbColumns as $key => $column) {
-        //             if ($key === 0) {
-        //                 $q->where($column, 'like', "%$search%");
-        //             } else {
-        //                 $q->orWhere($column, 'like', "%$search%");
-        //             }
-        //         }
-        //     });
-        // }
-
-        // // Order
-        // if (isset($order[0]['dir'])) {
-        //     $dir = $order[0]['dir'];
-        //     $colIndex = $order[0]['column'] ?? false;
-        //     $col = $dbColumns[$colIndex] ?? false;
-        //     if ($col) {
-        //         $query->orderBy($col, $dir);
-        //     }
-        // } else {
-        //     $query->orderBy('users.id', 'desc');
-        // }
-
-        // // Count recordsFiltered before applying limit & offset
-        // $recordsFiltered = $query->count(DB::raw('1'));
-
-        // // Pagination
-        // $data = $query->offset($start)->limit($length)->get()->toArray();
-
-        // // Total records
-        // $recordsTotal = User::count();
-
-        // Prepare response
-        $draw = $request->post('draw');
-        $recordsTotal = count($data);
-        $recordsFiltered = $data;
-        $response = [
-            'draw' => intval($draw),
-            'recordsTotal' => intval($recordsTotal),
-            'recordsFiltered' => intval($recordsFiltered),
+        return response()->json([
+            'draw' => $draw,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsTotal,
             'data' => $data
-        ];
-
-        return response()->json($response);
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
