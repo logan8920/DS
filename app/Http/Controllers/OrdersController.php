@@ -819,14 +819,20 @@ class OrdersController extends Controller
         $select = [
             'orders.order_id',
             'orders.order_number',
-            'orders.created_at as order_date',
+            DB::raw('orders.created_at as order_date'),
             'orders.shopify_order_id',
-            DB::raw('CONCAT("₹",orders.total_price) as price'),
-            'orders.financial_status as payment',
+            DB::raw("CONCAT('₹', orders.total_price) as price"),
+            DB::raw('orders.financial_status as payment'),
             'orders.customer',
-            DB::raw("IF(orders.financial_status = 'PREPAID','yes','no') as payment_required"),
-
+            DB::raw("
+                CASE 
+                    WHEN orders.financial_status = 'PREPAID' 
+                    THEN 'yes' 
+                    ELSE 'no' 
+                END as payment_required
+            "),
         ];
+
 
         $statuses = Statuses::select(['name','status_id'])->get()->pluck('status_id','name')->toArray();
 
