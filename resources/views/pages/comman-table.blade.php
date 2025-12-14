@@ -377,10 +377,9 @@
 
             <!-- Tabs -->
             <div class="order-tabs">
-                @php $index = 0; @endphp
+               
                 @foreach ($tabs as $tab => $data)
-                    <button {!! !$index ? `class="active"` : '' !!} data-filter="{{ $tab }}">{{ $tab }}</button>
-                    @php $index++; @endphp
+                    <button class="{{ $loop->first ? 'active' : '' }}"  data-filter="{{ $tab }}">{{ $tab }}</button>
                 @endforeach
             </div>
 
@@ -408,7 +407,8 @@
         });
 
         // Data Table Config
-        let tableData = {};
+        const tableData = {};
+        tableData['order_details'] = {};
         let cols = [];
         let ajaxUrl = '{{ $firstRoute }}';
         let colDefs = [];
@@ -448,7 +448,7 @@
             }
         }
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
@@ -495,8 +495,9 @@
 
         function makeFilter(filterData) {
             filterBody.innerHTML = "";
-            Object.keys(filterData).forEach(filter => {
+            Object.keys(filterData).forEach((filter,i) => {
                 let $div = $('<div>');
+                
                 $div.append($('<lable>').text(filter));
                 let filterType = filterData[filter].type;
                 let $filter;
