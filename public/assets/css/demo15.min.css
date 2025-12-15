@@ -8812,7 +8812,8 @@ body .product-popup {
 .product-media img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 160px;
+  object-fit: contain !important;
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s;
 }
@@ -16846,4 +16847,12 @@ span#netLossPerOrder.text-primary {
 
 span#netLossPerOrder.text-success-bold {
     color: #27e027 !important;
+}
+
+.intro-section img {
+    width: 100% !important;
+    border-radius: 10px;
+    object-fit: contain;
+    height: 198px !important;
+    /* aspect-ratio: 3/2; */
 }
