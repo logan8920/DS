@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\returnArgument;
+use App\Models\{Statuses};
+use DB;
 
 class OrdersController extends Controller
 {
@@ -12,8 +14,119 @@ class OrdersController extends Controller
      */
     public function index()
     {
+        $statuses = Statuses::select(['name', 'status_id'])->get()->pluck('name', 'status_id')->toArray();
         $pageHeading = "Orders";
         $tabs = [
+            "All" => [
+                "colDefs" => [
+                    [
+                        "targets" => -1,
+                        "title" => "Actions",
+                        "orderable" => false,
+                        "searchable" => false,
+                        "render" => "function(e, t, a, s) {
+                            const btnId = 'x-'+ parseInt(Math.random() * 1000000);
+                            tableData['order_details'][btnId] = a?.order_id;
+                            const aTag = document.createElement('a');
+                            aTag.href = 'javascript:;';
+                            aTag.setAttribute('data-bs-toggle','tooltip');
+                            aTag.setAttribute('data-order-id',btnId);
+                            aTag.title = 'Pay to proceed the order';
+                            aTag.textContent = 'Pay';
+                            return e == 'yes' ? (!a?.payment_details?.order_id ? aTag.outerHTML : 'Payment Done') : 'Order COD';
+                        }",
+
+                    ]
+                ],
+                "columns" => [
+                    ['data' => 'order_date', 'title' => 'Order Date'],
+                    ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
+                    ['data' => 'price', 'title' => 'Price'],
+                    ['data' => 'payment', 'title' => 'Payment'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'payment_required', 'title' => 'Action'],
+                ],
+                "filter" => [
+                    "Date Range" => [
+                        "type" => "input",
+                        "subtype" => "text",
+                        "name" => "date_range",
+                        "className" => " daterange"
+                    ],
+                    "DD Id" => [
+                        "type" => "input",
+                        "subtype" => "text",
+                        "name" => "ddId",
+                        "className" => "",
+                        "placeholder" => "DD Id"
+                    ],
+                    "Order Id" => [
+                        "type" => "input",
+                        "subtype" => "text",
+                        "name" => "orderKeyword",
+                        "className" => "",
+                        "placeholder" => "Order Id Or Awb No Or Dropshipper Order Id"
+                    ],
+                    "Customer Keyword" => [
+                        "type" => "input",
+                        "subtype" => "text",
+                        "name" => "customerKeyword",
+                        "className" => "",
+                        "placeholder" => "Customer name"
+                    ],
+                    "Product Name" => [
+                        "type" => "input",
+                        "subtype" => "text",
+                        "name" => "product_name",
+                        "className" => "",
+                        "placeholder" => "Product Name"
+                    ],
+                    "Status" => [
+                        "type" => "select",
+                        "subtype" => "",
+                        "option" => $statuses,
+                        "name" => "statusId",
+                        "className" => "",
+                        "placeholder" => "Customer name"
+                    ],
+                    "Payment Mode" => [
+                        "type" => "select",
+                        "subtype" => "",
+                        "option" => [
+                            "0" => "Select payment mode",
+                            "1" => "COD",
+                            "2" => "Prepaid",
+                        ],
+                        "name" => "paymentMode",
+                        "className" => "",
+                        "placeholder" => ""
+                    ],
+                    "Search by store" => [
+                        "type" => "select",
+                        "subtype" => "",
+                        "option" => [],
+                        "name" => "search_by_store",
+                        "className" => "virtualSelect",
+                        "placeholder" => ""
+                    ],
+                    "Rto Keyword Errors" => [
+                        "type" => "select",
+                        "subtype" => "",
+                        "option" => [
+                            "0" => "Select RTO Error",
+                            "true" => "Orders with RTO keywords error",
+                            "false" => "Orders without RTO keywords error",
+                        ],
+                        "name" => "rtoKeywordErrors",
+                        "className" => "",
+                        "placeholder" => ""
+                    ],
+                ],
+                "url" => route('orders.type', 'All')
+            ],
             "COD" => [
                 "colDefs" => [
                     [
@@ -32,13 +145,13 @@ class OrdersController extends Controller
                 "columns" => [
                     ['data' => 'order_date', 'title' => 'Order Date'],
                     ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
                     ['data' => 'price', 'title' => 'Price'],
                     ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Action'],
                 ],
                 "filter" => [
                     "DateRange" => [
@@ -78,34 +191,7 @@ class OrdersController extends Controller
                     "Status" => [
                         "type" => "select",
                         "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
+                        "option" => $statuses,
                         "name" => "statusId",
                         "className" => "",
                         "placeholder" => "Customer name"
@@ -163,13 +249,13 @@ class OrdersController extends Controller
                 "columns" => [
                     ['data' => 'order_date', 'title' => 'Order Date'],
                     ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
                     ['data' => 'price', 'title' => 'Price'],
                     ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Action'],
                 ],
                 "filter" => [
                     "Date Range" => [
@@ -276,7 +362,7 @@ class OrdersController extends Controller
                 ],
                 "url" => route('orders.type', 'Prepaid')
             ],
-            "Confirmed" => [
+            "{$statuses[2]}" => [
                 "colDefs" => [
                     [
                         "targets" => -1,
@@ -294,13 +380,13 @@ class OrdersController extends Controller
                 "columns" => [
                     ['data' => 'order_date', 'title' => 'Order Date'],
                     ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
                     ['data' => 'price', 'title' => 'Price'],
                     ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Action'],
                 ],
                 "filter" => [
                     "Date Range" => [
@@ -340,34 +426,7 @@ class OrdersController extends Controller
                     "Status" => [
                         "type" => "select",
                         "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
+                        "option" => $statuses,
                         "name" => "statusId",
                         "className" => "",
                         "placeholder" => "Customer name"
@@ -407,7 +466,7 @@ class OrdersController extends Controller
                 ],
                 "url" => route('orders.type', 'Confirmed')
             ],
-            "Cancelled" => [
+            "{$statuses[3]}" => [
                 "colDefs" => [
                     [
                         "targets" => -1,
@@ -425,13 +484,13 @@ class OrdersController extends Controller
                 "columns" => [
                     ['data' => 'order_date', 'title' => 'Order Date'],
                     ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
                     ['data' => 'price', 'title' => 'Price'],
                     ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Action'],
                 ],
                 "filter" => [
                     "Date Range" => [
@@ -471,34 +530,7 @@ class OrdersController extends Controller
                     "Status" => [
                         "type" => "select",
                         "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
+                        "option" => $statuses,
                         "name" => "statusId",
                         "className" => "",
                         "placeholder" => "Customer name"
@@ -538,7 +570,7 @@ class OrdersController extends Controller
                 ],
                 "url" => route('orders.type', 'Cancelled')
             ],
-            "Unprocessable Order" => [
+            "{$statuses[25]}" => [
                 "colDefs" => [
                     [
                         "targets" => -1,
@@ -556,13 +588,13 @@ class OrdersController extends Controller
                 "columns" => [
                     ['data' => 'order_date', 'title' => 'Order Date'],
                     ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
+                    ['data' => 'order_number', 'title' => 'Order Id'],
                     ['data' => 'price', 'title' => 'Price'],
                     ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
+                    ['data' => 'customer.name', 'title' => 'Customer Details'],
+                    ['data' => 'customer.phone', 'title' => 'Mobile'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Store Name'],
+                    ['data' => 'order_item.seller.store_name', 'title' => 'Action'],
                 ],
                 "filter" => [
                     "Date Range" => [
@@ -602,34 +634,7 @@ class OrdersController extends Controller
                     "Status" => [
                         "type" => "select",
                         "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
+                        "option" => $statuses,
                         "name" => "statusId",
                         "className" => "",
                         "placeholder" => "Customer name"
@@ -669,363 +674,215 @@ class OrdersController extends Controller
                 ],
                 "url" => route('orders.type', 'Unprocessable Order')
             ],
-            "All" => [
-                "colDefs" => [
-                    [
-                        "targets" => -1,
-                        "title" => "Actions",
-                        "orderable" => false,
-                        "searchable" => false,
-                        "render" => "function(e, t, a, s) {
-                            return `<a href='javascript:;' data-bs-toggle='tooltip' title='edit'>
-                                Edit
-                            </a>`;
-                        }",
+            // "Sync Error" => [
+            //     "colDefs" => [
+            //         [
+            //             "targets" => -1,
+            //             "title" => "Actions",
+            //             "orderable" => false,
+            //             "searchable" => false,
+            //             "render" => "function(e, t, a, s) {
+            //                 return `<a href='javascript:;' data-bs-toggle='tooltip' title='edit'>
+            //                     Edit
+            //                 </a>`;
+            //             }",
 
-                    ]
-                ],
-                "columns" => [
-                    ['data' => 'order_date', 'title' => 'Order Date'],
-                    ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
-                    ['data' => 'price', 'title' => 'Price'],
-                    ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
-                ],
-                "filter" => [
-                    "Date Range" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "date_range",
-                        "className" => " daterange"
-                    ],
-                    "DD Id" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "ddId",
-                        "className" => "",
-                        "placeholder" => "DD Id"
-                    ],
-                    "Order Id" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "orderKeyword",
-                        "className" => "",
-                        "placeholder" => "Order Id Or Awb No Or Dropshipper Order Id"
-                    ],
-                    "Customer Keyword" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "customerKeyword",
-                        "className" => "",
-                        "placeholder" => "Customer name"
-                    ],
-                    "Product Name" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "product_name",
-                        "className" => "",
-                        "placeholder" => "Product Name"
-                    ],
-                    "Status" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
-                        "name" => "statusId",
-                        "className" => "",
-                        "placeholder" => "Customer name"
-                    ],
-                    "Payment Mode" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select payment mode",
-                            "1" => "COD",
-                            "2" => "Prepaid",
-                        ],
-                        "name" => "paymentMode",
-                        "className" => "",
-                        "placeholder" => ""
-                    ],
-                    "Search by store" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [],
-                        "name" => "search_by_store",
-                        "className" => "virtualSelect",
-                        "placeholder" => ""
-                    ],
-                    "Rto Keyword Errors" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select RTO Error",
-                            "true" => "Orders with RTO keywords error",
-                            "false" => "Orders without RTO keywords error",
-                        ],
-                        "name" => "rtoKeywordErrors",
-                        "className" => "",
-                        "placeholder" => ""
-                    ],
-                ],
-                "url" => route('orders.type', 'All')
-            ],
-            "Sync Error" => [
-                "colDefs" => [
-                    [
-                        "targets" => -1,
-                        "title" => "Actions",
-                        "orderable" => false,
-                        "searchable" => false,
-                        "render" => "function(e, t, a, s) {
-                            return `<a href='javascript:;' data-bs-toggle='tooltip' title='edit'>
-                                Edit
-                            </a>`;
-                        }",
-
-                    ]
-                ],
-                "columns" => [
-                    ['data' => 'order_date', 'title' => 'Order Date'],
-                    ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
-                    ['data' => 'order_id', 'title' => 'Order Id'],
-                    ['data' => 'price', 'title' => 'Price'],
-                    ['data' => 'payment', 'title' => 'Payment'],
-                    ['data' => 'customer', 'title' => 'Customer Details'],
-                    ['data' => 'mobile', 'title' => 'Mobile'],
-                    ['data' => 'store', 'title' => 'Store Name'],
-                    ['data' => 'store', 'title' => 'Action'],
-                ],
-                "filter" => [
-                    "Date Range" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "date_range",
-                        "className" => " daterange"
-                    ],
-                    "DD Id" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "ddId",
-                        "className" => "",
-                        "placeholder" => "DD Id"
-                    ],
-                    "Order Id" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "orderKeyword",
-                        "className" => "",
-                        "placeholder" => "Order Id Or Awb No Or Dropshipper Order Id"
-                    ],
-                    "Customer Keyword" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "customerKeyword",
-                        "className" => "",
-                        "placeholder" => "Customer name"
-                    ],
-                    "Product Name" => [
-                        "type" => "input",
-                        "subtype" => "text",
-                        "name" => "product_name",
-                        "className" => "",
-                        "placeholder" => "Product Name"
-                    ],
-                    "Status" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select status",
-                            "1" => "New",
-                            "2" => "Confirmed",
-                            "3" => "Cancelled",
-                            "4" => "Pickup Initiated",
-                            "5" => "Pickup Cancelled",
-                            "6" => "Manifested",
-                            "7" => "Pickup Pending",
-                            "8" => "Pickup Completed",
-                            "9" => "In Transit",
-                            "10" => "Undelivered",
-                            "11" => "Out For Delivery",
-                            "12" => "Delivered",
-                            "13" => "RTO",
-                            "14" => "RTO In Transit",
-                            "15" => "RTO Delivered",
-                            "16" => "Booking in Process",
-                            "17" => "Cancel in Process",
-                            "18" => "Shipment Lost",
-                            "19" => "Shipment Damaged",
-                            "20" => "Order Confirmation In Process",
-                            "21" => "Shipment Cancelled",
-                            "22" => "Out for Pickup",
-                            "200" => "Cancelled on Dropdash",
-                            "201" => "Booked",
-                            "202" => "Unprocessable Order",
-                        ],
-                        "name" => "statusId",
-                        "className" => "",
-                        "placeholder" => "Customer name"
-                    ],
-                    "Payment Mode" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select payment mode",
-                            "1" => "COD",
-                            "2" => "Prepaid",
-                        ],
-                        "name" => "paymentMode",
-                        "className" => "",
-                        "placeholder" => ""
-                    ],
-                    "Search by store" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [],
-                        "name" => "search_by_store",
-                        "className" => "virtualSelect",
-                        "placeholder" => ""
-                    ],
-                    "Rto Keyword Errors" => [
-                        "type" => "select",
-                        "subtype" => "",
-                        "option" => [
-                            "0" => "Select RTO Error",
-                            "true" => "Orders with RTO keywords error",
-                            "false" => "Orders without RTO keywords error",
-                        ],
-                        "name" => "rtoKeywordErrors",
-                        "className" => "",
-                        "placeholder" => ""
-                    ],
-                ],
-                "url" => route('orders.type', 'Sync Error')
-            ]
+            //         ]
+            //     ],
+            //     "columns" => [
+            //         ['data' => 'order_date', 'title' => 'Order Date'],
+            //         ['data' => 'shopify_order_id', 'title' => 'Shopify Order Id'],
+            //         ['data' => 'order_id', 'title' => 'Order Id'],
+            //         ['data' => 'price', 'title' => 'Price'],
+            //         ['data' => 'payment', 'title' => 'Payment'],
+            //         ['data' => 'customer', 'title' => 'Customer Details'],
+            //         ['data' => 'mobile', 'title' => 'Mobile'],
+            //         ['data' => 'store', 'title' => 'Store Name'],
+            //         ['data' => 'store', 'title' => 'Action'],
+            //     ],
+            //     "filter" => [
+            //         "Date Range" => [
+            //             "type" => "input",
+            //             "subtype" => "text",
+            //             "name" => "date_range",
+            //             "className" => " daterange"
+            //         ],
+            //         "DD Id" => [
+            //             "type" => "input",
+            //             "subtype" => "text",
+            //             "name" => "ddId",
+            //             "className" => "",
+            //             "placeholder" => "DD Id"
+            //         ],
+            //         "Order Id" => [
+            //             "type" => "input",
+            //             "subtype" => "text",
+            //             "name" => "orderKeyword",
+            //             "className" => "",
+            //             "placeholder" => "Order Id Or Awb No Or Dropshipper Order Id"
+            //         ],
+            //         "Customer Keyword" => [
+            //             "type" => "input",
+            //             "subtype" => "text",
+            //             "name" => "customerKeyword",
+            //             "className" => "",
+            //             "placeholder" => "Customer name"
+            //         ],
+            //         "Product Name" => [
+            //             "type" => "input",
+            //             "subtype" => "text",
+            //             "name" => "product_name",
+            //             "className" => "",
+            //             "placeholder" => "Product Name"
+            //         ],
+            //         "Status" => [
+            //             "type" => "select",
+            //             "subtype" => "",
+            //             "option" => [
+            //                 "0" => "Select status",
+            //                 "1" => "New",
+            //                 "2" => "Confirmed",
+            //                 "3" => "Cancelled",
+            //                 "4" => "Pickup Initiated",
+            //                 "5" => "Pickup Cancelled",
+            //                 "6" => "Manifested",
+            //                 "7" => "Pickup Pending",
+            //                 "8" => "Pickup Completed",
+            //                 "9" => "In Transit",
+            //                 "10" => "Undelivered",
+            //                 "11" => "Out For Delivery",
+            //                 "12" => "Delivered",
+            //                 "13" => "RTO",
+            //                 "14" => "RTO In Transit",
+            //                 "15" => "RTO Delivered",
+            //                 "16" => "Booking in Process",
+            //                 "17" => "Cancel in Process",
+            //                 "18" => "Shipment Lost",
+            //                 "19" => "Shipment Damaged",
+            //                 "20" => "Order Confirmation In Process",
+            //                 "21" => "Shipment Cancelled",
+            //                 "22" => "Out for Pickup",
+            //                 "200" => "Cancelled on Dropdash",
+            //                 "201" => "Booked",
+            //                 "202" => "Unprocessable Order",
+            //             ],
+            //             "name" => "statusId",
+            //             "className" => "",
+            //             "placeholder" => "Customer name"
+            //         ],
+            //         "Payment Mode" => [
+            //             "type" => "select",
+            //             "subtype" => "",
+            //             "option" => [
+            //                 "0" => "Select payment mode",
+            //                 "1" => "COD",
+            //                 "2" => "Prepaid",
+            //             ],
+            //             "name" => "paymentMode",
+            //             "className" => "",
+            //             "placeholder" => ""
+            //         ],
+            //         "Search by store" => [
+            //             "type" => "select",
+            //             "subtype" => "",
+            //             "option" => [],
+            //             "name" => "search_by_store",
+            //             "className" => "virtualSelect",
+            //             "placeholder" => ""
+            //         ],
+            //         "Rto Keyword Errors" => [
+            //             "type" => "select",
+            //             "subtype" => "",
+            //             "option" => [
+            //                 "0" => "Select RTO Error",
+            //                 "true" => "Orders with RTO keywords error",
+            //                 "false" => "Orders without RTO keywords error",
+            //             ],
+            //             "name" => "rtoKeywordErrors",
+            //             "className" => "",
+            //             "placeholder" => ""
+            //         ],
+            //     ],
+            //     "url" => route('orders.type', 'Sync Error')
+            // ]
         ];
 
-        $defaultTabs = "COD";
+        $defaultTabs = "All";
 
         $firstRoute = route('orders.type', 'COD');
-        return view('pages.comman-table', compact('tabs', 'firstRoute', 'defaultTabs','pageHeading'));
+        return view('pages.comman-table', compact('tabs', 'firstRoute', 'defaultTabs', 'pageHeading'));
     }
 
-    public function orderType(Request $request)
+    public function orderType(Request $request, $type)
     {
+        $select = [
+            'orders.order_id',
+            'orders.order_number',
+            DB::raw('orders.created_at as order_date'),
+            'orders.shopify_order_id',
 
-        $data = [
-            [
-                'order_date' => '2025-08-16',
-                'shopify_order_id' => '#SH12345',
-                'order_id' => 'ORD001',
-                'price' => '₹2500',
-                'payment' => 'COD',
-                'customer' => 'John Doe',
-                'mobile' => '9876543210',
-                'store' => 'Amazon',
-            ],
-            [
-                'order_date' => '2025-08-15',
-                'shopify_order_id' => '#SH12346',
-                'order_id' => 'ORD002',
-                'price' => '₹1800',
-                'payment' => 'Prepaid',
-                'customer' => 'Vishal Kumar',
-                'mobile' => '9998887776',
-                'store' => 'Flipkart',
-            ]
+            // PostgreSQL-safe
+            DB::raw("CONCAT('₹', orders.total_price) as price"),
+
+            DB::raw('orders.financial_status as payment'),
+            'orders.customer',
+
+            // CASE instead of IF
+            DB::raw("
+            CASE 
+                WHEN orders.financial_status = 'PREPAID' 
+                THEN 'yes' 
+                ELSE 'no' 
+            END as payment_required
+        "),
         ];
 
+        $statuses = Statuses::select(['name', 'status_id'])
+            ->get()
+            ->pluck('status_id', 'name')
+            ->toArray();
 
+        // fixed case
+        $financialStatus = ['COD', 'PREPAID'];
+        $filter = null;
 
-        $order = $request->post('order');
-        $start = $request->post('start') ?? 0;
-        $length = $request->post('length') ?? 10;
-        $search = $request->post('search')['value'] ?? null;
+        if (array_key_exists($type, $statuses)) {
+            $filter = ['orders.status_id' => $statuses[$type]];
+        } elseif (in_array($type, $financialStatus)) {
+            $filter = ['orders.financial_status' => $type];
+        }
 
-        // $query = User::selectRaw('(@rownum := @rownum + 1) AS s_no, users.id, users.name, users.firmname, business_name, users.username, users.status, users.datetime, users.created_by, users.email, users.created_at, users.phone')
-        //     ->crossJoin(DB::raw('(SELECT @rownum := 0) r'))
-        //     ->where('api_partner', 1)->with(['createdBy:id,name', 'apiCredentials:user_id,ipaddress','apiConfig:user_id,pg_company_id']);
+        $query = Order::select($select)
+            ->join('order_items as oi', 'orders.order_id', '=', 'oi.order_id')
+            ->where('oi.dropshipper_id', auth()->id())
+            ->orderBy('orders.created_at', 'DESC')
+            ->with([
+                'orderItem' => function ($q) {
+                    $q->select(['order_id', 'seller_id'])
+                        ->where('dropshipper_id', auth()->id());
+                },
+                'orderItem.seller:user_id,store_name',
+                'paymentDetails:order_id'
+            ]);
 
-        // if (auth()->user()->api_partner) {
-        //     $query->where('id', auth()->user()->id);
-        // }
-        // // Search filter
-        // if ($search) {
-        //     $query->where(function ($q) use ($dbColumns, $search) {
-        //         foreach ($dbColumns as $key => $column) {
-        //             if ($key === 0) {
-        //                 $q->where($column, 'like', "%$search%");
-        //             } else {
-        //                 $q->orWhere($column, 'like', "%$search%");
-        //             }
-        //         }
-        //     });
-        // }
+        if ($filter) {
+            $query->where($filter);
+        }
 
-        // // Order
-        // if (isset($order[0]['dir'])) {
-        //     $dir = $order[0]['dir'];
-        //     $colIndex = $order[0]['column'] ?? false;
-        //     $col = $dbColumns[$colIndex] ?? false;
-        //     if ($col) {
-        //         $query->orderBy($col, $dir);
-        //     }
-        // } else {
-        //     $query->orderBy('users.id', 'desc');
-        // }
+        $data = $query->get();
 
-        // // Count recordsFiltered before applying limit & offset
-        // $recordsFiltered = $query->count(DB::raw('1'));
+        // DataTables params
+        $draw = intval($request->post('draw'));
+        $recordsTotal = $data->count();
 
-        // // Pagination
-        // $data = $query->offset($start)->limit($length)->get()->toArray();
-
-        // // Total records
-        // $recordsTotal = User::count();
-
-        // Prepare response
-        $draw = $request->post('draw');
-        $recordsTotal = count($data);
-        $recordsFiltered = $data;
-        $response = [
-            'draw' => intval($draw),
-            'recordsTotal' => intval($recordsTotal),
-            'recordsFiltered' => intval($recordsFiltered),
+        return response()->json([
+            'draw' => $draw,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsTotal,
             'data' => $data
-        ];
-
-        return response()->json($response);
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

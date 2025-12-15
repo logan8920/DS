@@ -6,9 +6,9 @@
 @section('content')
     <!-- Start of Main -->
     <main class="main">
-        @if ($banner ?? false)
+        @if ($banners ?? false)
             <section class="intro-section mb-4 mt-4">
-                <div class="swiper-container swiper-theme animation-slider" data-swiper-options="{
+            <div class="swiper-container swiper-theme animation-slider" data-swiper-options="{
                                                 'slidesPerView' : 1,
                                                 'loop':true,
                                                 'effect':'fade',
@@ -18,12 +18,14 @@
                                                 }
                                             }">
                     <div class="swiper-wrapper">
+                        @foreach ($banners as $banner)
                         <div class="swiper-slide banner banner-fixed intro-slide1">
                             <figure class="banner-media">
-                                <img src="{{ asset('assets/images/banner/')}}/{{ $banner['image'] }}" alt="Slide" width="1903" height="100"
+                                <img src="{{ $banner->image }}" alt="Slide" width="1903" height="100"
                                     alt="{{ $banner['name'] }}" style="background-color: #DBDBDD;">
                             </figure>
                         </div>
+                        @endforeach
                         <!-- End of .intro-slide1 -->
                     </div>
                 </div>
@@ -90,13 +92,13 @@
                             <h2 class="title pt-3 mb-5 appear-animate">{{ $cateogry->name }}</h2>
                             <div class="banner banner-fixed overlay-zoom br-xs">
                                 <figure class="banner-media h-100">
-                                    <img src="{{ asset('assets/images/categories/')}}/{{ $cateogry->icon }}" alt="{{ $cateogry->name }}"
-                                        width="431" height="610" style="background-color: #E2E2E2;object-fit: contain;" />
+                                    <img src="{{ str_contains($cateogry->icon, 'http') ? $cateogry->icon : asset("assets/images/categories/{$cateogry->icon}") }}" alt="{{ $cateogry->name }}"
+                                        width="431" height="610" style="object-fit: contain;" />
                                 </figure>
-                                <div class="banner-content">
+                                <!-- <div class="banner-content">
                                     <h5 class="banner-subtitle text-uppercase font-weight-bold">Accessories</h5>
                                     <h3 class="banner-title text-capitalize ls-25">{{ $cateogry->name }}</h3>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="product-wrapper col-xl-9 col-md-8">
@@ -122,16 +124,16 @@
                                     <div class="swiper-wrapper row cols-xl-4 cols-lg-3 cols-2">
                                             @foreach ($cateogry->product as $product)
                                             @php $counter++; @endphp
-                                            @if($counter === 1)
+                                            
                                             <div class="swiper-slide product-col">
-                                            @endif
+                                            
                                                 <div class="product-wrap">
                                                     <div class="product text-center">
                                                         <figure class="product-media">
                                                             <a href="{{ route('product.details', $product->product_id) }}">
-                                                                @if($product?->images)
-                                                                    @foreach ($product->images as $image)
-                                                                        <img src="{{ asset(Storage::url($image['image_path'])) }}" alt="Product"
+                                                                @if($product?->files)
+                                                                    @foreach ($product->files as $image)
+                                                                        <img src="{{ asset($image['image_path']) }}" alt="Product"
                                                                             width="300" height="337">
                                                                     @endforeach
                                                                 @else
@@ -156,11 +158,10 @@
                                                 </div>
 
                                                 <!-- End of Product Wrap -->
-                                            @if($counter % 2 === 0)
+                                            
                                             </div>
                                             <!-- End of Product Col -->
-                                            @php $counter = 0; @endphp
-                                            @endif
+                                            
                                             @endforeach
                                         </div>
                                 @endif
