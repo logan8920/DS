@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/', [DashboardController::class, "index"])->middleware(['auth', 'verified']);
-
+Route::get('/privacy',[DashboardController::class,'privacy']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -30,3 +30,4 @@ require __DIR__.'/rtointelligence.php';
 require __DIR__.'/ndr.php';
 require __DIR__.'/billing.php';
 require __DIR__.'/channels.php';
+require __DIR__.'/webhook.php';

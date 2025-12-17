@@ -16856,3 +16856,9 @@ span#netLossPerOrder.text-success-bold {
     height: 198px !important;
     /* aspect-ratio: 3/2; */
 }
+
+.view-all-product {
+    float: inline-end;
+    margin: -4px 0px 0px 0;
+    padding: 0 0 10px 0;
+}
