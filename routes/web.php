@@ -30,4 +30,3 @@ require __DIR__.'/rtointelligence.php';
 require __DIR__.'/ndr.php';
 require __DIR__.'/billing.php';
 require __DIR__.'/channels.php';
-require __DIR__.'/webhook.php';
