@@ -64,6 +64,8 @@ class ShopifyWebhookController extends Controller
      */
     public function shopRedact(Request $request)
     {
+        Log::channel('api')->info('Shopify customers/data_request webhook received', $request->all());
+        // Log::info();
         if (!$this->verifyHmac($request)) {
             return response('Invalid HMAC', 401);
         }
