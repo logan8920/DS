@@ -76,4 +76,18 @@ class ShopifyWebhookController extends Controller
 
         return response()->json(['status' => 'ok'], 200);
     }
+
+    public function handle(Request $request)
+    {
+        $hmacHeader = $request->header('X-Shopify-Hmac-Sha256');
+        $body = $request->getContent();
+        $calculatedHmac = base64_encode(hash_hmac('sha256', $body, env('SHOPIFY_API_SECRET'), true));
+
+        if (!hash_equals($hmacHeader, $calculatedHmac)) {
+            return response('Unauthorized', 401);
+        }
+
+        // Process webhook
+        return response('Webhook received', 200);
+    }
 }
