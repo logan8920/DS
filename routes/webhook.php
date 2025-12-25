@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\ShopifyWebhookController;
-
-Route::post('/webhooks/customers/data_request', [ShopifyWebhookController::class, 'customerDataRequest']);
-Route::post('/webhooks/customers/redact', [ShopifyWebhookController::class, 'customerRedact']);
-Route::post('/webhooks/shop/redact', [ShopifyWebhookController::class, 'shopRedact']);
+Route::prefix('shopify')->group(function(){
+    Route::post('/webhooks/customers/data_request', [ShopifyWebhookController::class, 'customerDataRequest']);
+    Route::post('/webhooks/customers/redact', [ShopifyWebhookController::class, 'customerRedact']);
+    Route::post('/webhooks/shop/redact', [ShopifyWebhookController::class, 'shopRedact']);
+});
