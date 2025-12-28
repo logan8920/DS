@@ -518,7 +518,7 @@ async function confirmationAndPost(event, data) {
 
 const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
 const host   = document.querySelector('meta[name="shopify-host"]').content;
-const shop   = document.querySelector('meta[name="shopify-shop-domain"]').content;
+const shop   = document.querySelector('meta[name="shopify-shop"]').content;
 
 const app = shop ? window['app-bridge'].createApp({
     apiKey: apiKey,

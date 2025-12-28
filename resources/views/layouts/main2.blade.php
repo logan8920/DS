@@ -8,8 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="shopify-api-key" content="{{ config('services.shopify.api_key') }}">
     <meta name="shopify-host" content="{{ request('host') }}">
-    <meta name="shopify-shop-domain" content="{{ request('shop') }}">
-
+    <meta name="shopify-shop" content="{{ request('shop') }}">
     <title>Dropshipx @yield('title')</title>
     <base href="{{ url('/') }}">
     <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
@@ -20,6 +19,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/favicon-32x32.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <!-- WebFont.js -->
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
     <script type="text/javascript">
         window.baseSRC = document.querySelector("base").href.slice(0, -1);
     </script>
@@ -250,8 +251,6 @@
     <script src="{{ asset('assets/vendor/jquery.countdown/jquery.countdown.min.js') }}"></script>
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
     <script src="{{ asset('assets/js/form.js?v=') . rand(11111, 999999) }}"></script>
     @yield('js')
     <script>

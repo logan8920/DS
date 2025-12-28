@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="shopify-api-key" content="{{ config('services.shopify.api_key') }}">
     <meta name="shopify-host" content="{{ request('host') }}">
-    <meta name="shopify-shop-domain" content="{{ request('shop') }}">
+    <meta name="shopify-shop" content="{{ request('shop') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -21,6 +21,9 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
+    
     <style>
         * {
             box-sizing: border-box;
@@ -214,8 +217,6 @@
     {{ $slot }}
 
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
     <script src="{{ asset('assets/js/form.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -225,6 +226,7 @@
                 startLoadings(submitBtn);
             })
         });
+
     </script>
 
 </body>
