@@ -519,7 +519,7 @@ async function confirmationAndPost(event, data) {
 const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
 const host   = document.querySelector('meta[name="shopify-host"]').content;
 const shop   = document.querySelector('meta[name="shopify-shop"]').content;
-console.log(document.querySelector('[title="Dropshipx"]'));
+setTimeout(() => console.log(document.querySelector('[title="Dropshipx"]')),5000);
 const app = shop ? window['app-bridge'].createApp({
     apiKey: apiKey,
     host: host,
