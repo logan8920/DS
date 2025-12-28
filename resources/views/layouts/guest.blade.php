@@ -23,7 +23,7 @@
 
     <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
     <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
-    
+
     <style>
         * {
             box-sizing: border-box;
@@ -217,7 +217,7 @@
     {{ $slot }}
 
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script src="{{ asset('assets/js/form.js?v='.rand(1111,9999)) }}"></script>
     <script>
         $(document).ready(function () {
             $('form').on('submit', function (e) {
