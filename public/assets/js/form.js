@@ -532,7 +532,7 @@ const shop   = document.querySelector('meta[name="shopify-shop"]').content;
 
     const token = await getSessionToken(app);
 
-    await fetch('/auth/bootstrap?_token='+csrfToken, {
+    await fetch('/auth/bootstrap', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
