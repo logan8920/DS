@@ -78,6 +78,7 @@ class DashboardController extends Controller
 
     public function bootstrap(Request $request)
     {
+        return response()->json(['ok' => true]);
         $jwt = substr($request->header('Authorization'), 7);
 
         $jwks = cache()->remember('shopify_jwks', 3600, function () {
