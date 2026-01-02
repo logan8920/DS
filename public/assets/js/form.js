@@ -531,12 +531,13 @@ const shop   = document.querySelector('meta[name="shopify-shop"]').content;
     });
 
     const token = await getSessionToken(app);
-    alert('asda');
+
     await fetch('/auth/bootstrap', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
         },
         credentials: 'same-origin'
     });
