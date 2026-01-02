@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="shopify-api-key" content="{{ config('services.shopify.api_key') }}">
+    <meta name="shopify-host" content="{{ request('host') }}">
+    <meta name="shopify-shop" content="{{ request('shop') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -17,6 +20,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
 
     <style>
         * {
@@ -42,11 +48,18 @@
             color: white;
         }
 
-        .left-panel::before {
+        /* .left-panel::before {
             content: "";
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, rgba(13, 110, 253, 0.7), rgba(102, 16, 242, 0.7));
+            z-index: 1;
+        } */
+        .left-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(137deg, rgb(243 83 23 / 97%), rgb(244 95 13 / 92%));
             z-index: 1;
         }
 
@@ -85,7 +98,7 @@
         .login-container h2 {
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: #0d6efd;
+            color: #f4651f;
         }
 
         .form-control {
@@ -97,7 +110,7 @@
         .btn-login {
             border-radius: 10px;
             padding: 0.75rem;
-            background: linear-gradient(90deg, #0d6efd, #6610f2);
+            background: linear-gradient(90deg, #f46a20, #f45b1e);
             border: none;
             color: white;
             transition: 0.3s;
@@ -118,7 +131,7 @@
             color: #6610f2;
         }
 
-         /* RIGHT PANEL (Register Form) */
+        /* RIGHT PANEL (Register Form) */
         .register-container {
             overflow: scroll;
             width: 527px;
@@ -135,7 +148,7 @@
         .register-container h2 {
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: #0d6efd;
+            color: #f4651f;
         }
 
         .form-control {
@@ -147,7 +160,7 @@
         .btn-register {
             border-radius: 10px;
             padding: 0.75rem;
-            background: linear-gradient(90deg, #0d6efd, #6610f2);
+            background: linear-gradient(90deg, #f46a20, #f45b1e);
             border: none;
             color: white;
             transition: 0.3s;
@@ -158,7 +171,7 @@
         }
 
         @media (max-width: 992px) {
-           
+
             body {
                 flex-direction: column-reverse;
             }
@@ -191,7 +204,7 @@
             .login-container h2 {
                 margin-top: 2rem;
             }
-            
+
         }
     </style>
 
@@ -204,15 +217,16 @@
     {{ $slot }}
 
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script src="{{ asset('assets/js/form.js?v='.rand(1111,9999)) }}"></script>
     <script>
-        $(document).ready(function(){
-            $('form').on('submit',function (e) {
-                $(this).find('input').attr("readonly",true);
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                $(this).find('input').attr("readonly", true);
                 const submitBtn = this.querySelector('button[type=submit]');
                 startLoadings(submitBtn);
             })
         });
+
     </script>
 
 </body>
