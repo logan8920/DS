@@ -6,6 +6,10 @@ use App\Models\{
     Category
 };
 use Illuminate\Http\Request;
+use Firebase\JWT\JWT;
+use Firebase\JWT\JWK;
+use Illuminate\Support\Facades\Http;
+use App\Models\ChannelConfig;
 
 class DashboardController extends Controller
 {
@@ -71,4 +75,28 @@ class DashboardController extends Controller
     public function privacy() {
         return view('pages.privacy');
     }
+
+    public function bootstrap(Request $request)
+    {
+        $jwt = substr($request->header('Authorization'), 7);
+
+        $jwks = cache()->remember('shopify_jwks', 3600, function () {
+            return Http::get('https://identity.myshopify.com/oauth2/keys')->json();
+        });
+
+        $payload = JWT::decode($jwt, JWK::parseKeySet($jwks));
+
+        $shop = str_replace(['https://','/'], '', $payload->dest);
+
+        session(['shop' => $shop]);
+
+        $channel = ChannelConfig::where('domain', $shop)->first();
+
+        if ($channel) {
+            auth()->loginUsingId($channel->seller_id);
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
 }

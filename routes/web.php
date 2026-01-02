@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view("welcome");
 // });
-Route::middleware('shopify.iframe')->group(function(){
+Route::middleware(['shopify.iframe'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/', [DashboardController::class, "index"])->middleware(['auth', 'verified']);
     Route::get('/privacy',[DashboardController::class,'privacy']);
@@ -32,4 +32,6 @@ Route::middleware('shopify.iframe')->group(function(){
     require __DIR__.'/channels.php';
 
 });
+
+Route::post('/auth/bootstrap', [DashboardController::class, 'bootstrap']);
 

@@ -520,10 +520,24 @@ const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
 const host   = document.querySelector('meta[name="shopify-host"]').content;
 const shop   = document.querySelector('meta[name="shopify-shop"]').content;
 
-const app = shop ? window['app-bridge'].createApp({
-    apiKey: apiKey,
-    host: host,
-    shop: shop,
-    forceRedirect: true
-}) : "";
+(async () => {
+    const AppBridge = window['app-bridge'].default;
+    const getSessionToken = window['app-bridge-utils'].getSessionToken;
 
+    const app = AppBridge({
+        apiKey: apiKey,
+        host: new URLSearchParams(window.location.search).get('host'),
+        forceRedirect: false
+    });
+
+    const token = await getSessionToken(app);
+    alert('asda');
+    await fetch('/auth/bootstrap', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    });
+})();
