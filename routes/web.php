@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::middleware(['shopify.iframe'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
-    Route::get('/', [DashboardController::class, "index"])->middleware(['auth', 'verified']);
+    Route::get('/', [DashboardController::class, "index"]);
     Route::get('/privacy',[DashboardController::class,'privacy']);
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
