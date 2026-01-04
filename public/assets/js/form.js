@@ -541,10 +541,10 @@ const shop = document.querySelector('meta[name="shopify-shop"]').content;
     credentials: 'same-origin'
   });
 })();
-
+let urlParams;
 document.addEventListener("DOMContentLoaded", function () {
 
-  const urlParams = new URLSearchParams(window.location.search);
+  urlParams = new URLSearchParams(window.location.search);
   if (![...urlParams].length) return;
 
   // Update all <a> tags
