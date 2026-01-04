@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 //     return view("welcome");
 // });
 Route::middleware(['shopify.iframe'])->group(function(){
-    Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
     Route::get('/', [DashboardController::class, "index"]);
     Route::get('/privacy',[DashboardController::class,'privacy']);
     Route::middleware('auth')->group(function () {
