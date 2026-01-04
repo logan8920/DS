@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         VerifyCsrfToken::except([
-            'bootstrap'
+            'auth/bootstrap'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
