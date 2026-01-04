@@ -17,7 +17,7 @@ Route::middleware(['shopify.iframe'])->group(function(){
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
     
-    require __DIR__.'/auth.php';
+    
     require __DIR__.'/product.php';
     require __DIR__.'/analytics.php';
     require __DIR__.'/orders.php';
@@ -32,6 +32,8 @@ Route::middleware(['shopify.iframe'])->group(function(){
     require __DIR__.'/channels.php';
 
 });
+
+require __DIR__.'/auth.php';
 
 Route::post('/auth/bootstrap', [DashboardController::class, 'bootstrap']);
 

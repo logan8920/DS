@@ -1,19 +1,18 @@
-let form = document.getElementById('regForm'),pwdd;
-  window.csrfToken = (document.querySelector('[name="csrf-token"]') && document.querySelector('[name="csrf-token"]').content || '');
+let form = document.getElementById('regForm'), pwdd;
+window.csrfToken = (document.querySelector('[name="csrf-token"]') && document.querySelector('[name="csrf-token"]').content || '');
 (form && (form.addEventListener("submit", async function (e) {
   e.preventDefault();
   if ($('#regForm[validate]').length && !$('#regForm').valid()) {
     return false;
-  }else if(!$('#regForm')[0].checkValidity()) {
+  } else if (!$('#regForm')[0].checkValidity()) {
     return false;
   }
   const $callback = $('#regForm[callbackFn]');
-  if($callback && $callback.attr('callbackFn')) {
+  if ($callback && $callback.attr('callbackFn')) {
     const Fn = $callback.attr('callbackFn');
     const callbackRes = await window[Fn]();
-    if(!callbackRes)  
-    { 
-      typeof(callbackErrorMessage) !== 'undefined' && toastr.error(callbackErrorMessage);
+    if (!callbackRes) {
+      typeof (callbackErrorMessage) !== 'undefined' && toastr.error(callbackErrorMessage);
       return false;
     }
   }
@@ -150,9 +149,9 @@ async function makeHttpRequest(url, method, data, csrf = false) {
   try {
 
     if (method.toLowerCase() == 'post') {
-      res = await fetch(url, config);
+      res = await fetch(appendParams(url), config);
     } else {
-      res = await fetch(url);
+      res = await fetch(appendParams(url));
     }
 
     if (!res.ok) {
@@ -510,66 +509,66 @@ async function confirmationAndPost(event, data) {
         toggleLoader();
         toastr.error(error)
       }
-      
+
     }
   });
 }
 
 
 const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
-const host   = document.querySelector('meta[name="shopify-host"]').content;
-const shop   = document.querySelector('meta[name="shopify-shop"]').content;
+const host = document.querySelector('meta[name="shopify-host"]').content;
+const shop = document.querySelector('meta[name="shopify-shop"]').content;
 
 (async () => {
-    const AppBridge = window['app-bridge'].default;
-    const getSessionToken = window['app-bridge-utils'].getSessionToken;
+  const AppBridge = window['app-bridge'].default;
+  const getSessionToken = window['app-bridge-utils'].getSessionToken;
 
-    const app = AppBridge({
-        apiKey: apiKey,
-        host: new URLSearchParams(window.location.search).get('host'),
-        forceRedirect: false
-    });
+  const app = AppBridge({
+    apiKey: apiKey,
+    host: new URLSearchParams(window.location.search).get('host'),
+    forceRedirect: false
+  });
 
-    const token = await getSessionToken(app);
+  const token = await getSessionToken(app);
 
-    await fetch('/auth/bootstrap', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-        },
-        credentials: 'same-origin'
-    });
+  await fetch('/auth/bootstrap', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    credentials: 'same-origin'
+  });
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (![...urlParams].length) return;
+  const urlParams = new URLSearchParams(window.location.search);
+  if (![...urlParams].length) return;
 
-    function appendParams(url) {
-        if (!url || url.startsWith('#') || url.startsWith('javascript')) return url;
+  // Update all <a> tags
+  document.querySelectorAll('a[href]').forEach(link => {
+    const newUrl = appendParams(link.getAttribute('href'));
+    if (newUrl) link.setAttribute('href', newUrl);
+  });
 
-        const base = new URL(url, window.location.origin);
-        urlParams.forEach((value, key) => {
-            if (!base.searchParams.has(key)) {
-                base.searchParams.append(key, value);
-            }
-        });
-        return base.pathname + '?' + base.searchParams.toString();
-    }
-
-    // Update all <a> tags
-    document.querySelectorAll('a[href]').forEach(link => {
-        const newUrl = appendParams(link.getAttribute('href'));
-        if (newUrl) link.setAttribute('href', newUrl);
-    });
-
-    // Update all form actions
-    document.querySelectorAll('form[action]').forEach(form => {
-        const newAction = appendParams(form.getAttribute('action'));
-        if (newAction) form.setAttribute('action', newAction);
-    });
+  // Update all form actions
+  document.querySelectorAll('form[action]').forEach(form => {
+    const newAction = appendParams(form.getAttribute('action'));
+    if (newAction) form.setAttribute('action', newAction);
+  });
 
 });
+
+function appendParams(url) {
+  if (!url || url.startsWith('#') || url.startsWith('javascript')) return url;
+
+  const base = new URL(url, window.location.origin);
+  urlParams.forEach((value, key) => {
+    if (!base.searchParams.has(key)) {
+      base.searchParams.append(key, value);
+    }
+  });
+  return base.pathname + '?' + base.searchParams.toString();
+}
