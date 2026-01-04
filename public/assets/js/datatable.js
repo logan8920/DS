@@ -6,6 +6,6 @@ $(document).ready(function () {
   });
 
   let con = typeof(configuration) === 'function' ? configuration() : configuration || {};
-  con.ajax.url = con.ajax.url.replace('http:',window.location.protocol);
+  con.ajax.url = appendParams(con.ajax.url.replace('http:',window.location.protocol));
   table = $('#dataTable').DataTable(con);
 });
