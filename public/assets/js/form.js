@@ -542,3 +542,34 @@ const shop   = document.querySelector('meta[name="shopify-shop"]').content;
         credentials: 'same-origin'
     });
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (![...urlParams].length) return;
+
+    function appendParams(url) {
+        if (!url || url.startsWith('#') || url.startsWith('javascript')) return url;
+
+        const base = new URL(url, window.location.origin);
+        urlParams.forEach((value, key) => {
+            if (!base.searchParams.has(key)) {
+                base.searchParams.append(key, value);
+            }
+        });
+        return base.pathname + '?' + base.searchParams.toString();
+    }
+
+    // Update all <a> tags
+    document.querySelectorAll('a[href]').forEach(link => {
+        const newUrl = appendParams(link.getAttribute('href'));
+        if (newUrl) link.setAttribute('href', newUrl);
+    });
+
+    // Update all form actions
+    document.querySelectorAll('form[action]').forEach(form => {
+        const newAction = appendParams(form.getAttribute('action'));
+        if (newAction) form.setAttribute('action', newAction);
+    });
+
+});
