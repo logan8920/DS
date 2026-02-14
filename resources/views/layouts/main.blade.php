@@ -18,8 +18,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/favicon-32x32.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
-    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
+    <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+
     <!-- WebFont.js -->
     <script type="text/javascript">
         window.baseSRC = document.querySelector("base").href.slice(0, -1);

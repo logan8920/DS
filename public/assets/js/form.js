@@ -518,10 +518,10 @@ async function confirmationAndPost(event, data) {
 const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
 const host = document.querySelector('meta[name="shopify-host"]').content;
 const shop = document.querySelector('meta[name="shopify-shop"]').content;
-
+let getSessionToken;
 (async () => {
   const AppBridge = window['app-bridge'].default;
-  const getSessionToken = window['app-bridge-utils'].getSessionToken;
+  getSessionToken = window['app-bridge-utils'].getSessionToken;
 
   const app = AppBridge({
     apiKey: apiKey,
