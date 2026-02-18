@@ -524,25 +524,16 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
     try {
 
-        console.log(window);
+        const AppBridge = window['app-bridge'].default;
+        const getSessionToken = window['app-bridge-utils'].getSessionToken;
 
-        if (!window.Shopify?.EmbeddedApp) {
-            console.error("Shopify EmbeddedApp not available");
-            return;
-        }
+        const app = AppBridge({
+          apiKey,
+          host,
+          forceRedirect: false
+        });
 
-        // ✅ Initialize bridge connection
-        const app = await window.Shopify.EmbeddedApp.extend();
-
-        // ✅ Get session token
-        const token = await app.send("getSessionToken");
-
-        console.log("Session Token:", token);
-
-        if (!token) {
-            console.error("Token not received — app not embedded correctly");
-            return;
-        }
+        const token = await getSessionToken(app);
 
         // ✅ Call Laravel bootstrap
         await fetch('/auth/bootstrap', {
