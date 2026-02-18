@@ -524,6 +524,8 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
     try {
 
+        console.log(window);
+
         if (!window.Shopify?.EmbeddedApp) {
             console.error("Shopify EmbeddedApp not available");
             return;
