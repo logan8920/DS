@@ -518,28 +518,45 @@ async function confirmationAndPost(event, data) {
 const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
 const host = document.querySelector('meta[name="shopify-host"]').content;
 const shop = document.querySelector('meta[name="shopify-shop"]').content;
-let getSessionToken;
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
 (async () => {
-  const AppBridge = window['app-bridge'].default;
-  getSessionToken = window['app-bridge-utils'].getSessionToken;
 
-  const app = AppBridge({
-    apiKey: apiKey,
-    host: new URLSearchParams(window.location.search).get('host'),
-    forceRedirect: false
-  });
+    try {
 
-  const token = await getSessionToken(app);
+        if (!window.Shopify?.EmbeddedApp) {
+            console.error("Shopify EmbeddedApp not available");
+            return;
+        }
 
-  await fetch('/auth/bootstrap', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': csrfToken,
-    },
-    credentials: 'same-origin'
-  });
+        // ✅ Initialize bridge connection
+        const app = await window.Shopify.EmbeddedApp.extend();
+
+        // ✅ Get session token
+        const token = await app.send("getSessionToken");
+
+        console.log("Session Token:", token);
+
+        if (!token) {
+            console.error("Token not received — app not embedded correctly");
+            return;
+        }
+
+        // ✅ Call Laravel bootstrap
+        await fetch('/auth/bootstrap', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            credentials: 'same-origin'
+        });
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+
 })();
 let urlParams;
 document.addEventListener("DOMContentLoaded", function () {
