@@ -22,8 +22,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
-     <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
+     <!-- <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script> -->
 
 
 
