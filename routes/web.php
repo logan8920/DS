@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmbeddedAppController;
 
 // Route::get('/', function () {
 //     return view("welcome");
@@ -36,4 +37,11 @@ Route::middleware(['shopify.iframe'])->group(function(){
 require __DIR__.'/auth.php';
 
 Route::post('/auth/bootstrap', [DashboardController::class, 'bootstrap']);
+
+Route::get('/session-token-bounce', [EmbeddedAppController::class, 'sessionTokenBounce'])
+  ->name('shopify.session_token_bounce');
+
+  Route::get('/app', [EmbeddedAppController::class, 'index'])
+  ->middleware('shopify.embedded.session');
+
 
