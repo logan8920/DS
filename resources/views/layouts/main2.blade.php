@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <!-- WebFont.js -->
     <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
-    <!-- <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
-    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script> -->
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge-utils@3"></script>
 
     <script type="text/javascript">
         window.baseSRC = document.querySelector("base").href.slice(0, -1);
