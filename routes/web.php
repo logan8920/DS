@@ -41,7 +41,7 @@ Route::post('/auth/bootstrap', [DashboardController::class, 'bootstrap']);
 Route::get('/session-token-bounce', [EmbeddedAppController::class, 'sessionTokenBounce'])
   ->name('shopify.session_token_bounce');
 
-  Route::get('/app', [EmbeddedAppController::class, 'index'])
+Route::get('/app', [EmbeddedAppController::class, 'index'])
   ->middleware('shopify.embedded.session');
 
 

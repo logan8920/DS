@@ -521,36 +521,44 @@ const shop = document.querySelector('meta[name="shopify-shop"]').content;
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
 (async () => {
+  try {
+    const appBridge = window['app-bridge'];
+    const appBridgeUtils = window['app-bridge-utils'];
 
-    try {
+    if (!appBridge?.createApp) throw new Error('App Bridge not loaded (window["app-bridge"].createApp missing)');
+    if (!appBridgeUtils?.getSessionToken) throw new Error('App Bridge Utils not loaded (window["app-bridge-utils"].getSessionToken missing)');
+    if (!apiKey || !host) throw new Error('Missing apiKey or host');
 
-        const AppBridge = window['app-bridge'].default;
-        const getSessionToken = window['app-bridge-utils'].getSessionToken;
+    const app = appBridge.createApp({
+      apiKey,
+      host,
+      // In embedded apps, forcing redirect is often safer if opened outside admin
+      forceRedirect:false,
+    });
 
-        const app = AppBridge({
-          apiKey,
-          host,
-          forceRedirect: false
-        });
+    const token = await appBridgeUtils.getSessionToken(app);
 
-        const token = await getSessionToken(app);
+    const res = await fetch('/auth/bootstrap', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      credentials: 'same-origin',
+      
+    });
 
-        // ✅ Call Laravel bootstrap
-        await fetch('/auth/bootstrap', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-            },
-            credentials: 'same-origin'
-        });
-
-    } catch (error) {
-        console.error("Error:", error);
+    if (!res.ok) {
+      // helpful for debugging Laravel validation// responses
+      const text = await res.text();
+      throw new Error(`Bootstrap failed: ${res.status} (http://res.status)} ${res.statusText} ${text}`);
     }
-
+  } catch (error) {
+    console.error('Error:', error);
+  }
 })();
+
 let urlParams;
 document.addEventListener("DOMContentLoaded", function () {
 
