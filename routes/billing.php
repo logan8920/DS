@@ -1,10 +1,11 @@
 <?php 
 use App\Http\Controllers\BillingController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::prefix('billing')->group(function(){
     Route::get('/marginremittance',[BillingController::class, 'marginremittance'])->name('billing.marginremittance');
-    Route::post('/marginremittance',[BillingController::class, 'marginremittanceAjax'])->name('billing.marginremittance.ajax');
+    Route::post('/marginremittance',[BillingController::class, 'marginremittanceAjax'])->name('billing.marginremittance.ajax')->withoutMiddleware([VerifyCsrfToken::class]);;
     Route::get('/prepaidpayment',[BillingController::class, 'prepaidpayment'])->name('billing.prepaidpayment');
-    Route::post('/prepaidpayment',[BillingController::class, 'prepaidpaymentAjax'])->name('billing.prepaidpayment.ajax');
+    Route::post('/prepaidpayment',[BillingController::class, 'prepaidpaymentAjax'])->name('billing.prepaidpayment.ajax')->withoutMiddleware([VerifyCsrfToken::class]);
 });

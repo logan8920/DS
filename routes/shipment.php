@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShipmentController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::prefix('shipment')->group(function(){
     Route::get('/',[ShipmentController::class, "index"])->name('shipment.index');
-    Route::post('/type/{type}',[ShipmentController::class, "shipmentType"])->name('shipment.type');
+    Route::post('/type/{type}',[ShipmentController::class, "shipmentType"])->name('shipment.type')->withoutMiddleware([VerifyCsrfToken::class]);
 });
