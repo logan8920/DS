@@ -521,41 +521,50 @@ const shop = document.querySelector('meta[name="shopify-shop"]').content;
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
 (async () => {
-  try {
-    const appBridge = window['app-bridge'];
-    const appBridgeUtils = window['app-bridge-utils'];
 
-    if (!appBridge?.createApp) throw new Error('App Bridge not loaded (window["app-bridge"].createApp missing)');
-    if (!appBridgeUtils?.getSessionToken) throw new Error('App Bridge Utils not loaded (window["app-bridge-utils"].getSessionToken missing)');
-    if (!apiKey || !host) throw new Error('Missing apiKey or host');
+  const appBridge = window['app-bridge'];
+  const appBridgeUtils = window['app-bridge-utils'];
 
-    const app = appBridge.createApp({
-      apiKey,
-      host,
-      // In embedded apps, forcing redirect is often safer if opened outside admin
-      forceRedirect:false,
-    });
+  if (!appBridge?.createApp) throw new Error('App Bridge not loaded (window["app-bridge"].createApp missing)');
+  if (!appBridgeUtils?.getSessionToken) throw new Error('App Bridge Utils not loaded (window["app-bridge-utils"].getSessionToken missing)');
+  if (!apiKey || !host) throw new Error('Missing apiKey or host');
 
-    const token = await appBridgeUtils.getSessionToken(app);
+  const app = appBridge.createApp({
+    apiKey,
+    host,
+    // In embedded apps, forcing redirect is often safer if opened outside admin
+    forceRedirect: false,
+  });
 
-    const res = await fetch('/auth/bootstrap', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken
-      },
-      credentials: 'same-origin',
-      
-    });
+  async function bootstrap() {
+    try {
+      const token = await appBridgeUtils.getSessionToken(app);
 
-    if (!res.ok) {
-      // helpful for debugging Laravel validation// responses
-      const text = await res.text();
-      throw new Error(`Bootstrap failed: ${res.status} (http://res.status)} ${res.statusText} ${text}`);
+      const res = await fetch('/auth/bootstrap', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        credentials: 'same-origin',
+
+      });
+
+      if (!res.ok) {
+        // helpful for debugging Laravel validation// responses
+        const text = await res.text();
+        throw new Error(`Bootstrap failed: ${res.status} (http://res.status)} ${res.statusText} ${text}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-  } catch (error) {
-    console.error('Error:', error);
+  }
+
+  try {
+    await bootstrap();
+  } catch (e) {
+    console.error(e);
   }
 })();
 

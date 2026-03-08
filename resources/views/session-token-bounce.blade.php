@@ -1,27 +1,30 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-" />
-    <title>Loading…</title>
-  </head>
-  <body>
-    <script src="[cdn.shopify.com/shopifycloud/app-bridge.js](https://cdn.shopify.com/shopifycloud/app-bridge.js)"></script>
-    <script>
-      // Minimal bounce page: initialize App Bridge, then reload the target route.
-      var app = window['app-bridge'].default;
-      var createApp = app.createApp;
+<head>
+    <meta charset="utf-8" />
+    <meta name="shopify-api-key" content="{{ config('services.shopify.api_key') }}" />
+    <meta name="shopify-host" content="{{ request('host') }}" />
+    <title>Loading...</title>
+</head>
+<body>
 
-      var actions = window['app-bridge'].actions;
-      var Redirect = actions.Redirect;
+<script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
 
-      var shopifyApp = createApp({
-        apiKey: @json($apiKey),
-        host: @json($host),
-        forceRedirect:,
-      });
+<script>
+    const apiKey = document.querySelector('meta[name="shopify-api-key"]').content;
+    const host = document.querySelector('meta[name="shopify-host"]').content;
+    const reload = @json(request('shopify-reload'));
 
-      var redirect = [Redirect.create](http://Redirect.create)(shopifyApp);
-      redirect.dispatch([Redirect.Action.REMOTE](http://Redirect.Action.REMOTE), @json($reload));
-    </script>
-  </body>
+    const app = window['app-bridge'].createApp({
+        apiKey: apiKey,
+        host: host
+    });
+
+    // Redirect if reload parameter exists
+    if (reload) {
+        window.location.assign(reload);
+    }
+</script>
+
+</body>
 </html>

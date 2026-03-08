@@ -12,43 +12,62 @@ class ShopifyEmbeddedSession
 {
     public function handle(Request $request, Closure $next)
     {
-        // Shopify admin can append: ?embedded=1&...&host=...&shop=...&id_token=...
-        $idToken = $request->query('id_token');
-        $shop    = $request->query('shop');
-        $host    = $request->query('host');
+        $shop = $request->query('shop');
+        $host = $request->query('host');
 
-        // If the session token isn't present (common after redirects), bounce.
-        if (!$idToken) {
-            return redirect()->route('shopify.session_token_bounce', [
-                'shop' => $shop,
-                'host' => $host,
-                // reload the original path WITHOUT id_token (it could be stale)
-                'shopify-reload' => $request->fullUrlWithoutQuery(['id_token']),
-            ]);
+        // 1) Prefer session token from the Authorization header (App Bridge adds it)
+        $authHeader = $request->header('authorization'); // Laravel normalizes header names
+        $bearerToken = null;
+
+        if (is_string($authHeader) && Str::startsWith($authHeader, 'Bearer ')) {
+            $bearerToken = Str::after($authHeader, 'Bearer ');
+        }
+
+        // 2) Fallback: token in URL param (initial load from Shopify admin)
+        $urlToken = $request->query('id_token');
+
+        $token = $bearerToken ?: $urlToken;
+
+        // 3) If no token, bounce (document) or 401 (XHR)
+        if (!$token) {
+            return $this->handleInvalidSession($request, $shop, $host);
         }
 
         try {
-            // Verify JWT using your app's API secret as the signing key.
-            // Install: composer require firebase/php-jwt
-            $decoded = JWT::decode($idToken, new Key(config('services.shopify.api_secret'), 'HS256'));
+            // Session tokens are signed with your app's API secret (HS256)
+            $decoded = JWT::decode(
+                $token,
+                new Key(config('services.shopify.api_secret'), 'HS256')
+            );
 
-            // Optional sanity checks (recommended):
-            // - destination should match https://{shop}
+            // Optional sanity check (destination should be the shop domain)
             if (isset($decoded->dest) && $shop && !Str::contains($decoded->dest, "https://{$shop}")) {
                 throw new \Exception('Invalid dest');
             }
 
-            // If valid, you can store token/claims on the request for controllers to use
+            // Make claims available to controllers
             $request->attributes->set('shopify_session', $decoded);
 
             return $next($request);
         } catch (\Throwable $e) {
-            // Token invalid/expired/scopes changed → bounce to refresh for a document request
-            return redirect()->route('shopify.session_token_bounce', [
-                'shop' => $shop,
-                'host' => $host,
-                'shopify-reload' => $request->fullUrlWithoutQuery(['id_token']),
-            ]);
+            // expired / invalid / scopes changed
+            return $this->handleInvalidSession($request, $shop, $host);
         }
+    }
+
+    private function handleInvalidSession(Request $request, ?string $shop, ?string $host)
+    {
+        // If this is an XHR/fetch request, return 401 + retry header so App Bridge refreshes the token
+        if ($request->expectsJson() || $request->ajax()) {
+            return response('Unauthorized', 401)
+                ->header('X-Shopify-Retry-Invalid-Session-Request', '1');
+        }
+
+        // Document request: redirect to bounce page so App Bridge can re-establish token
+        return redirect()->route('shopify.session_token_bounce', [
+            'shop' => $shop,
+            'host' => $host,
+            'shopify-reload' => $request->fullUrlWithoutQuery(['id_token']),
+        ]);
     }
 }
