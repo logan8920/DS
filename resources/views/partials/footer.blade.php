@@ -1,5 +1,5 @@
 <!-- Start of Footer -->
-<footer class="footer appear-animate bg-white mt-3" data-animation-options="{
+<footer class="footer appear-animate bg-white mt-4" data-animation-options="{
             'name': 'fadeIn'
         }">
     <div class="container-fluid">
