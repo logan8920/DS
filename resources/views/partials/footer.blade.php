@@ -41,7 +41,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-3">
+                <div class="col-xl-2 col-md-3">
                     <div class="widget">
                         <h4 class="widget-title">Brand Based Categories</h4>
                         <ul class="widget-body">
