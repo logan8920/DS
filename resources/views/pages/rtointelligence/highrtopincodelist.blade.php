@@ -1,4 +1,4 @@
-@extends('layouts.main2');
+@extends('layouts.main2')
 
 @section('title')
     - Source a Product
