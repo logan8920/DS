@@ -324,7 +324,7 @@
 
 @section('content')
     <!-- Start of Main -->
-    <main class="main pb-5 pl-5 pr-5 mt-5 pt-5 bg-grey">
+    <main class="main pb-5 pl-5 pr-5 mt-5 pt-5 bg-grey br-sm">
         {{-- Filter --}}
         <section class="filters card">
             <div class="filter-header" onclick="toggleFilters()">

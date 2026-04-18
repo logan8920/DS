@@ -4,10 +4,10 @@
         }">
     <div class="container-fluid">
         <div class="footer-top">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-md-3">
                     <div class="widget widget-about mt-0 mb-4">
-                        <a href="demo15.html" class="logo-footer">
+                        <a href="/" class="logo-footer">
                             <img src="{{ asset('assets/brand_logo_hor.png') }}" alt="logo-footer" width="145"
                                 height="45" />
                         </a>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-3">
+                <div class="col-xl-2 col-md-2">
                     <div class="widget">
                         <h3 class="widget-title">Company</h3>
                         <ul class="widget-body">
@@ -41,9 +41,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-3">
+                <div class="col-xl-2 col-md-2">
                     <div class="widget">
-                        <h4 class="widget-title">Brand Based Categories</h4>
+                        <h4 class="widget-title">Brand Based</h4>
                         <ul class="widget-body">
                             <li><a href="#">Premium Collection</a></li>
                             <li><a href="#">Editor Choice</a></li>
@@ -54,7 +54,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-3">
+                <div class="col-xl-2 col-md-2">
                     <div class="widget">
                         <h4 class="widget-title">Availability</h4>
                         <ul class="widget-body">
@@ -67,7 +67,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-3">
+                <div class="col-xl-2 col-md-2">
                     <div class="widget">
                         <h4 class="widget-title">Price Based </h4>
                         <ul class="widget-body">

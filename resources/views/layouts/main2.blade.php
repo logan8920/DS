@@ -152,7 +152,7 @@
         footer.appear-animate {
             border: 1px solid #00000042;
             animation-duration: 1.2s;
-            border-radius: 13px;
+            border-radius: 0.8rem;
         }
     </style>
 

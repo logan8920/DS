@@ -48,7 +48,8 @@
         }
 
         .card-header a.collapse {
-            color: #336699;
+            background: #ff3232 !important;
+            color: #fff;
         }
 
         .card-header a::after,
@@ -92,6 +93,8 @@
 
         .card-body {
             padding: 1.2rem 2rem;
+            background: white !important;
+            border-radius: 0.4rem;
         }
 
         .card-body p {
@@ -128,6 +131,7 @@
         .accordion-boxed .card-body {
             padding-top: 0.5rem;
             padding-bottom: 1.1rem;
+            border-radius: 0.4rem;
         }
 
         .accordion-boxed.accordion-gutter-md .card {
@@ -142,7 +146,8 @@
         }
 
         .accordion-bg .card-header a {
-            background-color: #f5f5f5;
+            background-color: #fff;
+            border-radius: 0.4rem;
         }
 
         .accordion-bg.accordion-primary .card-header a {
@@ -231,6 +236,7 @@
         .accordion-icon.accordion a {
             padding: 1.8rem 5rem 1.8rem 2rem;
             word-break: break-word;
+            border-radius: 0.4rem;
         }
 
         .accordion-gutter-md .card:not(:first-child) {
@@ -244,10 +250,15 @@
                 content: none;
             }
         }
+
+        .card-header a:hover {
+            color: #fff;
+            background: #ff3232 !important;
+        }
     </style>
 @endsection
 @section('content')
-    <main class="main pt-10 mt-2">
+    <main class="main pt-10 mt-2 bg-grey br-sm">
 
         <!-- Start of PageContent -->
         <div class="page-content contact-us">

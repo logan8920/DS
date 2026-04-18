@@ -246,7 +246,7 @@
     </style>
 @endsection
 @section('content')
-    <main class="main bg-grey pt-10">
+    <main class="main bg-grey pt-1 pb-1 br-sm">
 
         <!-- Start of PageContent -->
         <div class="page-content contact-us mt-5">
