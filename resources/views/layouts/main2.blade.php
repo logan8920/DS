@@ -12,7 +12,7 @@
     <title>Dropshipx @yield('title')</title>
     <base href="{{ url('/') }}">
     <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
-    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="description" content="Wolmart is powerful marketplace & ecommerce responsive Html5 Template.">
     <meta name="author" content="D-THEMES">
 
     <!-- Favicon -->
@@ -147,6 +147,12 @@
 
         div.vscomp-ele {
             max-width: 100%;
+        }
+
+        footer.appear-animate {
+            border: 1px solid #00000042;
+            animation-duration: 1.2s;
+            border-radius: 13px;
         }
     </style>
 

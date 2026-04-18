@@ -1,22 +1,247 @@
-@extends('layouts.main');
+@extends('layouts.main2');
 
 @section('title')
     - Source a Product
 @endsection
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/virtual-select.min.css') }}">
     <style>
-        div.contact-us-form .form-group .form-control {
-            margin-bottom: 0px;
+        .contact-section .card-header {
+            font-size: 1.4rem;
+            letter-spacing: 0;
         }
 
-        input {
-            background: #fff !important;
+        .contact-section .card-header a {
+            padding-top: 1.5rem;
         }
 
-        .card ul li {
-            list-style: auto;
+
+        .accordion {
+            overflow: hidden;
+        }
+
+        .accordion .collapsed,
+        .accordion .expanding {
+            display: none;
+        }
+
+        .card-header {
+            color: #333;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            line-height: 1.5;
+        }
+
+        .card-header a {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            position: relative;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            color: inherit;
+            padding: 1.4rem 5rem 1.4rem 2rem;
+            -webkit-transition: background-color 0.4s;
+            transition: background-color 0.4s;
+        }
+
+        .card-header a.collapse {
+            color: #336699;
+        }
+
+        .card-header a::after,
+        .card-header a::before {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            margin-top: -0.1rem;
+            font-family: "wolmart";
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #333;
+        }
+
+        .card-header a:hover {
+            color: #336699;
+        }
+
+        .card-header a:hover::after {
+            color: #336699;
+        }
+
+        .expand::after,
+        .collapse::after {
+            content: "";
+            -webkit-transition: -webkit-transform 0.3s;
+            transition: -webkit-transform 0.3s;
+            transition: transform 0.3s;
+            transition: transform 0.3s, -webkit-transform 0.3s;
+        }
+
+        .expand::after {
+            -webkit-transform: translateY(-50%) rotate(0deg);
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        .collapse::after {
+            -webkit-transform: translateY(-50%) rotate(180deg);
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .card-body {
+            padding: 1.2rem 2rem;
+        }
+
+        .card-body p {
+            font-size: 1.3rem;
+            line-height: 2;
+        }
+
+        .accordion-simple .card {
+            border-top: 1px solid #eee;
+        }
+
+        .accordion-simple .card:last-child {
+            border-bottom: 1px solid #eee;
+        }
+
+        .accordion-simple .card-body {
+            padding-top: 0;
+        }
+
+        .accordion-boxed .card-header a {
+            padding-bottom: 1.6rem;
+        }
+
+        .accordion-boxed .card {
+            border-top: 1px solid #eee;
+            border-left: 1px solid #eee;
+            border-right: 1px solid #eee;
+        }
+
+        .accordion-boxed .card:last-child {
+            border-bottom: 1px solid #eee;
+        }
+
+        .accordion-boxed .card-body {
+            padding-top: 0.5rem;
+            padding-bottom: 1.1rem;
+        }
+
+        .accordion-boxed.accordion-gutter-md .card {
+            border: 1px solid #eee;
+        }
+
+        .accordion-boxed.accordion-plus .expand::after,
+        .accordion-boxed.accordion-plus .expand::before,
+        .accordion-boxed.accordion-plus .collapse::after,
+        .accordion-boxed.accordion-plus .collapse::before {
+            background-color: #333;
+        }
+
+        .accordion-bg .card-header a {
+            background-color: #f5f5f5;
+        }
+
+        .accordion-bg.accordion-primary .card-header a {
+            background-color: #336699;
+            color: #fff;
+        }
+
+        .accordion-bg.accordion-primary .card-header a::after {
+            color: #fff;
+        }
+
+        .accordion-bg.accordion-plus .expand::before,
+        .accordion-bg.accordion-plus .expand::after,
+        .accordion-bg.accordion-plus .collapse::before,
+        .accordion-bg.accordion-plus .collapse::after {
+            background-color: #fff;
+        }
+
+        .accordion-plus .expand::before,
+        .accordion-plus .collapse::before {
+            content: "";
+            width: 1px;
+            height: 1rem;
+            right: 2.4rem;
+            -webkit-transition: background-color 0.3s, -webkit-transform 0.3s;
+            transition: background-color 0.3s, -webkit-transform 0.3s;
+            transition: transform 0.3s, background-color 0.3s;
+            transition: transform 0.3s, background-color 0.3s, -webkit-transform 0.3s;
+        }
+
+        .accordion-plus .expand::after,
+        .accordion-plus .collapse::after {
+            content: "";
+            width: 1rem;
+            height: 1px;
+            -webkit-transition: -webkit-transform 0.3s;
+            transition: -webkit-transform 0.3s;
+            transition: transform 0.3s;
+            transition: transform 0.3s, -webkit-transform 0.3s;
+        }
+
+        .accordion-plus .expand::before {
+            background-color: #333;
+            -webkit-transform: translateY(-50%) rotate(-180deg);
+            transform: translateY(-50%) rotate(-180deg);
+        }
+
+        .accordion-plus .expand::after {
+            -webkit-transform: translateY(-50%) rotate(-180deg);
+            transform: translateY(-50%) rotate(-180deg);
+        }
+
+        .accordion-plus .collapse::before {
+            background-color: transparent !important;
+            -webkit-transform: translateY(-50%) rotate(180deg);
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .accordion-plus .collapse::after {
+            -webkit-transform: translateY(-50%) rotate(180deg);
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .accordion-plus .expand::after,
+        .accordion-plus .collapse::after {
+            font-size: 1.6rem;
+            right: 2rem;
+            background-color: #333;
+        }
+
+        .accordion-border .card-body {
+            border: 1px solid #eee;
+            border-top: 0;
+        }
+
+        .accordion-icon .card-header i {
+            font-size: 1.7rem;
+            margin: 0 0.8rem 0 0;
+        }
+
+        .accordion-icon .card-body {
+            padding-top: 0.3rem;
+            padding-bottom: 1.2rem;
+        }
+
+        .accordion-icon.accordion a {
+            padding: 1.8rem 5rem 1.8rem 2rem;
+            word-break: break-word;
+        }
+
+        .accordion-gutter-md .card:not(:first-child) {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 375px) {
+
+            .without-bg-section .title::before,
+            .without-bg-section .title::after {
+                content: none;
+            }
         }
     </style>
 @endsection

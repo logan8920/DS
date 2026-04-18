@@ -10,8 +10,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <style>
         /* ============================
-                                                                                                           Orders Section
-                                                                                                        ============================ */
+                                                                                                               Orders Section
+                                                                                                            ============================ */
         .orders.card {
             border-radius: 12px;
             padding: 30px;
@@ -69,8 +69,8 @@
         }
 
         /* ============================
-                                                                                                           Tabs
-                                                                                                        ============================ */
+                                                                                                               Tabs
+                                                                                                            ============================ */
         .order-tabs {
             margin-bottom: 15px;
             display: flex;
@@ -100,8 +100,8 @@
         }
 
         /* ============================
-                                                                                                           Counters (Total / Selected)
-                                                                                                        ============================ */
+                                                                                                               Counters (Total / Selected)
+                                                                                                            ============================ */
         .order-counters {
             margin-bottom: 15px;
             display: flex;
@@ -120,8 +120,8 @@
         }
 
         /* ============================
-                                                                                                           Table Styling
-                                                                                                        ============================ */
+                                                                                                               Table Styling
+                                                                                                            ============================ */
         .table-responsive {
             margin-top: 10px;
         }
@@ -234,7 +234,7 @@
         /* Actions (Reset/Apply buttons) */
         .filter-body .actions {
             /* grid-column: span 2;
-                                                display: flex; */
+                                                    display: flex; */
             gap: 10px;
             justify-content: flex-end;
         }
@@ -302,6 +302,10 @@
                 transform: rotate(360deg);
             }
         }
+
+        table td {
+            word-break: break-word;
+        }
     </style>
 @endsection
 
@@ -322,7 +326,8 @@
             <div class="orders-header">
                 <h3>{{$pageHeading ?? 'Title'}}</h3>
                 <div class="order-actions">
-                    <button data-href="{{route('channels.create')}}" onclick="window.location.href = this.dataset.href" class="btn-confirm" >Add New Channel</button>
+                    <button data-href="{{route('channels.create')}}" onclick="window.location.href = this.dataset.href"
+                        class="btn-confirm">Add New Channel</button>
                 </div>
             </div>
 
@@ -360,7 +365,7 @@
                 ajax: {
                     url: NEWCONFIG[cTab]?.url,
                     type: 'POST',
-                    data: function(d) {
+                    data: function (d) {
                         // [...filterBody.querySelectorAll('input,select')].forEach(ele => {
                         //     d[ele.name] = ele.value;
                         // });
@@ -381,7 +386,7 @@
                 // }],
                 processing: true,
                 serverSide: true,
-                initComplete: function() {
+                initComplete: function () {
                     // let filter = NEWCONFIG[cTab]?.filter;
                     // if (filter) {
                     //     makeFilter(filter);
@@ -404,16 +409,16 @@
     <script src="{{ asset('assets/js/virtual-select.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="{{ asset('assets/js/datatable.js'.rand(1111,9999)) }}"></script>
+    <script src="{{ asset('assets/js/datatable.js?v=' . rand(1111, 9999)) }}"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // table.buttons().container().appendTo('.order-actions');
             // table.buttons().container().find('button').removeClass("dt-button");
             // 🔹 Move the button into your custom header area
 
 
             // 🔹 Tab click filter
-            $('.order-tabs button').on('click', function() {
+            $('.order-tabs button').on('click', function () {
                 $('.order-tabs button').removeClass('active');
                 $(this).addClass('active');
 
@@ -453,7 +458,7 @@
                     let options = {
                         ...filterData[filter]?.option
                     }
-                    $.each(options, function(val, text) {
+                    $.each(options, function (val, text) {
                         $filter.append(new Option(text, val));
                     });
                 }
@@ -502,12 +507,12 @@
             ));
         }
 
-        $(document).on("click","#filterBody button.apply",function(e){
+        $(document).on("click", "#filterBody button.apply", function (e) {
             e.preventDefault();
             table.ajax.reload();
         });
 
-        $(document).on("click","#filterBody button.reset",function(e){
+        $(document).on("click", "#filterBody button.reset", function (e) {
             e.preventDefault();
             [...filterBody.querySelectorAll('select,input')].forEach(ele => ele.reset());
             table.ajax.reload();
