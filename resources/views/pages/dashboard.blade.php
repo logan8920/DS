@@ -86,6 +86,7 @@
         @endif
         @if($categories5)
             @foreach ($categories5 as $cateogry)
+                @if($cateogry->subCatProduct()->exists())
                 <div class="container-fluid">
                     <div class="row banner-product-wrapper appear-animate pb-1 mb-10">
                         <div class="banner-product col-xl-3 col-md-4 mb-4 mb-md-0">
@@ -194,6 +195,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             @endforeach
         @endif
     </main>
