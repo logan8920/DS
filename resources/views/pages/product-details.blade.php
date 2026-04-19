@@ -7,10 +7,10 @@
     @php
         function str_contains_any(string $haystack, array $needles): bool
         {
-            return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
+            return array_reduce($needles, function ($a, $n) use ($haystack) { return $a || str_contains($haystack, $n); }, false);
         }
     @endphp
-    @endphp
+    
     <!-- Start of Main -->
     <main class="main mb-10 pb-1">
         <!-- Start of Breadcrumb -->
@@ -27,7 +27,7 @@
                     </a>
                     @if ($product?->previous())
                         <span class="product-nav-popup">
-                            <img src="{{ str_contains_any($product?->previous()?->image?->image_path,['http','https']) ? $product?->previous()?->image?->image_path : asset($product?->previous()?->image?->image_path) }}"
+                            <img data-srr="{{ $product?->previous()?->image?->image_path }}" src="{{ str_contains_any($product?->previous()?->image?->image_path,['http','https']) ? $product?->previous()?->image?->image_path : asset($product?->previous()?->image?->image_path) }}"
                                 alt="{{ $product?->previous()?->image?->alt_text }}" width="110" height="110"
                                 onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
                             <span class="product-name">{{ ucwords($product?->previous()?->name) }}</span>
@@ -68,7 +68,7 @@
                                         <div class="swiper-wrapper row cols-1 gutter-no">
                                             @forelse(($product->images ?? []) as $image)
                                                 <div class="swiper-slide">
-                                                    <figure class="product-image">
+                                                    <figure data-srr="{{ $image->image_path }}" class="product-image">
                                                         <img src="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
                                                             data-zoom-image="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
                                                             alt="{{ $image->alt_text }}" width="800" height="900"
