@@ -137,7 +137,7 @@
                                     @if ($product->category)
                                         <div data-srr="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset("assets/images/categories/".$product?->category?->icon) }}" class="product-bm-wrapper">
                                             <figure class="brand">
-                                                <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset(Storage::url($product?->category?->icon)) }}"
+                                                <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset("assets/images/categories/".$product?->category?->icon) }}"
                                                     alt="{{ $product?->category?->name }}"
                                                     onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`"
                                                     width="102" height="48" />
