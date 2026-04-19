@@ -16862,3 +16862,9 @@ span#netLossPerOrder.text-success-bold {
     margin: -4px 0px 0px 0;
     padding: 0 0 10px 0;
 }
+
+@media (min-width: 1080px) {
+  .btn-product-icon.btn-cart, .btn-product-icon.btn-quickview {
+    font-size: 1.2em;
+  }
+}

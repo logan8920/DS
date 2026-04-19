@@ -1,11 +1,11 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 @section('title')
     - Product Categories
 @endsection
 
 @section('content')
     <!-- Start of Main -->
-    <main class="main">
+    <main class="main pt-10 mt-2 bg-grey br-sm">
         <nav class="breadcrumb-nav">
             <div class="container-fluid">
                 <ul class="breadcrumb bb-no">

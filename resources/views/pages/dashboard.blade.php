@@ -64,7 +64,7 @@
                                 @foreach ($categories as $cateogry)
                                     <div class="swiper-slide category category-ellipse">
                                         <figure class="category-media">
-                                            <a href="{{ route('product.categories') }}">
+                                            <a href="javascript:;">
                                                 <img src="{{ asset('assets/images/categories/')}}/{{ $cateogry['icon'] }}"
                                                     alt="{{ $cateogry['name'] }}" width="190" height="190"
                                                     style="background-color: #C1C6CC;" />
