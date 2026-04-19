@@ -27,7 +27,7 @@ window.csrfToken = (document.querySelector('[name="csrf-token"]') && document.qu
   var url = this.action;
 
   try {
-    const res = await makeHttpRequest(url, (form?.nethod || 'post'), formData);
+    const res = await makeHttpRequest(url, (form?.method || 'post'), formData);
     if (res.success) {
 
       stopLoadings(button, buttonText)

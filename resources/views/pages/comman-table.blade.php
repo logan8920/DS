@@ -420,7 +420,7 @@
         let configuration = () => {
             return {
                 ajax: {
-                    url: NEWCONFIG[cTab]?.url,
+                    url: appendParams(NEWCONFIG[cTab]?.url),
                     type: 'POST',
                     data: function (d) {
                         [...filterBody.querySelectorAll('input,select')].forEach(ele => {
