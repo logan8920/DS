@@ -123,7 +123,7 @@
                                                 <div class="product-categories">
                                                     Category:
                                                     <span class="product-category"><a
-                                                            href="{{ route('product.category.show', ['parent' => $product?->category?->parent ? $product?->category?->parent : 0, 'id' => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
+                                                            href="{{ route('product.category.show', ['parent' => ($product?->category?->category_id ? $product?->category?->category_id : 0), 'id' => $product?->category?->category_id]) }}">{{ $product?->category?->name }}</a></span>
                                                 </div>
                                                 <div class="product-sku">
                                                     SKU: <span>{{ $product?->sku }}</span>
