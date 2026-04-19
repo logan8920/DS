@@ -326,7 +326,7 @@
             <div class="orders-header">
                 <h3>{{$pageHeading ?? 'Title'}}</h3>
                 <div class="order-actions">
-                    <button data-href="{{route('channels.create')}}" onclick="window.location.href = this.dataset.href"
+                    <button data-href="{{route('channels.create')}}" onclick="window.location.href = appendParams(this.dataset.href)"
                         class="btn-confirm">Add New Channel</button>
                 </div>
             </div>
