@@ -66,7 +66,7 @@
                                                 }
                                             }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
-                                            @forelse(($product->images ?? []) as $image)
+                                            @forelse(($product->files ?? []) as $image)
                                                 <div class="swiper-slide" data-srr="{{ $image->image_path }}">
                                                     <figure data-srr="{{ $image->image_path }}" class="product-image">
                                                         <img src="{{ $image->image_path ? (str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset(Storage::url($image->image_path))):  asset('assets/brand_icon.png') }}"
@@ -98,7 +98,7 @@
                                                 }
                                             }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
-                                            @forelse(($product->images ?? []) as $image)
+                                            @forelse(($product->files ?? []) as $image)
                                                 @php
                                                     $ext = strtolower(pathinfo($image['image_path'], PATHINFO_EXTENSION));
                                                     $imageExt = ['jpg','jpeg','png','gif','webp'];
@@ -1214,6 +1214,5 @@
 <script>
     @php $product->image; @endphp
     window.product = {!! json_encode($product->toArray()) !!};
-    window.products = {!! json_encode($product->images) !!};
 </script>
 @endsection
