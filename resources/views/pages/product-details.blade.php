@@ -69,8 +69,8 @@
                                             @forelse(($product->images ?? []) as $image)
                                                 <div class="swiper-slide" data-srr="{{ $image->image_path }}">
                                                     <figure data-srr="{{ $image->image_path }}" class="product-image">
-                                                        <img src="{{ $image->image_path ? (str_contains_any($image->image_path,['http','https']) ? $image->image_path : storage_path($image->image_path)) :  asset('assets/brand_icon.png') }}"
-                                                            data-zoom-image="{{ $image->image_path ? (str_contains_any($image->image_path,['http','https']) ? $image->image_path : storage_path($image->image_path)) :  asset('assets/brand_icon.png') }}"
+                                                        <img src="{{ $image->image_path ? (str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset(Storage::path($image->image_path))):  asset('assets/brand_icon.png') }}"
+                                                            data-zoom-image="{{ $image->image_path ? (str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset(Storage::path($image->image_path))) :  asset('assets/brand_icon.png') }}"
                                                             alt="{{ $image->alt_text }}" width="800" height="900"
                                                             onerror="(this.src = `{{ asset('assets/brand_logo_500x500.png') }}`),(this.dataset.zoomImage = `{{ asset('assets/brand_logo_500x500.png') }}`)">
                                                     </figure>
@@ -106,7 +106,7 @@
                                                 @endphp
                                                 <div class="product-thumb swiper-slide">
                                                     @if(in_array($ext, $imageExt))
-                                                    <img src="{{ $image->image_path ?(str_contains_any($image->image_path, ['http', 'https']) ? $image->image_path : storage_path($image->image_path)) :  asset('assets/brand_icon.png') }}"
+                                                    <img src="{{ $image->image_path ?(str_contains_any($image->image_path, ['http', 'https']) ? $image->image_path : asset(Storage::path($image->image_path))) :  asset('assets/brand_icon.png') }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
                                                     @elseif(in_array($ext, $videoExt))
                                                         <video 
@@ -114,7 +114,7 @@
                                                             height="337" 
                                                             controls
                                                         >
-                                                            <source src="{{ str_contains_any($image['image_path'],['http','https']) ? $image['image_path'] : storage_path($image['image_path']) }}" type="video/{{ $ext }}">
+                                                            <source src="{{ str_contains_any($image['image_path'],['http','https']) ? $image['image_path'] : asset(Storage::path($image['image_path'])) }}" type="video/{{ $ext }}">
                                                             Your browser does not support the video tag.
                                                         </video>
                                                     @endif
@@ -137,7 +137,7 @@
                                     @if ($product->category)
                                         <div class="product-bm-wrapper">
                                             <figure class="brand">
-                                                <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : storage_path($product?->category?->icon) }}"
+                                                <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset(Storage::path($product?->category?->icon)) }}"
                                                     alt="{{ $product?->category?->name }}"
                                                     onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`"
                                                     width="102" height="48" />
