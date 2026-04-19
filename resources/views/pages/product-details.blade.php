@@ -67,7 +67,7 @@
                                             }">
                                         <div class="swiper-wrapper row cols-1 gutter-no">
                                             @forelse(($product->images ?? []) as $image)
-                                                <div class="swiper-slide">
+                                                <div class="swiper-slide" data-srr="{{ $image->image_path }}">
                                                     <figure data-srr="{{ $image->image_path }}" class="product-image">
                                                         <img src="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
                                                             data-zoom-image="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
