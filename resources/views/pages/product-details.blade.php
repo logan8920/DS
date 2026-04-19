@@ -1115,8 +1115,8 @@
                                             <i class="w-icon-truck"></i>
                                         </span>
                                         <div class="icon-box-content">
-                                            <h4 class="icon-box-title">Free Shipping & Returns</h4>
-                                            <p>For all orders over $99</p>
+                                            <h4 class="icon-box-title">Free Shipping </h4>
+                                            <p>For all over India</p>
                                         </div>
                                     </div>
                                     <div class="icon-box icon-box-side">
