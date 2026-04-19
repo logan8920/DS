@@ -92,9 +92,25 @@
                                             }">
                                         <div class="product-thumbs swiper-wrapper row cols-4 gutter-sm">
                                             @forelse(($product->images ?? []) as $image)
+                                                @php
+                                                    $ext = strtolower(pathinfo($image['image_path'], PATHINFO_EXTENSION));
+                                                    $imageExt = ['jpg','jpeg','png','gif','webp'];
+                                                    $videoExt = ['mp4','webm','ogg'];
+                                                @endphp
                                                 <div class="product-thumb swiper-slide">
-                                                    <img src="{{ asset(Storage::url($image->image_path)) }}"
+                                                    @if(in_array($ext, $imageExt))
+                                                    <img src="{{ asset($image->image_path) }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
+                                                    @elseif(in_array($ext, $videoExt))
+                                                        <video 
+                                                            width="300" 
+                                                            height="337" 
+                                                            controls
+                                                        >
+                                                            <source src="{{ asset($image['image_path']) }}" type="video/{{ $ext }}">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @endif
                                                 </div>
                                             @empty
                                                 <div class="product-thumb swiper-slide">
