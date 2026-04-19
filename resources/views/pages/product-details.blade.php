@@ -106,7 +106,7 @@
                                                 @endphp
                                                 <div class="product-thumb swiper-slide">
                                                     @if(in_array($ext, $imageExt))
-                                                    <img src="{{ str_contains_any($image->image_path, ['http', 'https']) ? $image->image_path : asset($image->image_path) }}"
+                                                    <img src="{{ $image->image_path ?(str_contains_any($image->image_path, ['http', 'https']) ? $image->image_path : asset($image->image_path)) :  asset('assets/brand_icon.png') }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
                                                     @elseif(in_array($ext, $videoExt))
                                                         <video 
@@ -137,7 +137,7 @@
                                     @if ($product->category)
                                         <div class="product-bm-wrapper">
                                             <figure class="brand">
-                                                <img src="{{ storage_path($product?->category?->icon) }}"
+                                                <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset($product?->category?->icon) }}"
                                                     alt="{{ $product?->category?->name }}"
                                                     onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`"
                                                     width="102" height="48" />
@@ -1165,7 +1165,7 @@
                                                     <div class="product product-widget">
                                                         <figure class="product-media">
                                                             <a href="{{ route('product.details', $mProduct->product_id) }}" title="{{ $mProduct->name }}">
-                                                                <img src="{{ $mProduct?->image?->image_path ? asset(Storage::url($mProduct?->image?->image_path)) : asset('assets/brand_icon.png') }}"
+                                                                <img src="{{ $mProduct?->image?->image_path ? (str_contains_any($mProduct?->image?->image_path, ['http', 'https']) ? $mProduct?->image?->image_path : asset($mProduct?->image?->image_path)) :  asset('assets/brand_icon.png') }}"
                                                                     alt="Product" width="100" height="113" />
                                                             </a>
                                                         </figure>
