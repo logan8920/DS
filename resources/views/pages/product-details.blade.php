@@ -4,12 +4,19 @@
 @endsection
 
 @section('content')
+    @php
+        function str_contains_any(string $haystack, array $needles): bool
+        {
+            return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
+        }
+    @endphp
+    @endphp
     <!-- Start of Main -->
     <main class="main mb-10 pb-1">
         <!-- Start of Breadcrumb -->
         <nav class="breadcrumb-nav container">
             <ul class="breadcrumb bb-no">
-                <li><a href="demo1.html">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li>Products</li>
             </ul>
             <ul class="product-nav list-style-none">
@@ -20,7 +27,7 @@
                     </a>
                     @if ($product?->previous())
                         <span class="product-nav-popup">
-                            <img src="{{ storage_path($product?->previous()?->image?->image_path) }}"
+                            <img src="{{ str_contains_any($product?->previous()?->image?->image_path,['http','https']) ? $product?->previous()?->image?->image_path : asset($product?->previous()?->image?->image_path) }}"
                                 alt="{{ $product?->previous()?->image?->alt_text }}" width="110" height="110"
                                 onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
                             <span class="product-name">{{ ucwords($product?->previous()?->name) }}</span>
@@ -33,7 +40,7 @@
                     </a>
                     @if ($product?->next())
                         <span class="product-nav-popup">
-                            <img src="{{ storage_path($product?->next()?->image?->image_path) }}"
+                            <img src="{{ str_contains_any($product?->next()?->image?->image_path,['http','https']) ? $product?->next()?->image?->image_path : asset($product?->next()?->image?->image_path) }}"
                                 alt="{{ $product?->next()?->image?->alt_text }}" width="110" height="110"
                                 onerror="this.src = `{{ asset('assets/brand_logo_500x500.png') }}`" />
                             <span class="product-name">{{ ucwords($product?->next()?->name) }}</span>
@@ -62,8 +69,8 @@
                                             @forelse(($product->images ?? []) as $image)
                                                 <div class="swiper-slide">
                                                     <figure class="product-image">
-                                                        <img src="{{ asset(Storage::url($image->image_path)) }}"
-                                                            data-zoom-image="{{ "storage/".$image->image_path }}"
+                                                        <img src="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
+                                                            data-zoom-image="{{ str_contains_any($image->image_path,['http','https']) ? $image->image_path : asset($image->image_path) }}"
                                                             alt="{{ $image->alt_text }}" width="800" height="900"
                                                             onerror="(this.src = `{{ asset('assets/brand_logo_500x500.png') }}`),(this.dataset.zoomImage = `{{ asset('assets/brand_logo_500x500.png') }}`)">
                                                     </figure>
@@ -99,7 +106,7 @@
                                                 @endphp
                                                 <div class="product-thumb swiper-slide">
                                                     @if(in_array($ext, $imageExt))
-                                                    <img src="{{ asset($image->image_path) }}"
+                                                    <img src="{{ str_contains_any($image->image_path, ['http', 'https']) ? $image->image_path : asset($image->image_path) }}"
                                                         alt="{{ $image->alt_text }}" width="800" height="900">
                                                     @elseif(in_array($ext, $videoExt))
                                                         <video 
@@ -107,7 +114,7 @@
                                                             height="337" 
                                                             controls
                                                         >
-                                                            <source src="{{ asset($image['image_path']) }}" type="video/{{ $ext }}">
+                                                            <source src="{{ str_contains_any($image['image_path'],['http','https']) ? $image['image_path'] : asset($image['image_path']) }}" type="video/{{ $ext }}">
                                                             Your browser does not support the video tag.
                                                         </video>
                                                     @endif
