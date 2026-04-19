@@ -122,7 +122,7 @@
 
         <div class="row align-items-center mb-4">
             <div class="col-3">
-                <img width="36%" src="your-product.jpg" alt="Product" class="br-sm" />
+                <img width="36%" src="" alt="Product" class="br-sm" />
             </div>
             <div class="col-3">
                 <p class="text-dark mb-1">App Price</p>
