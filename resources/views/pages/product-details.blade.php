@@ -135,7 +135,7 @@
                                 <div class="product-details" data-sticky-options="{'minWidth': 767}">
                                     <h1 class="product-title">{{ $product->name }}</h1>
                                     @if ($product->category)
-                                        <div class="product-bm-wrapper">
+                                        <div data-srr="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset(Storage::url($product?->category?->icon)) }}" class="product-bm-wrapper">
                                             <figure class="brand">
                                                 <img src="{{ str_contains_any($product?->category?->icon, ['http', 'https']) ? $product?->category?->icon : asset(Storage::url($product?->category?->icon)) }}"
                                                     alt="{{ $product?->category?->name }}"
