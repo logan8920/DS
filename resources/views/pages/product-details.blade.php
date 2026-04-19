@@ -1214,6 +1214,6 @@
 <script>
     @php $product->image; @endphp
     window.product = {!! json_encode($product->toArray()) !!};
-    window.products = {!! json_encode($product->images->toArray()) !!};
+    window.products = {!! json_encode($product->images()->toArray()) !!};
 </script>
 @endsection
