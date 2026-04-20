@@ -263,7 +263,14 @@ class ProductController extends Controller
                     "files" => function ($q) use ($filename) {
                         $q->select([
                             "product_id",
-                            DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                            DB::raw("
+    CASE 
+        WHEN image_path IS NULL THEN NULL
+        WHEN image_path LIKE 'http%' 
+        THEN image_path 
+        ELSE CONCAT('" . asset('storage') . "/', image_path) 
+    END as \"originalSource\"
+"),
                             "alt_text as alt",
                             $filename,
                             DB::raw("'IMAGE' as \"contentType\""),
