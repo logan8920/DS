@@ -59,16 +59,18 @@ class Product extends Model
     public function productOptions()
     {
         return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id");
-           // ->selectRaw('attribute_id, product_attribute_id, value, product_id');
+        // ->selectRaw('attribute_id, product_attribute_id, value, product_id');
     }
 
-    public function optionValues(){
+    public function optionValues()
+    {
         return $this->hasMany(ProductAttributeValue::class, "product_id", "product_id");
 
     }
-    
 
-    public function variants(){
+
+    public function variants()
+    {
         $driver = DB::connection()->getDriverName();
 
         if ($driver === 'mysql') {
@@ -78,15 +80,22 @@ class Product extends Model
         }
         $this->variants = $this->optionValues()->select('attributes.name as optionName', 'value as name')->leftJoin('attributes', 'attributes.attribute_id', '=', 'product_attribute_values.attribute_id')->get()->toArray();
 
-        $this->variants = array_map(function($val) use ( $filename){
+        $this->variants = array_map(function ($val) use ($filename) {
             $return = [
                 "optionValues" => [
                     $val
                 ],
-                 "file" => $this->file()
+                "file" => $this->file()
                     ->select([
                         "product_id",
-                        DB::raw("CONCAT('" . asset('storage') . "/', image_path) as \"originalSource\""),
+                        DB::raw("
+    CASE 
+        WHEN image_path IS NULL THEN NULL
+        WHEN image_path LIKE 'http%' 
+        THEN image_path 
+        ELSE CONCAT('" . asset('storage') . "/', image_path) 
+    END as originalSource
+"),
                         "alt_text as alt",
                         $filename,
                         DB::raw("'IMAGE' as \"contentType\"")
@@ -97,10 +106,10 @@ class Product extends Model
             ];
 
             return $return;
-                
-        },$this->variants);
 
-        if(!count($this->variants ?? [])) {
+        }, $this->variants);
+
+        if (!count($this->variants ?? [])) {
             $this->variants = [
                 [
                     "optionValues" => [
