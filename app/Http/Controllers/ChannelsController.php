@@ -188,7 +188,7 @@ class ChannelsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         // Validate input
         $validator = Validator::make($request->all(), [
@@ -203,9 +203,9 @@ class ChannelsController extends Controller
         }
 
         $data = $validator->validated();
-
+        // dd($data);
         // Find record
-        $config = ChannelConfig::where('domain', $request->doamin)
+        $config = ChannelConfig::where('domain', $request->domain)
             // ->where('id', $id)
             ->first();
 
@@ -215,12 +215,14 @@ class ChannelsController extends Controller
                 'message' => 'Record not found'
             ], 404);
         }
+        
 
         // Update data
         $config->update($data);
 
         return response()->json([
             'status' => true,
+            'success' => 'Record updated successfully',
             'message' => 'Record updated successfully',
             'data' => $config
         ]);
