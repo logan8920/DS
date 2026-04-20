@@ -89,21 +89,21 @@ class ChannelsController extends Controller
 
             $result = ChannelConfig::create($data);
 
-            if(!$result) {
+            if (!$result) {
                 throw new Exception("Unable to create channel!", 422);
-            } 
+            }
 
             return response()->json([
                 "success" => "Channel Created Successfully!",
                 "sweetAlert" => true,
-                "redirect" => route('channels.allChannels') 
-            ],200);
+                "redirect" => route('channels.allChannels')
+            ], 200);
 
         } catch (Exception $e) {
             return response()->json([
                 "error" => $e->getMessage(),
                 //"redirect" => route('channels.allChannels') 
-            ],200);
+            ], 200);
         }
     }
 
@@ -112,21 +112,21 @@ class ChannelsController extends Controller
      */
     public function show(Request $request)
     {
-        
+
         $order = $request->post('order');
         $start = $request->post('start') ?? 0;
         $length = $request->post('length') ?? 10;
         $search = $request->post('search')['value'] ?? null;
 
         $dbColumns = [
-            'channel_configs.domain', 
-            'callback_url', 
-            'channels.name', 
+            'channel_configs.domain',
+            'callback_url',
+            'channels.name',
             'channel_configs.created_at'
         ];
 
         $query = ChannelConfig::selectRaw("domain, callback_url, channels.name, channel_configs.created_at, 'Active' as is_active")
-        ->join('channels', 'channels.id', '=', 'channel_configs.channel_id');
+            ->join('channels', 'channels.id', '=', 'channel_configs.channel_id');
 
         $query->where('seller_id', auth()->user()->id);
         // Search filter
@@ -188,9 +188,42 @@ class ChannelsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate input
+        $validator = Validator::make($request->all(), [
+            'domain' => 'required|string|max:255',
+            "api_key" => "required",
+            "api_key_secret" => "required",
+            "access_token" => "required"
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception($validator->errors()->first(), 422);
+        }
+
+        $data = $validator->validated();
+
+        // Find record
+        $config = ChannelConfig::where('domain', $request->doamin)
+            // ->where('id', $id)
+            ->first();
+
+        if (!$config) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Record not found'
+            ], 404);
+        }
+
+        // Update data
+        $config->update($data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Record updated successfully',
+            'data' => $config
+        ]);
     }
 
     /**
