@@ -89,7 +89,7 @@
 
 <div id="sidebar" class="sidebar">
 
-    <div class="logo" style="cursor: pointer;" onclick="window.location.href = `{{ route('dashboard') }}`">
+    <div class="logo" style="cursor: pointer;" onclick="this.nextElementSibling.click()">
         <img src="{{asset('assets/brand_logo_hor.png')}}" class="l-logo" height="40">
         <img src="{{asset('assets/brand_icon.png') }}" class="s-logo d-none" width="40">
     </div>
