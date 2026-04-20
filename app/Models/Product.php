@@ -94,7 +94,7 @@ class Product extends Model
         WHEN image_path LIKE 'http%' 
         THEN image_path 
         ELSE CONCAT('" . asset('storage') . "/', image_path) 
-    END as originalSource
+    END as \"originalSource\"
 "),
                         "alt_text as alt",
                         $filename,
@@ -127,7 +127,7 @@ class Product extends Model
         WHEN image_path LIKE 'http%' 
         THEN image_path 
         ELSE CONCAT('" . asset('storage') . "/', image_path) 
-    END as originalSource
+    END as \"originalSource\"
 "),
                             "alt_text as alt",
                             $filename,
